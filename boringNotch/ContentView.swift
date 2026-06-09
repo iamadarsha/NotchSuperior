@@ -24,6 +24,8 @@ struct ContentView: View {
     @ObservedObject var brightnessManager = BrightnessManager.shared
     @ObservedObject var volumeManager = VolumeManager.shared
     @ObservedObject private var notchSuperiorHUDEngine = NSHUDEngine.shared
+    @ObservedObject private var liveActivityEngine = NSLiveActivityEngine.shared
+    @ObservedObject private var shelfEngine = NSShelfEngine.shared
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -203,6 +205,17 @@ struct ContentView: View {
                 }
             }
 
+            if #available(macOS 26.0, *) {
+                if liveActivityEngine.currentActivity != nil {
+                    NSLiveActivityView()
+                        .zIndex(50)
+                        .transition(.asymmetric(
+                            insertion: .scale(scale: 0.7).combined(with: .opacity),
+                            removal: .scale(scale: 0.7).combined(with: .opacity)
+                        ))
+                }
+            }
+
             if notchSuperiorHUDEngine.activeHUD != nil {
                 NSHUDOverlayView(engine: notchSuperiorHUDEngine)
                     .zIndex(100)
@@ -354,7 +367,11 @@ struct ContentView: View {
                     case .home:
                         NotchHomeView(albumArtNamespace: albumArtNamespace)
                     case .shelf:
-                        ShelfView()
+                        if #available(macOS 26.0, *), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
+                            NSShelfView()
+                        } else {
+                            ShelfView()
+                        }
                     }
                 }
                 .transition(

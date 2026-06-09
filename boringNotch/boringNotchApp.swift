@@ -435,6 +435,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        // NOTCHSUPERIOR ADDITION — Main engine bootstrap
+        NSuperiorBootstrap.shared.start()
+
         previousScreens = NSScreen.screens
     }
 

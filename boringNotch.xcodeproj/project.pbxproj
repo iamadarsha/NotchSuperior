@@ -19,6 +19,15 @@
 		AA1000170609202600000001 /* NSTimerActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000180609202600000001 /* NSTimerActivity.swift */; };
 		AA1000190609202600000001 /* NSBatteryActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001A0609202600000001 /* NSBatteryActivity.swift */; };
 		AA10001B0609202600000001 /* NSPrivacyDotActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */; };
+		AA2000020609202600000001 /* NSDownloadActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000010609202600000001 /* NSDownloadActivity.swift */; };
+		AA2000040609202600000001 /* NSAirDropActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000030609202600000001 /* NSAirDropActivity.swift */; };
+		AA2000060609202600000001 /* NSBluetoothActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000050609202600000001 /* NSBluetoothActivity.swift */; };
+		AA2000080609202600000001 /* NSScreenRecordActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000070609202600000001 /* NSScreenRecordActivity.swift */; };
+		AA3000020609202600000001 /* NSuperiorBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3000010609202600000001 /* NSuperiorBootstrap.swift */; };
+		AA4000020609202600000001 /* NSShelfModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010609202600000001 /* NSShelfModels.swift */; };
+		AA4000040609202600000001 /* NSShelfEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000030609202600000001 /* NSShelfEngine.swift */; };
+		AA4000060609202600000001 /* NSShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000050609202600000001 /* NSShelfView.swift */; };
+		AA4000080609202600000001 /* NSShelfItemActionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */; };
 		1100290C2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */; };
 		110029272E84FD4C00035A57 /* TemporaryFileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110029262E84FD4C00035A57 /* TemporaryFileStorageService.swift */; };
 		1100292A2E8691B400035A57 /* FileShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110029292E8691B400035A57 /* FileShareView.swift */; };
@@ -205,6 +214,15 @@
 		AA1000180609202600000001 /* NSTimerActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTimerActivity.swift; sourceTree = "<group>"; };
 		AA10001A0609202600000001 /* NSBatteryActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBatteryActivity.swift; sourceTree = "<group>"; };
 		AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPrivacyDotActivity.swift; sourceTree = "<group>"; };
+		AA2000010609202600000001 /* NSDownloadActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDownloadActivity.swift; sourceTree = "<group>"; };
+		AA2000030609202600000001 /* NSAirDropActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAirDropActivity.swift; sourceTree = "<group>"; };
+		AA2000050609202600000001 /* NSBluetoothActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBluetoothActivity.swift; sourceTree = "<group>"; };
+		AA2000070609202600000001 /* NSScreenRecordActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenRecordActivity.swift; sourceTree = "<group>"; };
+		AA3000010609202600000001 /* NSuperiorBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSuperiorBootstrap.swift; sourceTree = "<group>"; };
+		AA4000010609202600000001 /* NSShelfModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfModels.swift; sourceTree = "<group>"; };
+		AA4000030609202600000001 /* NSShelfEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfEngine.swift; sourceTree = "<group>"; };
+		AA4000050609202600000001 /* NSShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfView.swift; sourceTree = "<group>"; };
+		AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfItemActionsMenu.swift; sourceTree = "<group>"; };
 		1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProvider+LoadHelpers.swift"; sourceTree = "<group>"; };
 		110029262E84FD4C00035A57 /* TemporaryFileStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryFileStorageService.swift; sourceTree = "<group>"; };
 		110029292E8691B400035A57 /* FileShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileShareView.swift; sourceTree = "<group>"; };
@@ -415,6 +433,10 @@
 				AA1000180609202600000001 /* NSTimerActivity.swift */,
 				AA10001A0609202600000001 /* NSBatteryActivity.swift */,
 				AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */,
+				AA2000010609202600000001 /* NSDownloadActivity.swift */,
+				AA2000030609202600000001 /* NSAirDropActivity.swift */,
+				AA2000050609202600000001 /* NSBluetoothActivity.swift */,
+				AA2000070609202600000001 /* NSScreenRecordActivity.swift */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -429,13 +451,34 @@
 			path = LiveActivity;
 			sourceTree = "<group>";
 		};
+		AA3000030609202600000001 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AA3000010609202600000001 /* NSuperiorBootstrap.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AA4000090609202600000001 /* Shelf */ = {
+			isa = PBXGroup;
+			children = (
+				AA4000030609202600000001 /* NSShelfEngine.swift */,
+				AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */,
+				AA4000010609202600000001 /* NSShelfModels.swift */,
+				AA4000050609202600000001 /* NSShelfView.swift */,
+			);
+			path = Shelf;
+			sourceTree = "<group>";
+		};
 		AA10000D0609202600000001 /* NotchSuperior */ = {
 			isa = PBXGroup;
 			children = (
+				AA3000030609202600000001 /* Core */,
 				AA10000B0609202600000001 /* DesignSystem */,
 				AA10000C0609202600000001 /* HUD */,
 				AA10001E0609202600000001 /* LiveActivity */,
 				AA1000100609202600000001 /* Settings */,
+				AA4000090609202600000001 /* Shelf */,
 			);
 			path = NotchSuperior;
 			sourceTree = "<group>";
@@ -1000,6 +1043,15 @@
 				AA1000070609202600000001 /* NSHUDEngine.swift in Sources */,
 				AA10001B0609202600000001 /* NSPrivacyDotActivity.swift in Sources */,
 				AA1000190609202600000001 /* NSBatteryActivity.swift in Sources */,
+				AA2000020609202600000001 /* NSDownloadActivity.swift in Sources */,
+				AA2000040609202600000001 /* NSAirDropActivity.swift in Sources */,
+				AA2000060609202600000001 /* NSBluetoothActivity.swift in Sources */,
+				AA2000080609202600000001 /* NSScreenRecordActivity.swift in Sources */,
+				AA3000020609202600000001 /* NSuperiorBootstrap.swift in Sources */,
+				AA4000020609202600000001 /* NSShelfModels.swift in Sources */,
+				AA4000040609202600000001 /* NSShelfEngine.swift in Sources */,
+				AA4000060609202600000001 /* NSShelfView.swift in Sources */,
+				AA4000080609202600000001 /* NSShelfItemActionsMenu.swift in Sources */,
 				1100292A2E8691B400035A57 /* FileShareView.swift in Sources */,
 				147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */,
 				AA1000110609202600000001 /* NSLiveActivityEngine.swift in Sources */,
