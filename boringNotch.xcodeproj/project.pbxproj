@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AAB000060609202600000001 /* NSDevModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000010609202600000001 /* NSDevModels.swift */; };
+		AAB000070609202600000001 /* NSDevEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000020609202600000001 /* NSDevEngine.swift */; };
+		AAB000080609202600000001 /* NSDevHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000030609202600000001 /* NSDevHUDView.swift */; };
+		AAB000090609202600000001 /* NSTerminalDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000040609202600000001 /* NSTerminalDropView.swift */; };
+		AAB0000A0609202600000001 /* NSDevSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000050609202600000001 /* NSDevSettingsSection.swift */; };
+		AA9000050609202600000001 /* NSLayoutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000010609202600000001 /* NSLayoutModels.swift */; };
+		AA9000060609202600000001 /* NSLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000020609202600000001 /* NSLayoutEngine.swift */; };
+		AA9000070609202600000001 /* NSLayoutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000030609202600000001 /* NSLayoutSettingsView.swift */; };
+		AA9000080609202600000001 /* NSBehaviorProfilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000040609202600000001 /* NSBehaviorProfilesView.swift */; };
 		AA8000020609202600000001 /* NSCommandModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000010609202600000001 /* NSCommandModels.swift */; };
 		AA8000040609202600000001 /* NSCommandEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000030609202600000001 /* NSCommandEngine.swift */; };
 		AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000050609202600000001 /* NSCommandLauncherView.swift */; };
@@ -223,6 +232,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NOTCHSUPERIOR_README.md; sourceTree = "<group>"; };
+		AAB000010609202600000001 /* NSDevModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevModels.swift; sourceTree = "<group>"; };
+		AAB000020609202600000001 /* NSDevEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevEngine.swift; sourceTree = "<group>"; };
+		AAB000030609202600000001 /* NSDevHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevHUDView.swift; sourceTree = "<group>"; };
+		AAB000040609202600000001 /* NSTerminalDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTerminalDropView.swift; sourceTree = "<group>"; };
+		AAB000050609202600000001 /* NSDevSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevSettingsSection.swift; sourceTree = "<group>"; };
+		AA9000010609202600000001 /* NSLayoutModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutModels.swift; sourceTree = "<group>"; };
+		AA9000020609202600000001 /* NSLayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutEngine.swift; sourceTree = "<group>"; };
+		AA9000030609202600000001 /* NSLayoutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutSettingsView.swift; sourceTree = "<group>"; };
+		AA9000040609202600000001 /* NSBehaviorProfilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBehaviorProfilesView.swift; sourceTree = "<group>"; };
 		AA8000010609202600000001 /* NSCommandModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandModels.swift; sourceTree = "<group>"; };
 		AA8000030609202600000001 /* NSCommandEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandEngine.swift; sourceTree = "<group>"; };
 		AA8000050609202600000001 /* NSCommandLauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandLauncherView.swift; sourceTree = "<group>"; };
@@ -441,6 +460,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AAB000000609202600000001 /* DevTools */ = {
+			isa = PBXGroup;
+			children = (
+				AAB000010609202600000001 /* NSDevModels.swift */,
+				AAB000020609202600000001 /* NSDevEngine.swift */,
+				AAB000030609202600000001 /* NSDevHUDView.swift */,
+				AAB000040609202600000001 /* NSTerminalDropView.swift */,
+				AAB000050609202600000001 /* NSDevSettingsSection.swift */,
+			);
+			path = DevTools;
+			sourceTree = "<group>";
+		};
+		AA9000000609202600000001 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				AA9000010609202600000001 /* NSLayoutModels.swift */,
+				AA9000020609202600000001 /* NSLayoutEngine.swift */,
+				AA9000030609202600000001 /* NSLayoutSettingsView.swift */,
+				AA9000040609202600000001 /* NSBehaviorProfilesView.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
 		AA8000000609202600000001 /* CommandLauncher */ = {
 			isa = PBXGroup;
 			children = (
@@ -540,6 +582,9 @@
 		AA10000D0609202600000001 /* NotchSuperior */ = {
 			isa = PBXGroup;
 			children = (
+				AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */,
+				AAB000000609202600000001 /* DevTools */,
+				AA9000000609202600000001 /* Layout */,
 				AA8000000609202600000001 /* CommandLauncher */,
 				AA7000000609202600000001 /* AI */,
 				AA5000000609202600000001 /* Clipboard */,
@@ -1127,6 +1172,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAB000060609202600000001 /* NSDevModels.swift in Sources */,
+				AAB000070609202600000001 /* NSDevEngine.swift in Sources */,
+				AAB000080609202600000001 /* NSDevHUDView.swift in Sources */,
+				AAB000090609202600000001 /* NSTerminalDropView.swift in Sources */,
+				AAB0000A0609202600000001 /* NSDevSettingsSection.swift in Sources */,
+				AA9000050609202600000001 /* NSLayoutModels.swift in Sources */,
+				AA9000060609202600000001 /* NSLayoutEngine.swift in Sources */,
+				AA9000070609202600000001 /* NSLayoutSettingsView.swift in Sources */,
+				AA9000080609202600000001 /* NSBehaviorProfilesView.swift in Sources */,
 				AA8000020609202600000001 /* NSCommandModels.swift in Sources */,
 				AA8000040609202600000001 /* NSCommandEngine.swift in Sources */,
 				AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */,

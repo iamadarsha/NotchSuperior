@@ -11,7 +11,14 @@ enum NSTokens {
     static let hudShadowOpacity: Double = 0.22
     static let hairlineOpacity: Double = 0.18
     static let progressHeight: CGFloat = 2
-    static let animationSpring = Animation.spring(response: 0.38, dampingFraction: 0.72)
+    static var animationSpring: Animation {
+        let presenting = UserDefaults.standard.bool(forKey: "NSProfilePresenting")
+        let batterySaver = UserDefaults.standard.bool(forKey: "NSProfileBatterySaver")
+        if presenting || batterySaver {
+            return .linear(duration: 0.001)   // instant — no animation cost
+        }
+        return .spring(response: 0.45, dampingFraction: 0.75)
+    }
     static let subtleSpring = Animation.spring(response: 0.25, dampingFraction: 0.85)
     static let dismissAnimation = Animation.easeOut(duration: 0.18)
 }

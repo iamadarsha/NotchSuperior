@@ -379,6 +379,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        KeyboardShortcuts.onKeyDown(for: .toggleTerminal) { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                let current = UserDefaults.standard.bool(forKey: "NSTerminalOpen")
+                let newValue = !current
+                UserDefaults.standard.set(newValue, forKey: "NSTerminalOpen")
+                if newValue {
+                    self.vm.open()
+                } else {
+                    self.vm.close()
+                }
+            }
+        }
+
         KeyboardShortcuts.onKeyDown(for: .toggleCommandLauncher) { [weak self] in
             guard let self = self else { return }
             Task { @MainActor in

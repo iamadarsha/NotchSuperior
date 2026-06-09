@@ -83,6 +83,24 @@ class NSCommandEngine: ObservableObject {
                     proc.arguments = ["-e", script]
                     try? proc.run()
                 }),
+            NSShortcutCommand(id: UUID(),
+                title: "Open Terminal",
+                subtitle: "Open dropdown shell",
+                icon: "terminal",
+                keywords: ["terminal", "shell", "dev"],
+                action: {
+                    UserDefaults.standard.set(true, forKey: "NSTerminalOpen")
+                }),
+            NSShortcutCommand(id: UUID(),
+                title: "Refresh Dev Status",
+                subtitle: "Check Docker, Git, & Latency",
+                icon: "arrow.clockwise",
+                keywords: ["git", "docker", "latency", "refresh", "dev"],
+                action: {
+                    Task {
+                        await NSDevEngine.shared.refresh()
+                    }
+                }),
         ]
     }
 

@@ -27,8 +27,29 @@ struct ContentView: View {
     @ObservedObject private var liveActivityEngine = NSLiveActivityEngine.shared
     @ObservedObject private var shelfEngine = NSShelfEngine.shared
     @ObservedObject private var commandEngine = NSCommandEngine.shared
+    @ObservedObject private var layoutEngine = NSLayoutEngine.shared
     @AppStorage("NSClipboardOpen") var clipboardOpen = false
     @AppStorage("NSAIChatOpen") var aiChatOpen = false
+    @AppStorage("NSTerminalOpen") var terminalOpen = false
+    
+    private func isEnabled(_ slot: NSWidgetSlot) -> Bool {
+        layoutEngine.effectiveWidgets.contains(slot)
+    }
+    
+    private func isActivityEnabled() -> Bool {
+        guard let activity = liveActivityEngine.currentActivity else { return false }
+        let name = String(describing: type(of: activity))
+        if name.contains("Media") {
+            return isEnabled(.nowPlaying)
+        }
+        if name.contains("Timer") || name.contains("Focus") {
+            return isEnabled(.focusTimer)
+        }
+        if name.contains("Battery") {
+            return isEnabled(.batteryDetailed)
+        }
+        return true
+    }
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -208,7 +229,7 @@ struct ContentView: View {
                 }
             }
 
-            if #available(macOS 26.0, *) {
+            if #available(macOS 26.0, *), isActivityEnabled() {
                 if liveActivityEngine.currentActivity != nil {
                     NSLiveActivityView()
                         .zIndex(50)
@@ -219,7 +240,7 @@ struct ContentView: View {
                 }
             }
 
-            if #available(macOS 26.0, *), clipboardOpen {
+            if #available(macOS 26.0, *), clipboardOpen, isEnabled(.clipboardShortcut) {
                 NSClipboardView()
                     .frame(width: 640, height: 180)
                     .background(Color.black)
@@ -239,6 +260,16 @@ struct ContentView: View {
                     .zIndex(80)
             }
 
+            if #available(macOS 26.0, *), terminalOpen {
+                NSTerminalDropView()
+                    .frame(width: 640)
+                    .background(Color.black)
+                    .clipShape(currentNotchShape)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(NSTokens.animationSpring, value: terminalOpen)
+                    .zIndex(80)
+            }
+
             if #available(macOS 26.0, *), commandEngine.isVisible {
                 NSCommandLauncherView()
                     .frame(width: 640)
@@ -249,9 +280,11 @@ struct ContentView: View {
                     .zIndex(90)
             }
 
-            if notchSuperiorHUDEngine.activeHUD != nil {
-                NSHUDOverlayView(engine: notchSuperiorHUDEngine)
-                    .zIndex(100)
+            if isEnabled(.volumeHUD) || isEnabled(.brightnessHUD) {
+                if notchSuperiorHUDEngine.activeHUD != nil {
+                    NSHUDOverlayView(engine: notchSuperiorHUDEngine)
+                        .zIndex(100)
+                }
             }
         }
         .padding(.bottom, 8)
@@ -309,7 +342,7 @@ struct ContentView: View {
                     .padding(.top, 40)
                     Spacer()
                 } else {
-                    if coordinator.expandingView.type == .battery && coordinator.expandingView.show
+                    if isEnabled(.batteryDetailed) && coordinator.expandingView.type == .battery && coordinator.expandingView.show
                         && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
                     {
                         HStack(spacing: 0) {
@@ -336,10 +369,10 @@ struct ContentView: View {
                             .frame(width: 76, alignment: .trailing)
                         }
                         .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
-                      } else if coordinator.sneakPeek.show && Defaults[.inlineHUD] && (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && vm.notchState == .closed {
+                      } else if (isEnabled(.volumeHUD) || isEnabled(.brightnessHUD)) && coordinator.sneakPeek.show && Defaults[.inlineHUD] && (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && vm.notchState == .closed {
                           InlineHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon, hoverAnimation: $isHovering, gestureProgress: $gestureProgress)
                               .transition(.opacity)
-                      } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
+                      } else if isEnabled(.nowPlaying) && (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
                       } else if !coordinator.expandingView.show && vm.notchState == .closed && (!musicManager.isPlaying && musicManager.isPlayerIdle) && Defaults[.showNotHumanFace] && !vm.hideOnClosed  {
@@ -354,28 +387,30 @@ struct ContentView: View {
 
                       if coordinator.sneakPeek.show {
                           if (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && !Defaults[.inlineHUD] && vm.notchState == .closed {
-                              SystemEventIndicatorModifier(
-                                  eventType: $coordinator.sneakPeek.type,
-                                  value: $coordinator.sneakPeek.value,
-                                  icon: $coordinator.sneakPeek.icon,
-                                  sendEventBack: { newVal in
-                                      switch coordinator.sneakPeek.type {
-                                      case .volume:
-                                          VolumeManager.shared.setAbsolute(Float32(newVal))
-                                      case .brightness:
-                                          BrightnessManager.shared.setAbsolute(value: Float32(newVal))
-                                      default:
-                                          break
+                              if isEnabled(.volumeHUD) || isEnabled(.brightnessHUD) {
+                                  SystemEventIndicatorModifier(
+                                      eventType: $coordinator.sneakPeek.type,
+                                      value: $coordinator.sneakPeek.value,
+                                      icon: $coordinator.sneakPeek.icon,
+                                      sendEventBack: { newVal in
+                                          switch coordinator.sneakPeek.type {
+                                          case .volume:
+                                              VolumeManager.shared.setAbsolute(Float32(newVal))
+                                          case .brightness:
+                                              BrightnessManager.shared.setAbsolute(value: Float32(newVal))
+                                          default:
+                                              break
+                                          }
                                       }
-                                  }
-                              )
-                              .padding(.bottom, 10)
-                              .padding(.leading, 4)
-                              .padding(.trailing, 8)
+                                  )
+                                  .padding(.bottom, 10)
+                                  .padding(.leading, 4)
+                                  .padding(.trailing, 8)
+                              }
                           }
                           // Old sneak peek music
                           else if coordinator.sneakPeek.type == .music {
-                              if vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard {
+                              if isEnabled(.nowPlaying) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard {
                                   HStack(alignment: .center) {
                                       Image(systemName: "music.note")
                                       GeometryReader { geo in
@@ -400,7 +435,7 @@ struct ContentView: View {
                     case .home:
                         NotchHomeView(albumArtNamespace: albumArtNamespace)
                     case .shelf:
-                        if #available(macOS 26.0, *), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
+                        if #available(macOS 26.0, *), isEnabled(.clipboardShortcut), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
                             NSShelfView()
                         } else {
                             ShelfView()

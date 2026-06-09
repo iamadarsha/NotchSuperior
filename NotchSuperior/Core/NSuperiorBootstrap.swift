@@ -41,5 +41,15 @@ final class NSuperiorBootstrap {
         
         // Setup Command Launcher
         NSCommandEngine.shared.setup()
+        
+        // Setup Layout Engine
+        NSLayoutEngine.shared.setup()
+        
+        // Setup Dev Status Polling if needed
+        if NSLayoutEngine.shared.effectiveWidgets.contains(.gitStatus)
+            || NSLayoutEngine.shared.effectiveWidgets.contains(.dockerStatus)
+            || NSLayoutEngine.shared.effectiveWidgets.contains(.networkLatency) {
+            NSDevEngine.shared.start()
+        }
     }
 }

@@ -60,6 +60,17 @@ struct SettingsView: View {
                 NavigationLink(value: "Focus") {
                     Label("Focus & Pomodoro", systemImage: "timer")
                 }
+                Section("Layout & System") {
+                    NavigationLink(value: "Layouts") {
+                        Label("Layout Profiles", systemImage: "rectangle.3.group")
+                    }
+                    NavigationLink(value: "BehaviorProfiles") {
+                        Label("Behavior Profiles", systemImage: "switch.2")
+                    }
+                    NavigationLink(value: "DevTools") {
+                        Label("Dev Tools", systemImage: "terminal")
+                    }
+                }
                 Section("AI") {
                     NavigationLink(value: "AIChat") {
                         Label("AI Chat", systemImage: "bubble.left.and.bubble.right")
@@ -146,6 +157,48 @@ struct SettingsView: View {
                             }
                         }
                         .navigationTitle("Focus & Pomodoro")
+                    }
+                case "Layouts":
+                    if #available(macOS 26.0, *) {
+                        NSLayoutSettingsView()
+                    } else {
+                        Form {
+                            Section {
+                                Text("Layout Profiles requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("Layout Profiles")
+                            }
+                        }
+                        .navigationTitle("Layout Profiles")
+                    }
+                case "BehaviorProfiles":
+                    if #available(macOS 26.0, *) {
+                        NSBehaviorProfilesView()
+                    } else {
+                        Form {
+                            Section {
+                                Text("Behavior Profiles requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("Behavior Profiles")
+                            }
+                        }
+                        .navigationTitle("Behavior Profiles")
+                    }
+                case "DevTools":
+                    if #available(macOS 26.0, *) {
+                        NSDevSettingsSection()
+                    } else {
+                        Form {
+                            Section {
+                                Text("Dev Tools requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("Dev Tools")
+                            }
+                        }
+                        .navigationTitle("Dev Tools")
                     }
                 case "AIChat":
                     if #available(macOS 26.0, *) {
