@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA5000020609202600000001 /* NSClipboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010609202600000001 /* NSClipboardModels.swift */; };
+		AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000030609202600000001 /* NSClipboardEngine.swift */; };
+		AA5000060609202600000001 /* NSClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000050609202600000001 /* NSClipboardView.swift */; };
+		AA5000080609202600000001 /* NSClipboardItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000070609202600000001 /* NSClipboardItemRow.swift */; };
+		AA50000A0609202600000001 /* NSSnippetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000090609202600000001 /* NSSnippetRow.swift */; };
+		AA50000C0609202600000001 /* NSSnippetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50000B0609202600000001 /* NSSnippetEditorView.swift */; };
+		AA6000020609202600000001 /* NSFocusModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000010609202600000001 /* NSFocusModels.swift */; };
+		AA6000040609202600000001 /* NSFocusEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000030609202600000001 /* NSFocusEngine.swift */; };
+		AA6000060609202600000001 /* NSFocusExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000050609202600000001 /* NSFocusExpandedView.swift */; };
+		AA6000080609202600000001 /* NSFocusSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000070609202600000001 /* NSFocusSettingsSection.swift */; };
+		AA60000A0609202600000001 /* NSFocusActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000090609202600000001 /* NSFocusActivity.swift */; };
 		AA1000010609202600000001 /* NSTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000020609202600000001 /* NSTokens.swift */; };
 		AA1000030609202600000001 /* NSGlassModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000040609202600000001 /* NSGlassModifiers.swift */; };
 		AA1000050609202600000001 /* NSHUDTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000060609202600000001 /* NSHUDTheme.swift */; };
@@ -202,6 +213,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA5000010609202600000001 /* NSClipboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardModels.swift; sourceTree = "<group>"; };
+		AA5000030609202600000001 /* NSClipboardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardEngine.swift; sourceTree = "<group>"; };
+		AA5000050609202600000001 /* NSClipboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardView.swift; sourceTree = "<group>"; };
+		AA5000070609202600000001 /* NSClipboardItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardItemRow.swift; sourceTree = "<group>"; };
+		AA5000090609202600000001 /* NSSnippetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetRow.swift; sourceTree = "<group>"; };
+		AA50000B0609202600000001 /* NSSnippetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetEditorView.swift; sourceTree = "<group>"; };
+		AA6000010609202600000001 /* NSFocusModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusModels.swift; sourceTree = "<group>"; };
+		AA6000030609202600000001 /* NSFocusEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusEngine.swift; sourceTree = "<group>"; };
+		AA6000050609202600000001 /* NSFocusExpandedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusExpandedView.swift; sourceTree = "<group>"; };
+		AA6000070609202600000001 /* NSFocusSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusSettingsSection.swift; sourceTree = "<group>"; };
+		AA6000090609202600000001 /* NSFocusActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusActivity.swift; sourceTree = "<group>"; };
 		AA1000020609202600000001 /* NSTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTokens.swift; sourceTree = "<group>"; };
 		AA1000040609202600000001 /* NSGlassModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSGlassModifiers.swift; sourceTree = "<group>"; };
 		AA1000060609202600000001 /* NSHUDTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDTheme.swift; sourceTree = "<group>"; };
@@ -429,6 +451,7 @@
 		AA10001D0609202600000001 /* Activities */ = {
 			isa = PBXGroup;
 			children = (
+				AA6000090609202600000001 /* NSFocusActivity.swift */,
 				AA1000160609202600000001 /* NSMediaActivity.swift */,
 				AA1000180609202600000001 /* NSTimerActivity.swift */,
 				AA10001A0609202600000001 /* NSBatteryActivity.swift */,
@@ -473,6 +496,8 @@
 		AA10000D0609202600000001 /* NotchSuperior */ = {
 			isa = PBXGroup;
 			children = (
+				AA5000000609202600000001 /* Clipboard */,
+				AA6000000609202600000001 /* Focus */,
 				AA3000030609202600000001 /* Core */,
 				AA10000B0609202600000001 /* DesignSystem */,
 				AA10000C0609202600000001 /* HUD */,
@@ -884,6 +909,30 @@
 			path = Tips;
 			sourceTree = "<group>";
 		};
+		AA5000000609202600000001 /* Clipboard */ = {
+			isa = PBXGroup;
+			children = (
+				AA5000030609202600000001 /* NSClipboardEngine.swift */,
+				AA5000070609202600000001 /* NSClipboardItemRow.swift */,
+				AA5000010609202600000001 /* NSClipboardModels.swift */,
+				AA5000050609202600000001 /* NSClipboardView.swift */,
+				AA50000B0609202600000001 /* NSSnippetEditorView.swift */,
+				AA5000090609202600000001 /* NSSnippetRow.swift */,
+			);
+			path = Clipboard;
+			sourceTree = "<group>";
+		};
+		AA6000000609202600000001 /* Focus */ = {
+			isa = PBXGroup;
+			children = (
+				AA6000030609202600000001 /* NSFocusEngine.swift */,
+				AA6000050609202600000001 /* NSFocusExpandedView.swift */,
+				AA6000010609202600000001 /* NSFocusModels.swift */,
+				AA6000070609202600000001 /* NSFocusSettingsSection.swift */,
+			);
+			path = Focus;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1032,6 +1081,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA5000020609202600000001 /* NSClipboardModels.swift in Sources */,
+				AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */,
+				AA5000060609202600000001 /* NSClipboardView.swift in Sources */,
+				AA5000080609202600000001 /* NSClipboardItemRow.swift in Sources */,
+				AA50000A0609202600000001 /* NSSnippetRow.swift in Sources */,
+				AA50000C0609202600000001 /* NSSnippetEditorView.swift in Sources */,
+				AA6000020609202600000001 /* NSFocusModels.swift in Sources */,
+				AA6000040609202600000001 /* NSFocusEngine.swift in Sources */,
+				AA6000060609202600000001 /* NSFocusExpandedView.swift in Sources */,
+				AA6000080609202600000001 /* NSFocusSettingsSection.swift in Sources */,
+				AA60000A0609202600000001 /* NSFocusActivity.swift in Sources */,
 				AA1000030609202600000001 /* NSGlassModifiers.swift in Sources */,
 				AA1000090609202600000001 /* NSHUDOverlayView.swift in Sources */,
 				AA10000E0609202600000001 /* NSHUDSettingsSection.swift in Sources */,

@@ -351,6 +351,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
         }
 
+        KeyboardShortcuts.onKeyDown(for: .toggleClipboard) { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                let current = UserDefaults.standard.bool(forKey: "NSClipboardOpen")
+                let newValue = !current
+                UserDefaults.standard.set(newValue, forKey: "NSClipboardOpen")
+                if newValue {
+                    self.vm.open()
+                } else {
+                    self.vm.close()
+                }
+            }
+        }
+
         KeyboardShortcuts.onKeyDown(for: .toggleSneakPeek) { [weak self] in
             guard let self = self else { return }
             if Defaults[.sneakPeekStyles] == .inline {

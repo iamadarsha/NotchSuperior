@@ -61,6 +61,17 @@ final class NSLiveActivityEngine: ObservableObject {
         }
     }
     
+    func dismiss(for activityType: any NSActivity.Type) {
+        queue.removeAll { type(of: $0) == activityType }
+        currentActivity = queue.first
+        if queue.isEmpty {
+            dismissTask?.cancel()
+            dismissTask = nil
+        } else {
+            scheduleDismissalIfNeeded()
+        }
+    }
+    
     func dismissAll() {
         queue.removeAll()
         currentActivity = nil

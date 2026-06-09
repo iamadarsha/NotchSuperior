@@ -26,6 +26,7 @@ struct ContentView: View {
     @ObservedObject private var notchSuperiorHUDEngine = NSHUDEngine.shared
     @ObservedObject private var liveActivityEngine = NSLiveActivityEngine.shared
     @ObservedObject private var shelfEngine = NSShelfEngine.shared
+    @AppStorage("NSClipboardOpen") var clipboardOpen = false
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -214,6 +215,16 @@ struct ContentView: View {
                             removal: .scale(scale: 0.7).combined(with: .opacity)
                         ))
                 }
+            }
+
+            if #available(macOS 26.0, *), clipboardOpen {
+                NSClipboardView()
+                    .frame(width: 640, height: 180)
+                    .background(Color.black)
+                    .clipShape(currentNotchShape)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(NSTokens.animationSpring, value: clipboardOpen)
+                    .zIndex(80)
             }
 
             if notchSuperiorHUDEngine.activeHUD != nil {

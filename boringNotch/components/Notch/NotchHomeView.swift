@@ -444,13 +444,21 @@ struct NotchHomeView: View {
             MusicPlayerView(albumArtNamespace: albumArtNamespace)
 
             if Defaults[.showCalendar] {
-                CalendarView()
-                    .frame(width: shouldShowCamera ? 170 : 215)
-                    .onHover { isHovering in
-                        vm.isHoveringCalendar = isHovering
+                ZStack(alignment: .topTrailing) {
+                    CalendarView()
+                        .frame(width: shouldShowCamera ? 170 : 215)
+                        .onHover { isHovering in
+                            vm.isHoveringCalendar = isHovering
+                        }
+                        .environmentObject(vm)
+                        .transition(.opacity)
+                    
+                    if #available(macOS 26.0, *) {
+                        FocusNotchButton()
+                            .padding(.top, 4)
+                            .padding(.trailing, 4)
                     }
-                    .environmentObject(vm)
-                    .transition(.opacity)
+                }
             }
 
             if shouldShowCamera {
@@ -573,6 +581,71 @@ struct CustomSlider: View {
                     }
             )
             .animation(.spring(response: 0.35, dampingFraction: 0.7), value: dragging)
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+struct FocusNotchButton: View {
+    @ObservedObject var focusEngine = NSFocusEngine.shared
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: {
+            if focusEngine.state == .idle {
+                focusEngine.start()
+            } else {
+                if focusEngine.isPaused {
+                    focusEngine.resume()
+                } else {
+                    focusEngine.pause()
+                }
+            }
+        }) {
+            Image(systemName: iconName)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(iconColor)
+                .padding(4)
+                .background(isHovered ? Color.white.opacity(0.15) : Color.clear)
+                .clipShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .help(helpText)
+    }
+
+    private var iconName: String {
+        if focusEngine.state == .idle {
+            return "timer"
+        } else if focusEngine.isPaused {
+            return "play.fill"
+        } else {
+            return "pause.fill"
+        }
+    }
+
+    private var iconColor: Color {
+        if focusEngine.state == .idle {
+            return .secondary
+        } else {
+            switch focusEngine.state {
+            case .working: return .red
+            case .breaking: return .green
+            case .longBreak: return .blue
+            case .idle: return .secondary
+            }
+        }
+    }
+
+    private var helpText: String {
+        if focusEngine.state == .idle {
+            return "Start Focus Session"
+        } else if focusEngine.isPaused {
+            return "Resume Focus Session"
+        } else {
+            return "Pause Focus Session"
         }
     }
 }

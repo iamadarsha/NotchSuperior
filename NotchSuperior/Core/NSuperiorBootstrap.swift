@@ -27,6 +27,9 @@ final class NSuperiorBootstrap {
         // Start screen recording observer
         NSScreenRecordObserver.shared.start()
         
+        // Start Clipboard Engine
+        NSClipboardEngine.shared.start()
+        
         // Start Bluetooth Observer on supported OS versions
         if #available(macOS 26.0, *) {
             NSBluetoothObserver.shared.start()

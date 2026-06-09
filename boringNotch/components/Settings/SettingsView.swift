@@ -54,6 +54,12 @@ struct SettingsView: View {
                 NavigationLink(value: "Shelf") {
                     Label("Shelf", systemImage: "books.vertical")
                 }
+                NavigationLink(value: "Clipboard") {
+                    Label("Clipboard & Snippets", systemImage: "doc.on.clipboard")
+                }
+                NavigationLink(value: "Focus") {
+                    Label("Focus & Pomodoro", systemImage: "timer")
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -102,6 +108,34 @@ struct SettingsView: View {
                     Charge()
                 case "Shelf":
                     Shelf()
+                case "Clipboard":
+                    if #available(macOS 26.0, *) {
+                        NSClipboardView()
+                    } else {
+                        Form {
+                            Section {
+                                Text("Clipboard & Snippets requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("Clipboard & Snippets")
+                            }
+                        }
+                        .navigationTitle("Clipboard & Snippets")
+                    }
+                case "Focus":
+                    if #available(macOS 26.0, *) {
+                        NSFocusSettingsSection()
+                    } else {
+                        Form {
+                            Section {
+                                Text("Focus & Pomodoro requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("Focus & Pomodoro")
+                            }
+                        }
+                        .navigationTitle("Focus & Pomodoro")
+                    }
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":
