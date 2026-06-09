@@ -19,5 +19,9 @@
 	<array>
 		<dict/>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>NotchSuperior records voice memos for AI Notes.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>NotchSuperior transcribes voice notes locally.</string>
 </dict>
 </plist>

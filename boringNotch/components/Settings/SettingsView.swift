@@ -60,6 +60,17 @@ struct SettingsView: View {
                 NavigationLink(value: "Focus") {
                     Label("Focus & Pomodoro", systemImage: "timer")
                 }
+                Section("AI") {
+                    NavigationLink(value: "AIChat") {
+                        Label("AI Chat", systemImage: "bubble.left.and.bubble.right")
+                    }
+                    NavigationLink(value: "AINotes") {
+                        Label("AI Notes", systemImage: "mic.circle")
+                    }
+                    NavigationLink(value: "AISettings") {
+                        Label("API Keys", systemImage: "key")
+                    }
+                }
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
@@ -135,6 +146,48 @@ struct SettingsView: View {
                             }
                         }
                         .navigationTitle("Focus & Pomodoro")
+                    }
+                case "AIChat":
+                    if #available(macOS 26.0, *) {
+                        NSAIChatView()
+                    } else {
+                        Form {
+                            Section {
+                                Text("AI Chat requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("AI Chat")
+                            }
+                        }
+                        .navigationTitle("AI Chat")
+                    }
+                case "AINotes":
+                    if #available(macOS 26.0, *) {
+                        NSAINotesView()
+                    } else {
+                        Form {
+                            Section {
+                                Text("AI Notes requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("AI Notes")
+                            }
+                        }
+                        .navigationTitle("AI Notes")
+                    }
+                case "AISettings":
+                    if #available(macOS 26.0, *) {
+                        NSAISettingsSection()
+                    } else {
+                        Form {
+                            Section {
+                                Text("API Keys requires macOS 26 or newer.")
+                                    .foregroundStyle(.secondary)
+                            } header: {
+                                Text("API Keys")
+                            }
+                        }
+                        .navigationTitle("API Keys")
                     }
                 case "Shortcuts":
                     Shortcuts()

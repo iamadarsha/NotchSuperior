@@ -10,6 +10,8 @@ import SwiftUI
 
 extension KeyboardShortcuts.Name {
     static let toggleClipboard = Self("toggleClipboard", default: .init(.v, modifiers: [.shift, .command]))
+    static let toggleAIChat = Self("toggleAIChat", default: .init(.a, modifiers: [.shift, .command]))
+    static let toggleCommandLauncher = Self("toggleCommandLauncher", default: .init(.space, modifiers: [.control, .option]))
     static let clipboardHistoryPanel = Self("clipboardHistoryPanel", default: .init(.c, modifiers: [.shift, .command]))
     static let toggleMicrophone = Self("toggleMicrophone", default: .init(.f5, modifiers: [.function]))
     static let decreaseBacklight = Self("decreaseBacklight", default: .init(.f1, modifiers: [.command]))

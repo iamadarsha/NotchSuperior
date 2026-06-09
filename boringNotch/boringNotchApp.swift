@@ -365,6 +365,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        KeyboardShortcuts.onKeyDown(for: .toggleAIChat) { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                let current = UserDefaults.standard.bool(forKey: "NSAIChatOpen")
+                let newValue = !current
+                UserDefaults.standard.set(newValue, forKey: "NSAIChatOpen")
+                if newValue {
+                    self.vm.open()
+                } else {
+                    self.vm.close()
+                }
+            }
+        }
+
+        KeyboardShortcuts.onKeyDown(for: .toggleCommandLauncher) { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                let current = NSCommandEngine.shared.isVisible
+                let newValue = !current
+                if newValue {
+                    NSCommandEngine.shared.show()
+                    self.vm.open()
+                } else {
+                    NSCommandEngine.shared.hide()
+                    self.vm.close()
+                }
+            }
+        }
+
         KeyboardShortcuts.onKeyDown(for: .toggleSneakPeek) { [weak self] in
             guard let self = self else { return }
             if Defaults[.sneakPeekStyles] == .inline {

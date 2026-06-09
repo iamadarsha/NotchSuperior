@@ -34,5 +34,12 @@ final class NSuperiorBootstrap {
         if #available(macOS 26.0, *) {
             NSBluetoothObserver.shared.start()
         }
+        
+        // Load AI states
+        NSAIEngine.shared.load()
+        NSAINoteEngine.shared.load()
+        
+        // Setup Command Launcher
+        NSCommandEngine.shared.setup()
     }
 }

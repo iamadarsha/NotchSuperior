@@ -26,7 +26,9 @@ struct ContentView: View {
     @ObservedObject private var notchSuperiorHUDEngine = NSHUDEngine.shared
     @ObservedObject private var liveActivityEngine = NSLiveActivityEngine.shared
     @ObservedObject private var shelfEngine = NSShelfEngine.shared
+    @ObservedObject private var commandEngine = NSCommandEngine.shared
     @AppStorage("NSClipboardOpen") var clipboardOpen = false
+    @AppStorage("NSAIChatOpen") var aiChatOpen = false
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -225,6 +227,26 @@ struct ContentView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .animation(NSTokens.animationSpring, value: clipboardOpen)
                     .zIndex(80)
+            }
+
+            if #available(macOS 26.0, *), aiChatOpen {
+                NSAIChatView()
+                    .frame(width: 640, height: 320)
+                    .background(Color.black)
+                    .clipShape(currentNotchShape)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(NSTokens.animationSpring, value: aiChatOpen)
+                    .zIndex(80)
+            }
+
+            if #available(macOS 26.0, *), commandEngine.isVisible {
+                NSCommandLauncherView()
+                    .frame(width: 640)
+                    .background(Color.black)
+                    .clipShape(currentNotchShape)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(NSTokens.animationSpring, value: commandEngine.isVisible)
+                    .zIndex(90)
             }
 
             if notchSuperiorHUDEngine.activeHUD != nil {

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA8000020609202600000001 /* NSCommandModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000010609202600000001 /* NSCommandModels.swift */; };
+		AA8000040609202600000001 /* NSCommandEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000030609202600000001 /* NSCommandEngine.swift */; };
+		AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000050609202600000001 /* NSCommandLauncherView.swift */; };
+		AA7000020609202600000001 /* NSAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000010609202600000001 /* NSAIModels.swift */; };
+		AA7000040609202600000001 /* NSAIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000030609202600000001 /* NSAIKeyStore.swift */; };
+		AA7000060609202600000001 /* NSAIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000050609202600000001 /* NSAIEngine.swift */; };
+		AA7000080609202600000001 /* NSAIChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000070609202600000001 /* NSAIChatView.swift */; };
+		AA70000A0609202600000001 /* NSAINoteEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000090609202600000001 /* NSAINoteEngine.swift */; };
+		AA70000C0609202600000001 /* NSAINotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000B0609202600000001 /* NSAINotesView.swift */; };
+		AA70000E0609202600000001 /* NSAISettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000D0609202600000001 /* NSAISettingsSection.swift */; };
 		AA5000020609202600000001 /* NSClipboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010609202600000001 /* NSClipboardModels.swift */; };
 		AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000030609202600000001 /* NSClipboardEngine.swift */; };
 		AA5000060609202600000001 /* NSClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000050609202600000001 /* NSClipboardView.swift */; };
@@ -213,6 +223,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA8000010609202600000001 /* NSCommandModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandModels.swift; sourceTree = "<group>"; };
+		AA8000030609202600000001 /* NSCommandEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandEngine.swift; sourceTree = "<group>"; };
+		AA8000050609202600000001 /* NSCommandLauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandLauncherView.swift; sourceTree = "<group>"; };
+		AA7000010609202600000001 /* NSAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIModels.swift; sourceTree = "<group>"; };
+		AA7000030609202600000001 /* NSAIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIKeyStore.swift; sourceTree = "<group>"; };
+		AA7000050609202600000001 /* NSAIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIEngine.swift; sourceTree = "<group>"; };
+		AA7000070609202600000001 /* NSAIChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIChatView.swift; sourceTree = "<group>"; };
+		AA7000090609202600000001 /* NSAINoteEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINoteEngine.swift; sourceTree = "<group>"; };
+		AA70000B0609202600000001 /* NSAINotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINotesView.swift; sourceTree = "<group>"; };
+		AA70000D0609202600000001 /* NSAISettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAISettingsSection.swift; sourceTree = "<group>"; };
 		AA5000010609202600000001 /* NSClipboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardModels.swift; sourceTree = "<group>"; };
 		AA5000030609202600000001 /* NSClipboardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardEngine.swift; sourceTree = "<group>"; };
 		AA5000050609202600000001 /* NSClipboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardView.swift; sourceTree = "<group>"; };
@@ -421,6 +441,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA8000000609202600000001 /* CommandLauncher */ = {
+			isa = PBXGroup;
+			children = (
+				AA8000030609202600000001 /* NSCommandEngine.swift */,
+				AA8000050609202600000001 /* NSCommandLauncherView.swift */,
+				AA8000010609202600000001 /* NSCommandModels.swift */,
+			);
+			path = CommandLauncher;
+			sourceTree = "<group>";
+		};
+		AA7000000609202600000001 /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				AA7000010609202600000001 /* NSAIModels.swift */,
+				AA7000030609202600000001 /* NSAIKeyStore.swift */,
+				AA7000050609202600000001 /* NSAIEngine.swift */,
+				AA7000070609202600000001 /* NSAIChatView.swift */,
+				AA7000090609202600000001 /* NSAINoteEngine.swift */,
+				AA70000B0609202600000001 /* NSAINotesView.swift */,
+				AA70000D0609202600000001 /* NSAISettingsSection.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
 		AA10000B0609202600000001 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +540,8 @@
 		AA10000D0609202600000001 /* NotchSuperior */ = {
 			isa = PBXGroup;
 			children = (
+				AA8000000609202600000001 /* CommandLauncher */,
+				AA7000000609202600000001 /* AI */,
 				AA5000000609202600000001 /* Clipboard */,
 				AA6000000609202600000001 /* Focus */,
 				AA3000030609202600000001 /* Core */,
@@ -1081,6 +1127,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA8000020609202600000001 /* NSCommandModels.swift in Sources */,
+				AA8000040609202600000001 /* NSCommandEngine.swift in Sources */,
+				AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */,
+				AA7000020609202600000001 /* NSAIModels.swift in Sources */,
+				AA7000040609202600000001 /* NSAIKeyStore.swift in Sources */,
+				AA7000060609202600000001 /* NSAIEngine.swift in Sources */,
+				AA7000080609202600000001 /* NSAIChatView.swift in Sources */,
+				AA70000A0609202600000001 /* NSAINoteEngine.swift in Sources */,
+				AA70000C0609202600000001 /* NSAINotesView.swift in Sources */,
+				AA70000E0609202600000001 /* NSAISettingsSection.swift in Sources */,
 				AA5000020609202600000001 /* NSClipboardModels.swift in Sources */,
 				AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */,
 				AA5000060609202600000001 /* NSClipboardView.swift in Sources */,
