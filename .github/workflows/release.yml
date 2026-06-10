@@ -444,18 +444,18 @@ jobs:
           CASK
           }
 
-          write_cask "boring-notch@rc" "NotchSuperior RC" \
-            "Not so boring notch That Rocks (Release Candidate)" > boring-notch@rc.rb
+          write_cask "notch-superior@rc" "NotchSuperior RC" \
+            "A premium MacBook notch command center (Release Candidate)" > notch-superior@rc.rb
           if [[ "${IS_BETA}" == "false" ]]; then
-            write_cask "boring-notch" "NotchSuperior" \
-              "Not so boring notch That Rocks" > boring-notch.rb
+            write_cask "notch-superior" "NotchSuperior" \
+              "A premium MacBook notch command center" > notch-superior.rb
           fi
 
       - name: Upload cask artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: homebrew-cask-${{ env.VERSION }}
-          path: boring-notch*.rb
+          path: notch-superior*.rb
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -466,11 +466,11 @@ jobs:
       - name: Update casks in tap
         run: |
           set -euo pipefail
-          cp boring-notch@rc.rb homebrew-tap/Casks/boring-notch@rc.rb
-          COMMIT_MSG="Update boring-notch@rc to v${VERSION}"
+          cp notch-superior@rc.rb homebrew-tap/Casks/notch-superior@rc.rb
+          COMMIT_MSG="Update notch-superior@rc to v${VERSION}"
           if [[ "${IS_BETA}" == "false" ]]; then
-            cp boring-notch.rb homebrew-tap/Casks/boring-notch.rb
-            COMMIT_MSG="Update boring-notch and boring-notch@rc to v${VERSION}"
+            cp notch-superior.rb homebrew-tap/Casks/notch-superior.rb
+            COMMIT_MSG="Update notch-superior and notch-superior@rc to v${VERSION}"
           fi
           cd homebrew-tap
           git config user.name "github-actions[bot]"
