@@ -25,7 +25,9 @@ final class NSLiveActivityEngine: ObservableObject {
     private var queue: [any NSActivity] = []
     private var dismissTask: Task<Void, Never>?
     
-    private init() {}
+    private init() {
+        setupExternalObservers()
+    }
     
     func post(_ activity: any NSActivity) {
         // Remove existing occurrence if matching by ID
@@ -89,6 +91,46 @@ final class NSLiveActivityEngine: ObservableObject {
             try? await Task.sleep(nanoseconds: UInt64(ttl * 1_000_000_000))
             guard !Task.isCancelled else { return }
             await self?.dismiss(activity.id)
+        }
+    }
+
+    private func setupExternalObservers() {
+        DistributedNotificationCenter.default().addObserver(
+            forName: Notification.Name("com.notchsuperior.activity.post"),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let jsonString = notification.object as? String,
+                  let data = jsonString.data(using: .utf8),
+                  let request = try? JSONDecoder().decode(NSLiveActivityRequestDecodable.self, from: data) else {
+                return
+            }
+            
+            let activity = NSThirdPartyActivity(
+                id: request.id,
+                priority: request.priority,
+                ttl: request.ttl,
+                title: request.title,
+                subtitle: request.subtitle,
+                progress: request.progress,
+                systemImageName: request.systemImageName,
+                customIconColor: request.customIconColor,
+                actionLabel: request.actionLabel,
+                actionNotificationName: request.actionNotificationName
+            )
+            self?.post(activity)
+        }
+        
+        DistributedNotificationCenter.default().addObserver(
+            forName: Notification.Name("com.notchsuperior.activity.dismiss"),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let idString = notification.object as? String,
+                  let id = UUID(uuidString: idString) else {
+                return
+            }
+            self?.dismiss(id)
         }
     }
 }

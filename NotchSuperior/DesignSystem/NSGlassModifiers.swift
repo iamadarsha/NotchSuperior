@@ -25,7 +25,7 @@ private struct NSGlassSurfaceModifier: ViewModifier {
             // macOS 26+: true Liquid Glass with system-depth rendering
             content
                 .glassEffect(
-                    Glass().cornerRadius(cornerRadius),
+                    .regular,
                     in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 )
                 .overlay {

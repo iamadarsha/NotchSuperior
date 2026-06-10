@@ -106,7 +106,7 @@ class NSDevEngine: ObservableObject {
     }
 
     // MARK: — Shell helper (nonisolated — safe to call from detached Tasks)
-    private static func shell(_ cmd: String) -> String {
+    nonisolated private static func shell(_ cmd: String) -> String {
         let proc = Process()
         proc.executableURL = URL(fileURLWithPath: "/bin/zsh")
         proc.arguments = ["-c", cmd]
