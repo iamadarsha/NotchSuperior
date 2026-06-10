@@ -1,13 +1,14 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/iamadarsha/NotchSuperior"><img src="logo.png" alt="NotchSuperior Logo" width="160"></a>
-  <br>
-  NotchSuperior
+  <a href="https://github.com/iamadarsha/NotchSuperior">
+    <!-- Animated SVG Banner -->
+    <img src="banner.svg" alt="NotchSuperior Banner" width="100%">
+  </a>
   <br>
 </h1>
 
 <p align="center">
-  <strong>Transform your MacBook's notch into a fluid, responsive command center.</strong>
+  <strong>Transform your MacBook's notch into a fluid, responsive, and gorgeous command center.</strong>
 </p>
 
 <p align="center">
@@ -18,17 +19,16 @@
   <a href="https://www.ko-fi.com/alexander5015">
     <img src="https://srv-cdn.himpfen.io/badges/kofi/kofi-flat.svg" alt="Support" />
   </a>
+  <a href="https://instagram.com/iamadarsha">
+    <img src="https://img.shields.io/badge/Instagram-@iamadarsha-E4405F?style=flat&logo=instagram&logoColor=white" alt="Creator Instagram" />
+  </a>
 </p>
 
 ---
 
 Say hello to **NotchSuperior**, a premium, high-performance utility that transforms your MacBook's screen notch from a static cutout into a gorgeous, interactive overlay. 
 
-NotchSuperior introduces **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**.
-
-<p align="center">
-  <img src="logo.png" alt="NotchSuperior Icon" width="200" />
-</p>
+Built with **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**, NotchSuperior is the ultimate extension for your macOS workflow.
 
 ---
 
@@ -42,53 +42,80 @@ Open your Terminal app (`/Applications/Utilities/Terminal.app`) and paste the fo
 curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/main/install.sh | bash
 ```
 
-> [!NOTE]
-> **What this command does:**
-> 1. Downloads the latest verified release build of NotchSuperior.
-> 2. Mounts the installation image.
-> 3. Installs `NotchSuperior.app` into your `/Applications` folder.
-> 4. Automatically clears the macOS gatekeeper quarantine (`xattr`) so you don't have to manually bypass "unidentified developer" warnings.
-> 5. Launches the app instantly.
+<details>
+<summary><strong>🔍 Click to see what this command does under the hood</strong></summary>
+
+1. Downloads the latest verified release build of `NotchSuperior.dmg`.
+2. Mounts the installation volume.
+3. Installs `NotchSuperior.app` into your `/Applications` folder.
+4. Automatically clears the macOS gatekeeper quarantine flags (`xattr`) so you don't have to manually bypass "unidentified developer" warnings.
+5. Instantly launches the application.
+</details>
 
 ---
 
 ## ✨ Key Features
 
-NotchSuperior is packed with features that fit seamlessly into macOS:
-
-### 🌈 Apple Intelligence Siri Glow Border
-When expanded, the notch features a multi-layered neon border that breathes, pulses, and rotates organic fluid colors. The gradient uses Siri's cyan, violet, blue, and pink color spectrum to deliver a world-class visual experience.
-
-### 📷 Smart Camera Mirror
-A quick-toggle webcam preview. Hover over the camera icon to reveal a mirrored webcam crop inside the notch. Features native permissions verification and custom aspect crops.
-
-### 📅 Calendar & Reminders
-A live productivity hub. Scroll through current and upcoming meetings, check off active iCloud reminders, and open your calendar application directly from the notch interface.
-
-### 🎵 Now Playing & Waveform Visualizer
-Compatible with Apple Music, Spotify, YouTube Music, and web players. Features customizable playback controls (favorite buttons, volume control, track seek slider) and timeline synchronization.
-
-### 🧠 Secure Local AI & Voice Notes
-- **Voice Memos**: Record voice memos directly from the notch.
-- **On-Device STT**: Transcribes your voice notes locally using Apple's Speech Framework (no keys required).
-- **AI Workspace**: Slide down chat panels using secure Keychain-stored OpenAI, Claude, or Gemini API keys to summarize, rewrite, or debug.
-
-### 💻 Developer HUD & Terminal Drop-Down
-- **System Metrics Tile**: Displays active Git branch, Docker container status, and network latency pings.
-- **Guake-style Terminal**: Press `Ctrl + Opt + ~` to drop down a zsh terminal directly from the notch for swift CLI checks.
-
-### 📦 Notch Shelf & Drag-and-Drop
-Drag any file, folder, image, or text snippet to the top center of your screen to drop it onto the Notch Shelf. Includes AirDrop shortcuts and Quick Look previews.
+| Feature Area | Description | SwiftUI / macOS Technologies |
+|---|---|---|
+| **🌈 Siri Glow Border** | A multi-layered animated border that breathes, pulses, and rotates organic siri gradient colors when expanded. | Counters-rotating Angular Gradients, `.blendMode(.screen)` |
+| **📷 Smart Camera Mirror** | A quick webcam preview that expands dynamically when hovered. Native permission flows built-in. | AVFoundation, AVCaptureSession, `.notDetermined` auto-grant |
+| **📅 Calendar & Reminders** | Live productivity events. Scroll meetings, check off active iCloud reminders, and click to view. | EventKit, CalendarStore, iCloud Integration |
+| **🎵 Now Playing HUD** | Music controls, timeline scrubbers, and real-time audio spectrogram visualizer. | MediaRemote, Apple Music & Spotify API, Lottie |
+| **🧠 Local AI Notes** | Record voice memos, transcribe locally on-device, and query local LLMs using secure Keychain API keys. | Speech Framework, Keychain, SSE stream reconnection |
+| **💻 Developer HUD** | Live dashboard displaying Git branch status, Docker container counts, and network ping times. | Process calling `/bin/zsh` on detached background threads |
+| **📦 Dynamic Shelf** | Drag any file, folder, image, or text to the top-center notch to drop it onto your Shelf. | Drag & Drop delegates, Quick Look, AirDrop integration |
 
 ---
 
-## 🛠️ Configuration & Customization
+## 🛠️ Interactive Configuration & Details
 
-NotchSuperior features a completely redesigned macOS 15-style preferences panel. 
+<details>
+<summary><strong>💻 How to use the Drop-down Developer Terminal</strong></summary>
 
-- **General**: Customize start-on-login, preferred display targets, hover delay, and gesture sensitivity.
-- **Appearance**: Adjust theme modifiers (Liquid Glass, Minimal, OLED Black), accent tints, and backing glass opacity.
-- **Layout Profiles**: Drag-and-drop to reorder active widget slots or set app-specific layout profiles.
+Press **`Ctrl + Opt + ~`** to drop down a responsive zsh terminal directly from your notch. 
+- Fully functional shell environment.
+- Respects active path directory settings.
+- Automatically disappears when you click outside or press escape.
+</details>
+
+<details>
+<summary><strong>🧠 Setting up Secure Local AI & Voice Notes</strong></summary>
+
+1. Open **Settings > AI** in the menu bar.
+2. Select your provider (**OpenAI, Claude, or Gemini**).
+3. Paste your API Key. It is securely saved in your macOS System Keychain (`kSecAttrAccessibleWhenUnlocked`).
+4. Record voice notes from the notch. On-device Speech-to-Text runs locally using Apple's Speech Framework (no keys needed!).
+</details>
+
+<details>
+<summary><strong>🔌 Integrating with NSExtensionSDK (Third-Party Push)</strong></summary>
+
+NotchSuperior features a public Swift Package `NSExtensionSDK` that allows other macOS apps to push custom Live Activities to the notch.
+
+```swift
+import NSExtensionSDK
+
+// 1. Configure your activity payload
+let request = NSLiveActivityRequest(
+    title: "Uploading Assets",
+    subtitle: "24 of 100 files completed",
+    progress: 0.24,
+    systemImageName: "arrow.up.circle.fill",
+    customIconColor: "green",
+    actionLabel: "Cancel",
+    actionNotificationName: "com.myapp.upload.cancel"
+)
+
+// 2. Post to NotchSuperior
+NSLiveActivityClient.shared.post(request: request)
+
+// 3. Listen for action callbacks
+let observer = NSLiveActivityClient.shared.observeAction(for: "com.myapp.upload.cancel") {
+    print("User canceled the upload from the Notch!")
+}
+```
+</details>
 
 ---
 
@@ -97,7 +124,7 @@ NotchSuperior features a completely redesigned macOS 15-style preferences panel.
 If you prefer to compile NotchSuperior yourself, you can build it with Xcode:
 
 ### Prerequisites
-- macOS **14 Sonoma** or later
+- macOS **13.0** or later
 - **Xcode 16** or later
 
 ### Build Instructions
@@ -121,6 +148,6 @@ We welcome community pull requests and feature ideas! Check out our [CONTRIBUTIN
 ## 🌟 Support & Credits
 - **[MediaRemoteAdapter](https://github.com/ungive/mediaremote-adapter)** — Powering the macOS Now Playing source.
 - **[NotchDrop](https://github.com/Lakr233/NotchDrop)** — Foundational concept for drag-and-drop shelf mechanics.
-- Created by [@iamadarsha](https://instagram.com/iamadarsha).
+- Created and maintained by **[@iamadarsha](https://instagram.com/iamadarsha)**.
 
 If you love NotchSuperior, please consider starring the repository ⭐

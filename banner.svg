@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050508" />
+      <stop offset="100%" stop-color="#0F0F16" />
+    </linearGradient>
+
+    <!-- Siri Glow Gradient -->
+    <linearGradient id="siriGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9433E9" />
+      <stop offset="25%" stop-color="#1F59F6" />
+      <stop offset="50%" stop-color="#2ED1DC" />
+      <stop offset="75%" stop-color="#F53A9C" />
+      <stop offset="100%" stop-color="#FA9E3F" />
+    </linearGradient>
+
+    <filter id="blurGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <style>
+      .glow-path {
+        stroke: url(#siriGrad);
+        stroke-width: 3;
+        fill: none;
+        stroke-dasharray: 600;
+        animation: draw 8s linear infinite;
+      }
+      .blur-path {
+        stroke: url(#siriGrad);
+        stroke-width: 12;
+        fill: none;
+        stroke-dasharray: 600;
+        opacity: 0.6;
+        filter: url(#blurGlow);
+        animation: draw 8s linear infinite, pulse 3s ease-in-out infinite alternate;
+      }
+      .title-text {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-weight: 800;
+        fill: #FFFFFF;
+        font-size: 38px;
+        letter-spacing: -0.5px;
+      }
+      .subtitle-text {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-weight: 400;
+        fill: #8A8D9F;
+        font-size: 16px;
+      }
+      .icon-card {
+        animation: float 4s ease-in-out infinite alternate;
+      }
+      .card-1 { animation-delay: 0s; }
+      .card-2 { animation-delay: 0.8s; }
+      .card-3 { animation-delay: 1.6s; }
+      .card-4 { animation-delay: 2.4s; }
+
+      @keyframes draw {
+        0% { stroke-dashoffset: 600; }
+        100% { stroke-dashoffset: 0; }
+      }
+      @keyframes pulse {
+        0% { opacity: 0.35; }
+        100% { opacity: 0.75; }
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-8px); }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="300" rx="16" fill="url(#bgGrad)" />
+
+  <!-- Mock Notch with Siri Glow -->
+  <g transform="translate(400, 0)">
+    <!-- Siri Blur Path -->
+    <path class="blur-path" d="M -120 0 L -100 0 C -80 0 -80 28 -60 28 L 60 28 C 80 28 80 0 100 0 L 120 0" />
+    <!-- Siri Core Path -->
+    <path class="glow-path" d="M -120 0 L -100 0 C -80 0 -80 28 -60 28 L 60 28 C 80 28 80 0 100 0 L 120 0" />
+    <!-- Notch Fill -->
+    <path d="M -100 0 C -80 0 -80 28 -60 28 L 60 28 C 80 28 80 0 100 0 Z" fill="#000000" />
+  </g>
+
+  <!-- Title & Subtitle -->
+  <text x="400" y="140" text-anchor="middle" class="title-text">NotchSuperior</text>
+  <text x="400" y="175" text-anchor="middle" class="subtitle-text">The premium Apple Intelligence command center for your Mac.</text>
+
+  <!-- Floating Cards/Badges representing features -->
+  <!-- Card 1: Music -->
+  <g transform="translate(120, 220)" class="icon-card card-1">
+    <rect width="120" height="44" rx="10" fill="#151522" stroke="#252538" stroke-width="1" />
+    <text x="20" y="27" fill="#E2E2E9" font-family="sans-serif" font-size="12" font-weight="600">🎵 Music HUD</text>
+  </g>
+
+  <!-- Card 2: AI Chat -->
+  <g transform="translate(270, 220)" class="icon-card card-2">
+    <rect width="120" height="44" rx="10" fill="#151522" stroke="#252538" stroke-width="1" />
+    <text x="20" y="27" fill="#E2E2E9" font-family="sans-serif" font-size="12" font-weight="600">🧠 Local AI</text>
+  </g>
+
+  <!-- Card 3: Terminal -->
+  <g transform="translate(420, 220)" class="icon-card card-3">
+    <rect width="120" height="44" rx="10" fill="#151522" stroke="#252538" stroke-width="1" />
+    <text x="20" y="27" fill="#E2E2E9" font-family="sans-serif" font-size="12" font-weight="600">💻 Dev Terminal</text>
+  </g>
+
+  <!-- Card 4: Shelf -->
+  <g transform="translate(570, 220)" class="icon-card card-4">
+    <rect width="120" height="44" rx="10" fill="#151522" stroke="#252538" stroke-width="1" />
+    <text x="20" y="27" fill="#E2E2E9" font-family="sans-serif" font-size="12" font-weight="600">📦 Drag Shelf</text>
+  </g>
+</svg>
