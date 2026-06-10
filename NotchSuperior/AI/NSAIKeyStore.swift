@@ -1,4 +1,15 @@
-// NOTCHSUPERIOR ADDITION
+// ────────────────────────────────────────────────────────
+// NotchSuperior — NSAIKeyStore.swift
+// FIX 6: Upgraded keychain accessibility from
+//         kSecAttrAccessibleAfterFirstUnlock  →  kSecAttrAccessibleWhenUnlocked
+//
+//  kSecAttrAccessibleAfterFirstUnlock allows key reads even when the screen is
+//  locked (background processes, widgets). For API keys used only by the
+//  foreground notch UI this is unnecessarily permissive.
+//  kSecAttrAccessibleWhenUnlocked ensures the key is only readable while the
+//  device is unlocked — the correct setting for a foreground macOS app.
+// ────────────────────────────────────────────────────────
+
 import Foundation
 import Security
 
@@ -15,7 +26,6 @@ final class NSAIKeyStore {
         let account = "apikey"
         let data = key.data(using: .utf8)!
 
-        // Delete any existing entry first
         let deleteQuery: [String: Any] = [
             kSecClass as String:       kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -28,7 +38,8 @@ final class NSAIKeyStore {
             kSecAttrService as String:     service,
             kSecAttrAccount as String:     account,
             kSecValueData as String:       data,
-            kSecAttrAccessible as String:  kSecAttrAccessibleAfterFirstUnlock
+            // FIX 6: WhenUnlocked — readable only while screen is unlocked
+            kSecAttrAccessible as String:  kSecAttrAccessibleWhenUnlocked
         ]
         SecItemAdd(addQuery as CFDictionary, nil)
     }

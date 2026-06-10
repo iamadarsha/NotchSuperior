@@ -1,4 +1,12 @@
-// NOTCHSUPERIOR ADDITION
+// ────────────────────────────────────────────────────────
+// NotchSuperior — NSAIEngine.swift
+// FIX 3: SSE retry/reconnect on stream drop, configurable timeout,
+//         partial-response display on error instead of silent hang.
+// FIX 4: New dedicated summarize(text:systemPrompt:) bypasses
+//         conversation validation — NSAINoteEngine no longer needs
+//         to inject a fake conversation.
+// ────────────────────────────────────────────────────────
+
 import Foundation
 import SwiftUI
 
@@ -12,6 +20,10 @@ class NSAIEngine: ObservableObject {
     @Published var errorMessage: String? = nil
 
     private var streamTask: Task<Void, Never>?
+
+    // MARK: — SSE retry config (FIX 3)
+    private let maxRetries = 2
+    private let retryDelayNS: UInt64 = 1_500_000_000   // 1.5 s
 
     // MARK: — Provider selection
     @AppStorage("NSAISelectedProvider") var selectedProviderRaw: String = NSAIProvider.openAI.rawValue
@@ -42,18 +54,14 @@ class NSAIEngine: ObservableObject {
             return
         }
 
-        // Add user message
         let userMsg = NSAIChatMessage(id: UUID(), role: "user",
                                       content: text, timestamp: Date())
         conversations[idx].messages.append(userMsg)
         conversations[idx].updatedAt = Date()
-
-        // Auto-title on first message
         if conversations[idx].messages.count == 1 {
             conversations[idx].title = String(text.prefix(40))
         }
 
-        // Build assistant placeholder
         let assistantMsg = NSAIChatMessage(id: UUID(), role: "assistant",
                                            content: "", timestamp: Date())
         conversations[idx].messages.append(assistantMsg)
@@ -63,31 +71,77 @@ class NSAIEngine: ObservableObject {
         streamingText = ""
         errorMessage = nil
 
-        let messages = conversations[idx].messages.dropLast()  // exclude empty assistant
+        let messages = Array(conversations[idx].messages.dropLast())
         let systemPrompt: String = contextText.map {
             "The user has the following context selected:\n\n\($0)\n\nAnswer with this in mind."
         } ?? "You are a helpful assistant built into the macOS menu bar notch. Be concise."
 
         streamTask = Task {
+            // FIX 3: retry loop — up to maxRetries reconnects on stream drop
+            var attempt = 0
+            var accumulated = ""
+            repeat {
+                do {
+                    let stream = try await streamCompletion(
+                        messages: messages,
+                        systemPrompt: systemPrompt,
+                        apiKey: apiKey,
+                        provider: selectedProvider)
+                    for try await chunk in stream {
+                        guard !Task.isCancelled else { break }
+                        accumulated += chunk
+                        streamingText = accumulated
+                        conversations[idx].messages[assistantIdx].content = accumulated
+                    }
+                    break  // clean finish — exit retry loop
+                } catch {
+                    attempt += 1
+                    if attempt > maxRetries || Task.isCancelled {
+                        // FIX 3: Show partial response + error notice instead of hanging
+                        let partial = accumulated.isEmpty ? "" : accumulated + "\n\n"
+                        conversations[idx].messages[assistantIdx].content =
+                            partial + "⚠ Connection lost: \(error.localizedDescription)"
+                        errorMessage = error.localizedDescription
+                        break
+                    }
+                    // Wait before retrying
+                    try? await Task.sleep(nanoseconds: retryDelayNS)
+                }
+            } while !Task.isCancelled
+
+            isStreaming = false
+            save()
+        }
+    }
+
+    // FIX 4: Dedicated summarize method — bypasses conversation validation.
+    // NSAINoteEngine calls this directly; no fake conversation injection needed.
+    func summarize(text: String, systemPrompt: String) async -> String {
+        guard let apiKey = NSAIKeyStore.shared.load(for: selectedProvider) else {
+            return "⚠ No API key set for \(selectedProvider.displayName). Add it in Settings → AI."
+        }
+        let userMsg = NSAIChatMessage(id: UUID(), role: "user",
+                                      content: text, timestamp: Date())
+        var result = ""
+        var attempt = 0
+        repeat {
             do {
                 let stream = try await streamCompletion(
-                    messages: Array(messages),
+                    messages: [userMsg],
                     systemPrompt: systemPrompt,
                     apiKey: apiKey,
                     provider: selectedProvider)
                 for try await chunk in stream {
-                    guard !Task.isCancelled else { break }
-                    streamingText += chunk
-                    conversations[idx].messages[assistantIdx].content = streamingText
+                    result += chunk
                 }
+                break
             } catch {
-                conversations[idx].messages[assistantIdx].content =
-                    "Error: \(error.localizedDescription)"
-                errorMessage = error.localizedDescription
+                attempt += 1
+                if attempt > maxRetries { break }
+                try? await Task.sleep(nanoseconds: retryDelayNS)
             }
-            isStreaming = false
-            save()
-        }
+        } while true
+        return result.isEmpty ? "⚠ Summarization failed. Try again." : result
     }
 
     func cancelStream() {
@@ -102,9 +156,6 @@ class NSAIEngine: ObservableObject {
 
     // MARK: — Streaming network layer
 
-    // Returns an AsyncThrowingStream<String, Error> of text chunks.
-    // Implements SSE parsing for OpenAI/Claude and JSON for Gemini.
-
     private func streamCompletion(
         messages: [NSAIChatMessage],
         systemPrompt: String,
@@ -113,9 +164,9 @@ class NSAIEngine: ObservableObject {
     ) async throws -> AsyncThrowingStream<String, Error> {
 
         let request = try buildRequest(messages: messages,
-                                        systemPrompt: systemPrompt,
-                                        apiKey: apiKey,
-                                        provider: provider)
+                                       systemPrompt: systemPrompt,
+                                       apiKey: apiKey,
+                                       provider: provider)
 
         return AsyncThrowingStream { continuation in
             Task {
@@ -141,12 +192,13 @@ class NSAIEngine: ObservableObject {
     }
 
     private func buildRequest(messages: [NSAIChatMessage],
-                                systemPrompt: String,
-                                apiKey: String,
-                                provider: NSAIProvider) throws -> URLRequest {
+                               systemPrompt: String,
+                               apiKey: String,
+                               provider: NSAIProvider) throws -> URLRequest {
         var req = URLRequest(url: URL(string: provider.baseURL)!)
         req.httpMethod = "POST"
-        req.timeoutInterval = 60
+        // FIX 3: explicit timeout so URLSession doesn't hang indefinitely
+        req.timeoutInterval = 45
 
         switch provider {
         case .openAI:
@@ -174,8 +226,6 @@ class NSAIEngine: ObservableObject {
             req.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         case .gemini:
-            // Gemini doesn't support SSE stream the same way;
-            // use non-streaming endpoint for Gemini and collect full response.
             var components = URLComponents(string: provider.baseURL)!
             components.queryItems = [URLQueryItem(name:"key", value:apiKey)]
             req.url = components.url
@@ -194,11 +244,9 @@ class NSAIEngine: ObservableObject {
         return req
     }
 
-    // Parses a single SSE line and returns the text delta, or nil.
     private func parseSSELine(_ line: String,
                               provider: NSAIProvider) -> String? {
         guard line.hasPrefix("data: ") else {
-            // Gemini returns full JSON, not SSE
             if provider == .gemini, !line.isEmpty,
                let data = line.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: data) as? [String:Any],
@@ -210,7 +258,6 @@ class NSAIEngine: ObservableObject {
             }
             return nil
         }
-
         let payload = String(line.dropFirst(6))
         guard payload != "[DONE]",
               let data = payload.data(using: .utf8),
@@ -228,12 +275,11 @@ class NSAIEngine: ObservableObject {
                let text = delta["text"] as? String { return text }
             return nil
         case .gemini:
-            return nil  // handled above
+            return nil
         }
     }
 
     // MARK: — Persistence
-
     private var storeURL: URL {
         let dir = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]

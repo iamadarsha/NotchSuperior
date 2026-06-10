@@ -1,9 +1,10 @@
 // ────────────────────────────────────────────────────────
 // NotchSuperior — NSClipboardEngine.swift
-// Part of the boring.notch fork
-// Phase: 4 — Clipboard & Snippets
-// Created: 2026-06-09
-// NOTCHSUPERIOR ADDITION
+// FIX 5: Battery-safe polling.
+//   • Timer tolerance set to 0.5 s so the OS can coalesce wakeups.
+//   • Polling pauses when the notch is collapsed (isNotchOpen = false).
+//   • Public pausePolling() / resumePolling() API consumed by notch
+//     expand/collapse state changes in ContentView.
 // ────────────────────────────────────────────────────────
 
 import Cocoa
@@ -15,14 +16,11 @@ extension NSColor {
         if hexSanitized.hasPrefix("#") {
             hexSanitized.remove(at: hexSanitized.startIndex)
         }
-        
         var rgb: UInt64 = 0
         guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else { return nil }
-        
         let r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
         let g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
         let b = CGFloat(rgb & 0x0000FF) / 255.0
-        
         self.init(red: r, green: g, blue: b, alpha: 1.0)
     }
 }
@@ -36,6 +34,7 @@ final class NSClipboardEngine: ObservableObject {
 
     private var pollTimer: Timer?
     private var lastChangeCount: Int = 0
+    private var isPaused: Bool = false   // FIX 5: notch-state gate
 
     private init() {}
 
@@ -44,39 +43,58 @@ final class NSClipboardEngine: ObservableObject {
         load()
         purgeOld()
         lastChangeCount = NSPasteboard.general.changeCount
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { [weak self] _ in
-            Task { @MainActor in 
-                self?.checkPasteboard() 
-            }
-        }
+        scheduleTimer()
     }
 
-    func stop() { 
-        pollTimer?.invalidate() 
+    func stop() {
+        pollTimer?.invalidate()
         pollTimer = nil
+    }
+
+    // FIX 5: Called by notch collapse — pauses polling to reduce CPU wakeups
+    func pausePolling() {
+        isPaused = true
+    }
+
+    // FIX 5: Called by notch expand — resumes and does one immediate check
+    func resumePolling() {
+        isPaused = false
+        checkPasteboard()   // catch anything copied while notch was closed
+    }
+
+    // MARK: — Timer setup with OS-coalescable tolerance (FIX 5)
+    private func scheduleTimer() {
+        pollTimer?.invalidate()
+        let t = Timer(timeInterval: 0.8, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.checkPasteboard()
+            }
+        }
+        // FIX 5: tolerance lets the OS batch this timer with other low-priority
+        // work, preventing a dedicated CPU wakeup every 800 ms
+        t.tolerance = 0.5
+        RunLoop.main.add(t, forMode: .common)
+        pollTimer = t
     }
 
     // MARK: — Polling
     private func checkPasteboard() {
+        // FIX 5: skip while notch is collapsed
+        guard !isPaused else { return }
+
         let pb = NSPasteboard.general
         guard pb.changeCount != lastChangeCount else { return }
         lastChangeCount = pb.changeCount
         guard let item = buildItem(from: pb) else { return }
-        
-        // Deduplicate: skip if identical to top item
         if let top = history.first, isDuplicate(item, top) { return }
-        
         history.insert(item, at: 0)
-        if history.count > 200 { 
-            history = Array(history.prefix(200)) 
+        if history.count > 200 {
+            history = Array(history.prefix(200))
         }
         save()
     }
 
     private func buildItem(from pb: NSPasteboard) -> NSClipboardItem? {
-        // Priority: image > file > color > url > text
-        
-        // 1. Image
         if let imgData = pb.data(forType: .tiff) {
             if let rep = NSBitmapImageRep(data: imgData),
                let png = rep.representation(using: .png, properties: [:]) {
@@ -84,15 +102,11 @@ final class NSClipboardEngine: ObservableObject {
                     type: .image, imageData: png, isPinned: false)
             }
         }
-        
-        // 2. File
         if let urls = pb.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
            let firstURL = urls.first(where: { $0.isFileURL }) {
             return NSClipboardItem(id: UUID(), addedAt: Date(),
                 type: .file, filePath: firstURL.path, isPinned: false)
         }
-        
-        // 3. Color (from NSPasteboard color type)
         if let color = NSColor(from: pb), let rgbColor = color.usingColorSpace(.sRGB) {
             let r = Int(rgbColor.redComponent * 255)
             let g = Int(rgbColor.greenComponent * 255)
@@ -101,29 +115,20 @@ final class NSClipboardEngine: ObservableObject {
             return NSClipboardItem(id: UUID(), addedAt: Date(),
                 type: .color, text: hex, colorHex: hex, isPinned: false)
         }
-        
-        // 4. String (Text, URL, Color Hex)
         if let str = pb.string(forType: .string) {
             let trimmed = str.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            // Hex color check
             let colorRegex = "^#[0-9a-fA-F]{6}$"
             if trimmed.range(of: colorRegex, options: .regularExpression) != nil {
                 return NSClipboardItem(id: UUID(), addedAt: Date(),
                     type: .color, text: trimmed, colorHex: trimmed, isPinned: false)
             }
-            
-            // URL check
             if trimmed.lowercased().hasPrefix("http://") || trimmed.lowercased().hasPrefix("https://") {
                 return NSClipboardItem(id: UUID(), addedAt: Date(),
                     type: .url, text: trimmed, isPinned: false)
             }
-            
-            // Generic text
             return NSClipboardItem(id: UUID(), addedAt: Date(),
                 type: .text, text: str, isPinned: false)
         }
-        
         return nil
     }
 
@@ -148,12 +153,9 @@ final class NSClipboardEngine: ObservableObject {
     func copyToPasteboard(_ item: NSClipboardItem) {
         let pb = NSPasteboard.general
         pb.clearContents()
-        
         if item.type == .color, let hex = item.colorHex {
             pb.setString(hex, forType: .string)
-            if let color = NSColor(hex: hex) {
-                color.write(to: pb)
-            }
+            if let color = NSColor(hex: hex) { color.write(to: pb) }
         } else if let text = item.text {
             pb.setString(text, forType: .string)
         } else if let data = item.imageData {
@@ -163,10 +165,8 @@ final class NSClipboardEngine: ObservableObject {
                 pb.setData(data, forType: .png)
             }
         } else if item.type == .file, let path = item.filePath {
-            let url = URL(fileURLWithPath: path)
-            pb.writeObjects([url as NSURL])
+            pb.writeObjects([URL(fileURLWithPath: path) as NSURL])
         }
-        
         lastChangeCount = pb.changeCount
     }
 
@@ -224,7 +224,7 @@ final class NSClipboardEngine: ObservableObject {
     }
 
     private func purgeOld() {
-        let cutoff = Date().addingTimeInterval(-7 * 86400)  // 7 days
+        let cutoff = Date().addingTimeInterval(-7 * 86400)
         history = history.filter { $0.isPinned || $0.addedAt > cutoff }
         save()
     }

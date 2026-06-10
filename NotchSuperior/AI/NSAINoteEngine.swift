@@ -1,4 +1,11 @@
-// NOTCHSUPERIOR ADDITION
+// ────────────────────────────────────────────────────────
+// NotchSuperior — NSAINoteEngine.swift
+// FIX 4: Removed fake-conversation injection pattern.
+//         Now calls NSAIEngine.summarize(text:systemPrompt:)
+//         directly — a clean, validated code path that does
+//         not pollute the conversations list.
+// ────────────────────────────────────────────────────────
+
 import Foundation
 import AVFoundation
 import Speech
@@ -11,14 +18,13 @@ class NSAINoteEngine: ObservableObject {
     @Published var notes: [NSAINote] = []
     @Published var isProcessing = false
 
-    // MARK: — Voice transcription (using SFSpeechRecognizer)
-    // Uses Apple's on-device speech framework — no network call for transcription.
     private var audioEngine = AVAudioEngine()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     @Published var isRecording = false
     @Published var liveTranscript = ""
 
+    // MARK: — Voice recording
     func startRecording() {
         SFSpeechRecognizer.requestAuthorization { [weak self] status in
             guard status == .authorized else { return }
@@ -32,7 +38,7 @@ class NSAINoteEngine: ObservableObject {
         guard let req = recognitionRequest else { return }
         req.shouldReportPartialResults = true
 
-        recognitionTask = recognizer?.recognitionTask(with: req) { [weak self] result, error in
+        recognitionTask = recognizer?.recognitionTask(with: req) { [weak self] result, _ in
             if let result { self?.liveTranscript = result.bestTranscription.formattedString }
         }
 
@@ -57,7 +63,9 @@ class NSAINoteEngine: ObservableObject {
         return result
     }
 
-    // MARK: — AI summarization
+    // MARK: — AI summarization (FIX 4)
+    // Uses NSAIEngine.summarize(text:systemPrompt:) — a dedicated path
+    // that streams a one-shot completion without touching the conversations list.
     func summarize(text: String, template: NSAINoteTemplate,
                    noteID: UUID) async {
         guard let idx = notes.firstIndex(where: { $0.id == noteID }) else { return }
@@ -66,33 +74,14 @@ class NSAINoteEngine: ObservableObject {
             return
         }
         isProcessing = true
+        notes[idx].summary = nil   // clear stale summary while processing
 
-        // Create a temporary conversation just for summarization
-        let convID = UUID()
-        var tmpConv = NSAIConversation(id: convID,
-            title: "Note Summarization", provider: NSAIEngine.shared.selectedProvider,
-            messages: [], createdAt: Date(), updatedAt: Date())
-        let userMsg = NSAIChatMessage(id: UUID(), role: "user",
-            content: text, timestamp: Date())
-        tmpConv.messages = [userMsg]
+        let summary = await NSAIEngine.shared.summarize(
+            text: text,
+            systemPrompt: template.systemPrompt)
 
-        // Add temporary conversation to engine list to be used by sendMessage
-        NSAIEngine.shared.conversations.insert(tmpConv, at: 0)
-
-        await NSAIEngine.shared.sendMessage(
-            text,
-            in: convID,
-            contextText: template.systemPrompt)
-
-        // Extract last assistant message
-        if let conv = NSAIEngine.shared.conversations.first(where:{ $0.id == convID }),
-           let last = conv.messages.last(where:{ $0.role == "assistant" }) {
-            notes[idx].summary = last.content
-            notes[idx].updatedAt = Date()
-        }
-
-        // Clean up temporary conversation
-        NSAIEngine.shared.deleteConversation(convID)
+        notes[idx].summary = summary
+        notes[idx].updatedAt = Date()
         isProcessing = false
         save()
     }

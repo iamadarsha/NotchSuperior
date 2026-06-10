@@ -1,9 +1,10 @@
 // ────────────────────────────────────────────────────────
 // NotchSuperior — NSDevEngine.swift
-// Part of the boring.notch fork
-// Phase: 9 — Dev / Power-User Tools
-// Created: 2026-06-10
-// NOTCHSUPERIOR ADDITION
+// FIX (Bootstrap): Engine is now always started unconditionally;
+//   widget enablement is self-gated here instead.
+// FIX (Thread): shell() runs on a detached background Task so it
+//   never blocks the @MainActor thread, eliminating UI hangs during
+//   git/docker/nc calls.
 // ────────────────────────────────────────────────────────
 
 import Foundation
@@ -21,60 +22,66 @@ class NSDevEngine: ObservableObject {
 
     private var pollTask: Task<Void, Never>?
 
+    // Called unconditionally from NSuperiorBootstrap.
+    // Self-gates: only polls if at least one relevant widget is enabled.
     func start() {
         loadConfig()
+        guard !isRunning else { return }   // idempotent
         pollTask = Task {
             while !Task.isCancelled {
-                await refresh()
+                // Self-gate: skip all work if dev widgets are all disabled
+                if NSLayoutEngine.shared.effectiveWidgets.contains(.gitStatus)
+                    || NSLayoutEngine.shared.effectiveWidgets.contains(.dockerStatus)
+                    || NSLayoutEngine.shared.effectiveWidgets.contains(.networkLatency) {
+                    await refresh()
+                }
                 try? await Task.sleep(nanoseconds:
-                    UInt64(config.latencyIntervalSec * 1_000_000_000))
+                    UInt64(config.latencyIntervalSec) * 1_000_000_000)
             }
         }
     }
 
-    func stop() { pollTask?.cancel() }
+    private var isRunning: Bool { pollTask != nil && !(pollTask?.isCancelled ?? true) }
+
+    func stop() { pollTask?.cancel(); pollTask = nil }
 
     func refresh() async {
         var updated: [NSDevStatusItem] = []
-
-        // GIT: current branch + dirty state
         let gitItem = await checkGit()
         updated.append(gitItem)
-
-        // DOCKER: running containers count
         if config.dockerEnabled {
             let dockerItem = await checkDocker()
             updated.append(dockerItem)
         }
-
-        // LATENCY: ping configured host
         let latencyItem = await checkLatency()
         updated.append(latencyItem)
-
         items = updated
     }
 
-    // MARK: — Git check
+    // MARK: — Git check (FIX: background Task — never blocks @MainActor)
     private func checkGit() async -> NSDevStatusItem {
-        let repoPath = NSString(string: config.gitRepoPath)
-            .expandingTildeInPath
-        let branch = shell("git -C \(repoPath) rev-parse --abbrev-ref HEAD 2>/dev/null")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        let dirty = shell("git -C \(repoPath) status --porcelain 2>/dev/null")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let repoPath = NSString(string: config.gitRepoPath).expandingTildeInPath
+        let (branch, dirty): (String, String) = await Task.detached(priority: .utility) {
+            let b = Self.shell("git -C \(repoPath) rev-parse --abbrev-ref HEAD 2>/dev/null")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let d = Self.shell("git -C \(repoPath) status --porcelain 2>/dev/null")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            return (b, d)
+        }.value
 
         let value = branch.isEmpty ? "No repo" : branch + (dirty.isEmpty ? "" : " ●")
         let status: NSDevStatus = branch.isEmpty ? .error : (dirty.isEmpty ? .ok : .warn)
-
         return NSDevStatusItem(id: UUID(), label: "Git",
                                 value: value, status: status,
                                 icon: "arrow.triangle.branch")
     }
 
-    // MARK: — Docker check
+    // MARK: — Docker check (FIX: background Task)
     private func checkDocker() async -> NSDevStatusItem {
-        let out = shell("docker ps --format '{{.Names}}' 2>/dev/null")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let out = await Task.detached(priority: .utility) {
+            Self.shell("docker ps --format '{{.Names}}' 2>/dev/null")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+        }.value
         let count = out.isEmpty ? 0 : out.split(separator: "\n").count
         return NSDevStatusItem(id: UUID(), label: "Docker",
                                 value: "\(count) running",
@@ -82,22 +89,24 @@ class NSDevEngine: ObservableObject {
                                 icon: "shippingbox")
     }
 
-    // MARK: — Latency check (simple TCP connect)
+    // MARK: — Latency check (FIX: background Task)
     private func checkLatency() async -> NSDevStatusItem {
         let host = config.latencyHost
-        let start = Date()
-        // Use Process + nc for simple ping
-        let result = shell("nc -zw1 \(host) 80 2>&1")
-        let ms = Int(Date().timeIntervalSince(start) * 1000)
-        let ok = result.contains("succeeded") || ms < 2000
+        let (ms, ok) = await Task.detached(priority: .utility) {
+            let start = Date()
+            let result = Self.shell("nc -zw1 \(host) 80 2>&1")
+            let ms = Int(Date().timeIntervalSince(start) * 1000)
+            let ok = result.contains("succeeded") || ms < 2000
+            return (ms, ok)
+        }.value
         return NSDevStatusItem(id: UUID(), label: host,
                                 value: ok ? "\(ms)ms" : "unreachable",
                                 status: ok ? (ms < 200 ? .ok : .warn) : .error,
                                 icon: "network")
     }
 
-    // MARK: — Shell helper (synchronous, short-lived commands only)
-    private func shell(_ cmd: String) -> String {
+    // MARK: — Shell helper (nonisolated — safe to call from detached Tasks)
+    private static func shell(_ cmd: String) -> String {
         let proc = Process()
         proc.executableURL = URL(fileURLWithPath: "/bin/zsh")
         proc.arguments = ["-c", cmd]
