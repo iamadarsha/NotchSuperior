@@ -21,6 +21,7 @@ private struct NSGlassSurfaceModifier: ViewModifier {
     let strokeOpacity: Double
 
     func body(content: Content) -> some View {
+        #if compiler(>=6.3)
         if #available(macOS 26.0, *) {
             // macOS 26+: true Liquid Glass with system-depth rendering
             content
@@ -34,23 +35,30 @@ private struct NSGlassSurfaceModifier: ViewModifier {
                 }
                 .shadow(color: .black.opacity(shadowOpacity), radius: 20, y: 10)
         } else {
-            // macOS 13–15 fallback: UIKit-style ultraThinMaterial
-            content
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                                .fill(Color.white.opacity(tintOpacity))
-                        }
-                        .overlay {
-                            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                                .stroke(Color.white.opacity(strokeOpacity), lineWidth: 0.75)
-                        }
-                )
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .shadow(color: .black.opacity(shadowOpacity), radius: 18, y: 10)
+            fallbackBody(content: content)
         }
+        #else
+        fallbackBody(content: content)
+        #endif
+    }
+
+    private func fallbackBody(content: Content) -> some View {
+        // macOS 13–15 fallback: UIKit-style ultraThinMaterial
+        content
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(Color.white.opacity(tintOpacity))
+                    }
+                    .overlay {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .stroke(Color.white.opacity(strokeOpacity), lineWidth: 0.75)
+                    }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .shadow(color: .black.opacity(shadowOpacity), radius: 18, y: 10)
     }
 }
 
