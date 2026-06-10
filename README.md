@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/iamadarsha/NotchSuperior"><img src="https://framerusercontent.com/images/RFK4vs0kn8pRMuOO58JeyoemXA.png?scale-down-to=256" alt="NotchSuperior Logo" width="160"></a>
+  <a href="https://github.com/iamadarsha/NotchSuperior"><img src="logo.png" alt="NotchSuperior Logo" width="160"></a>
   <br>
   NotchSuperior
   <br>
@@ -24,10 +24,10 @@
 
 Say hello to **NotchSuperior**, a premium, high-performance utility that transforms your MacBook's screen notch from a static cutout into a gorgeous, interactive overlay. 
 
-Built on the foundation of `boring.notch`, NotchSuperior introduces **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**.
+NotchSuperior introduces **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/2d5f69c1-6e7b-4bc2-a6f1-bb9e27cf88a8" alt="NotchSuperior Preview Animation" width="600" />
+  <img src="logo.png" alt="NotchSuperior Icon" width="200" />
 </p>
 
 ---
@@ -39,7 +39,7 @@ You can download, install, bypass security quarantines, and launch **NotchSuperi
 Open your Terminal app (`/Applications/Utilities/Terminal.app`) and paste the following:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/feature/notch-superior/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/main/install.sh | bash
 ```
 
 > [!NOTE]
@@ -121,7 +121,6 @@ We welcome community pull requests and feature ideas! Check out our [CONTRIBUTIN
 ## 🌟 Support & Credits
 - **[MediaRemoteAdapter](https://github.com/ungive/mediaremote-adapter)** — Powering the macOS Now Playing source.
 - **[NotchDrop](https://github.com/Lakr233/NotchDrop)** — Foundational concept for drag-and-drop shelf mechanics.
-- Icon design by [@maxtron95](https://github.com/maxtron95).
-- Web design by [@himanshhhhuv](https://github.com/himanshhhhuv).
+- Created by [@iamadarsha](https://instagram.com/iamadarsha).
 
-If you love NotchSuperior, please consider starring the repository or [buying us a coffee on Ko-Fi](https://www.ko-fi.com/alexander5015)!
+If you love NotchSuperior, please consider starring the repository ⭐

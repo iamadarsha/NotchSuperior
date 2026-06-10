@@ -1,6 +1,6 @@
 # NotchSuperior
 
-NotchSuperior is a powerful, production-grade fork of `boring.notch` that enhances the macOS notch with advanced tools, layout presets, secure AI capabilities, and high-performance developer features. It builds on the core project to transform the camera notch into a fluid, responsive command center.
+NotchSuperior is a powerful, production-grade utility that enhances the macOS notch with advanced tools, layout presets, secure AI capabilities, and high-performance developer features. It transforms the camera notch into a fluid, responsive command center.
 
 ## Core Phases & Enhancements
 

@@ -3,7 +3,7 @@
 # ────────────────────────────────────────────────────────
 # NotchSuperior — install.sh
 # One-liner to run:
-# curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/feature/notch-superior/install.sh | bash
+# curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/main/install.sh | bash
 # ────────────────────────────────────────────────────────
 
 set -e

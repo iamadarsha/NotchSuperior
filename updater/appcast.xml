@@ -324,7 +324,7 @@
                             <li><b>♻️ Shuffle is now always enabled.</b></li>
                             <li><b>💡 Refactored Shuffle & Repeat:</b> toggleShuffle/toggleRepeat refactored for improved experience.</li>
                             </ul>
-                        <p>— The Boring Team</p>
+                        <p>— The NotchSuperior Team</p>
                     </div>
                 ]]></description>
             <enclosure url="https://github.com/iamadarsha/NotchSuperior/releases/download/v2.7-rc.1/Flying_Rabbit.dmg" length="9033202" type="application/octet-stream" sparkle:edSignature="z1SbQHDCg1D+6m811f4ubdinUiXvoYF4Ra2xlzS3NSAlUqmmIpdzCp1MHMv5J9ddlxTws3rG48OCJfZRAXHHAw=="/>
@@ -336,7 +336,7 @@
             <sparkle:shortVersionString>2.7-rc.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
             <description><![CDATA[
-                    <h1 id="-release-v2-7-flying-rabbit-rc-0-boring-notch">🎉 Release v2.7 Flying Rabbit RC 0 — NotchSuperior</h1>
+                    <h1 id="-release-v2-7-flying-rabbit-rc-0-notch-superior">🎉 Release v2.7 Flying Rabbit RC 0 — NotchSuperior</h1>
                     <p>We're thrilled to announce <strong>NotchSuperior v2.7: Flying Rabbit RC 0</strong>, packed with powerful new features, polish, and community contributions!</p>
                     <h2 id="-highlights">🚀 Highlights</h2>
                     <ul>
@@ -486,7 +486,7 @@
                 <li>✨ Added "Buy us a coffee" option in Welcome screen</li>
                 <li>⚠️ Added warning badges for unsupported extensions</li>
                 <li>🐛 Various bug fixes and stability improvements</li>
-                <li>For more details, check out <a href="https://theboring.name">our website</a></li>
+                 <li>For more details, check out <a href="https://github.com/iamadarsha/NotchSuperior">our website</a></li>
                 </ul>
             ]]></description>
             <enclosure url="https://github.com/iamadarsha/NotchSuperior/releases/download/wolf.painting/WolfPainting.dmg" length="8722621" type="application/octet-stream" sparkle:edSignature="j2Wp9e23UvN7yx2NztYfGbUiKfCU4qc2xpsPwBPx/ERUz01pJTfJlf8oN0Wri8gcho42/xfcfnWNwChfMPzrCQ=="/>
