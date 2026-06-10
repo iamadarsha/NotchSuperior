@@ -76,9 +76,16 @@
 - Utilized SwiftUI's optimized `Text(endDate, style: .timer)` to power the countdown timer live activity, achieving zero main-thread polling overhead.
 
 ## Known Issues / TODOs
-- None. All features are fully implemented, committed, and clean-built.
+- None. All features are fully implemented, committed, and clean-built. Verified via QA audit pass.
+
+## QA Audit Pass (2026-06-10)
+- Verified all 52 files from the spec exist and contain complete, non-stubbed implementations.
+- Updated Sandbox Entitlements for Microphone and Speech Recognition to use standard App Sandbox keys (`com.apple.security.device.microphone` and `com.apple.security.personal-information.speech-recognition`).
+- Fixed developer widget integration: wrapped widget slots (Music Player, Calendar, Camera) in `NotchHomeView.swift` with layout engine check (`isEnabled`), added `NSDevHUDView` under `NotchHomeView` when open, and integrated compact `NSDevStatusTile` into `ContentView.swift` for the closed state.
+- Verified clean build (`** BUILD SUCCEEDED **`) for the `boringNotch` target in Xcode.
 
 ## How to Resume
 1. Run on a real MacBook with a screen notch.
 2. Open `boringNotch.xcodeproj` and compile the `boringNotch` target.
 3. Perform manual QA on the settings options (General, Appearance, HUD & Display, Layout Profiles, Behavior Profiles, Dev Tools, AI Chat, etc.).
+

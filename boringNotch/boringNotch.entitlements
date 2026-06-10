@@ -20,9 +20,9 @@
 	<true/>
 	<key>com.apple.security.network.server</key>
 	<true/>
-	<key>com.apple.security.speech-recognition</key>
+	<key>com.apple.security.device.microphone</key>
 	<true/>
-	<key>com.apple.security.microphone</key>
+	<key>com.apple.security.personal-information.speech-recognition</key>
 	<true/>
 	<key>com.apple.security.temporary-exception.apple-events</key>
 	<array>

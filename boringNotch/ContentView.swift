@@ -375,6 +375,9 @@ struct ContentView: View {
                       } else if isEnabled(.nowPlaying) && (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
+                      } else if #available(macOS 26.0, *), vm.notchState == .closed, (isEnabled(.gitStatus) || isEnabled(.dockerStatus) || isEnabled(.networkLatency)) {
+                          NSDevStatusTile()
+                              .frame(alignment: .center)
                       } else if !coordinator.expandingView.show && vm.notchState == .closed && (!musicManager.isPlaying && musicManager.isPlayerIdle) && Defaults[.showNotHumanFace] && !vm.hideOnClosed  {
                           BoringFaceAnimation()
                        } else if vm.notchState == .open {

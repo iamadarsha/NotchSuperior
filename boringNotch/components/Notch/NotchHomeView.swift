@@ -425,6 +425,13 @@ struct NotchHomeView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     let albumArtNamespace: Namespace.ID
 
+    private func isEnabled(_ slot: NSWidgetSlot) -> Bool {
+        if #available(macOS 26.0, *) {
+            return NSLayoutEngine.shared.effectiveWidgets.contains(slot)
+        }
+        return true
+    }
+
     var body: some View {
         Group {
             if !coordinator.firstLaunch {
@@ -440,10 +447,21 @@ struct NotchHomeView: View {
     }
 
     private var mainContent: some View {
-        HStack(alignment: .top, spacing: (shouldShowCamera && Defaults[.showCalendar]) ? 10 : 15) {
-            MusicPlayerView(albumArtNamespace: albumArtNamespace)
+        let showCal = isEnabled(.calendar)
+        let showMusic = isEnabled(.nowPlaying)
+        let showDev = {
+            if #available(macOS 26.0, *) {
+                return isEnabled(.gitStatus) || isEnabled(.dockerStatus) || isEnabled(.networkLatency)
+            }
+            return false
+        }()
+        
+        return HStack(alignment: .center, spacing: (shouldShowCamera && showCal) ? 10 : 15) {
+            if showMusic {
+                MusicPlayerView(albumArtNamespace: albumArtNamespace)
+            }
 
-            if Defaults[.showCalendar] {
+            if showCal {
                 ZStack(alignment: .topTrailing) {
                     CalendarView()
                         .frame(width: shouldShowCamera ? 170 : 215)
@@ -453,7 +471,7 @@ struct NotchHomeView: View {
                         .environmentObject(vm)
                         .transition(.opacity)
                     
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 26.0, *), isEnabled(.focusTimer) {
                         FocusNotchButton()
                             .padding(.top, 4)
                             .padding(.trailing, 4)
@@ -461,7 +479,12 @@ struct NotchHomeView: View {
                 }
             }
 
-            if shouldShowCamera {
+            if #available(macOS 26.0, *), showDev {
+                NSDevHUDView()
+                    .transition(.opacity)
+            }
+
+            if isEnabled(.cameraPreview) && shouldShowCamera {
                 CameraPreviewView(webcamManager: webcamManager)
                     .scaledToFit()
                     .opacity(vm.notchState == .closed ? 0 : 1)
