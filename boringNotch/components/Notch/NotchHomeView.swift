@@ -426,7 +426,7 @@ struct NotchHomeView: View {
     let albumArtNamespace: Namespace.ID
 
     private func isEnabled(_ slot: NSWidgetSlot) -> Bool {
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             return NSLayoutEngine.shared.effectiveWidgets.contains(slot)
         }
         return true
@@ -450,7 +450,7 @@ struct NotchHomeView: View {
         let showCal = isEnabled(.calendar)
         let showMusic = isEnabled(.nowPlaying)
         let showDev = {
-            if #available(macOS 26.0, *) {
+            if #available(macOS 14.0, *) {
                 return isEnabled(.gitStatus) || isEnabled(.dockerStatus) || isEnabled(.networkLatency)
             }
             return false
@@ -471,7 +471,7 @@ struct NotchHomeView: View {
                         .environmentObject(vm)
                         .transition(.opacity)
                     
-                    if #available(macOS 26.0, *), isEnabled(.focusTimer) {
+                    if #available(macOS 14.0, *), isEnabled(.focusTimer) {
                         FocusNotchButton()
                             .padding(.top, 4)
                             .padding(.trailing, 4)
@@ -479,7 +479,7 @@ struct NotchHomeView: View {
                 }
             }
 
-            if #available(macOS 26.0, *), showDev {
+            if #available(macOS 14.0, *), showDev {
                 NSDevHUDView()
                     .transition(.opacity)
             }
@@ -608,7 +608,7 @@ struct CustomSlider: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct FocusNotchButton: View {
     @ObservedObject var focusEngine = NSFocusEngine.shared
     @State private var isHovered = false

@@ -9,7 +9,7 @@
 import SwiftUI
 
 // Compact tile strip shown inside the notch when devHUD layout is active
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSDevHUDView: View {
     @ObservedObject var engine = NSDevEngine.shared
 
@@ -40,7 +40,7 @@ struct NSDevHUDView: View {
 }
 
 // Compact status view for the closed notch state
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSDevStatusTile: View {
     @ObservedObject var engine = NSDevEngine.shared
     @EnvironmentObject var vm: BoringViewModel

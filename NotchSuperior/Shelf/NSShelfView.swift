@@ -9,7 +9,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSShelfView: View {
     @ObservedObject var engine = NSShelfEngine.shared
     @State private var selectedStackID: UUID?
@@ -103,7 +103,7 @@ struct NSShelfView: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSShelfItemTile: View {
     let item: NSShelfItem
     @ObservedObject var engine = NSShelfEngine.shared

@@ -1,7 +1,7 @@
 // NOTCHSUPERIOR ADDITION
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAIChatView: View {
     @ObservedObject var engine = NSAIEngine.shared
     @State private var inputText = ""
@@ -162,7 +162,7 @@ struct NSAIChatView: View {
 }
 
 // Single message bubble
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAIMessageBubble: View {
     let message: NSAIChatMessage
     var isUser: Bool { message.role == "user" }

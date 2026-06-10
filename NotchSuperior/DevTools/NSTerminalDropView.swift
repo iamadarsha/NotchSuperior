@@ -10,7 +10,7 @@ import SwiftUI
 
 // Guake-style terminal drop panel from the notch
 // Triggered by the command launcher or a keyboard shortcut ⌃`
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSTerminalDropView: View {
     @AppStorage("NSTerminalShell") var shellPath = "/bin/zsh"
     @AppStorage("NSTerminalOpen") var isOpen = false

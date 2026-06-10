@@ -31,7 +31,7 @@ final class NSuperiorBootstrap {
         NSClipboardEngine.shared.start()
         
         // Start Bluetooth Observer on supported OS versions
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSBluetoothObserver.shared.start()
         }
         

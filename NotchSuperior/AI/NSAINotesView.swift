@@ -1,7 +1,7 @@
 // NOTCHSUPERIOR ADDITION
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAINotesView: View {
     @ObservedObject var engine = NSAINoteEngine.shared
     @State private var selectedNoteID: UUID? = nil
@@ -49,7 +49,7 @@ struct NSAINotesView: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAINoteDetailView: View {
     @State var note: NSAINote
     @ObservedObject var engine = NSAINoteEngine.shared

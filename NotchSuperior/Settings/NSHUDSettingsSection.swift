@@ -10,7 +10,7 @@ enum NSHUDPosition: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSHUDSettingsSection: View {
     @AppStorage("NSHUDTheme") private var hudTheme = NSHUDTheme.liquidGlass.rawValue
     @AppStorage("NSHUDDismissDuration") private var dismissDuration = 2.5

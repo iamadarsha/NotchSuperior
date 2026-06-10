@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSFocusActivity: NSActivity {
     let id = UUID()
     let priority = 7

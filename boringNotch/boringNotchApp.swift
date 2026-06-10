@@ -145,16 +145,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func cleanupWindows(shouldInvert: Bool = false) {
-        let shouldCleanupMulti = shouldInvert ? !Defaults[.showOnAllDisplays] : Defaults[.showOnAllDisplays]
+        // Clean up multi-display windows
+        windows.values.forEach { window in
+            window.close()
+            NotchSpaceManager.shared.notchSpace.windows.remove(window)
+        }
+        windows.removeAll()
+        viewModels.removeAll()
         
-        if shouldCleanupMulti {
-            windows.values.forEach { window in
-                window.close()
-                NotchSpaceManager.shared.notchSpace.windows.remove(window)
-            }
-            windows.removeAll()
-            viewModels.removeAll()
-        } else if let window = window {
+        // Clean up single-display window
+        if let window = window {
             window.close()
             NotchSpaceManager.shared.notchSpace.windows.remove(window)
             if let obs = windowScreenDidChangeObserver {
@@ -467,15 +467,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        if !Defaults[.showOnAllDisplays] {
-            let viewModel = self.vm
-            let window = createBoringNotchWindow(
-                for: NSScreen.main ?? NSScreen.screens.first!, with: viewModel)
-            self.window = window
-            adjustWindowPosition(changeAlpha: true)
-        } else {
-            adjustWindowPosition(changeAlpha: true)
-        }
+        adjustWindowPosition(changeAlpha: true)
 
         setupDragDetectors()
 

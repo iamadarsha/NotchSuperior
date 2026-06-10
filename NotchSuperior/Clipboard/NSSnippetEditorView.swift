@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSSnippetEditorView: View {
     let snippet: NSSnippet?    // nil = new snippet
     @ObservedObject var engine = NSClipboardEngine.shared

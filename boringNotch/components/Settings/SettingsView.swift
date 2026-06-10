@@ -113,12 +113,12 @@ struct SettingsView: View {
                 case "HUD":
                     HUD()
                 case "HUDDisplay":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSHUDSettingsSection()
                     } else {
                         Form {
                             Section {
-                                Text("HUD & Display requires macOS 26 or newer for Liquid Glass controls.")
+                                Text("HUD & Display requires macOS 14 or newer for Liquid Glass controls.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("HUD & Display")
@@ -131,12 +131,12 @@ struct SettingsView: View {
                 case "Shelf":
                     Shelf()
                 case "Clipboard":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSClipboardView()
                     } else {
                         Form {
                             Section {
-                                Text("Clipboard & Snippets requires macOS 26 or newer.")
+                                Text("Clipboard & Snippets requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("Clipboard & Snippets")
@@ -145,12 +145,12 @@ struct SettingsView: View {
                         .navigationTitle("Clipboard & Snippets")
                     }
                 case "Focus":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSFocusSettingsSection()
                     } else {
                         Form {
                             Section {
-                                Text("Focus & Pomodoro requires macOS 26 or newer.")
+                                Text("Focus & Pomodoro requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("Focus & Pomodoro")
@@ -159,12 +159,12 @@ struct SettingsView: View {
                         .navigationTitle("Focus & Pomodoro")
                     }
                 case "Layouts":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSLayoutSettingsView()
                     } else {
                         Form {
                             Section {
-                                Text("Layout Profiles requires macOS 26 or newer.")
+                                Text("Layout Profiles requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("Layout Profiles")
@@ -173,12 +173,12 @@ struct SettingsView: View {
                         .navigationTitle("Layout Profiles")
                     }
                 case "BehaviorProfiles":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSBehaviorProfilesView()
                     } else {
                         Form {
                             Section {
-                                Text("Behavior Profiles requires macOS 26 or newer.")
+                                Text("Behavior Profiles requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("Behavior Profiles")
@@ -187,12 +187,12 @@ struct SettingsView: View {
                         .navigationTitle("Behavior Profiles")
                     }
                 case "DevTools":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSDevSettingsSection()
                     } else {
                         Form {
                             Section {
-                                Text("Dev Tools requires macOS 26 or newer.")
+                                Text("Dev Tools requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("Dev Tools")
@@ -201,12 +201,12 @@ struct SettingsView: View {
                         .navigationTitle("Dev Tools")
                     }
                 case "AIChat":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSAIChatView()
                     } else {
                         Form {
                             Section {
-                                Text("AI Chat requires macOS 26 or newer.")
+                                Text("AI Chat requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("AI Chat")
@@ -215,12 +215,12 @@ struct SettingsView: View {
                         .navigationTitle("AI Chat")
                     }
                 case "AINotes":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSAINotesView()
                     } else {
                         Form {
                             Section {
-                                Text("AI Notes requires macOS 26 or newer.")
+                                Text("AI Notes requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("AI Notes")
@@ -229,12 +229,12 @@ struct SettingsView: View {
                         .navigationTitle("AI Notes")
                     }
                 case "AISettings":
-                    if #available(macOS 26.0, *) {
+                    if #available(macOS 14.0, *) {
                         NSAISettingsSection()
                     } else {
                         Form {
                             Section {
-                                Text("API Keys requires macOS 26 or newer.")
+                                Text("API Keys requires macOS 14 or newer.")
                                     .foregroundStyle(.secondary)
                             } header: {
                                 Text("API Keys")
@@ -1024,34 +1024,39 @@ struct About: View {
 
                 UpdaterSettingsView(updater: updaterController.updater)
 
-                HStack(spacing: 30) {
-                    Spacer(minLength: 0)
-                    Button {
-                        if let url = URL(string: "https://github.com/iamadarsha/NotchSuperior") {
-                            NSWorkspace.shared.open(url)
-                        }
-                    } label: {
-                        VStack(spacing: 5) {
+                Link(destination: URL(string: "https://github.com/iamadarsha/NotchSuperior")!) {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 6) {
                             Image("Github")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 18)
+                                .frame(width: 24, height: 24)
                             Text("GitHub")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(.primary)
                         }
-                        .contentShape(Rectangle())
+                        Spacer()
                     }
-                    Spacer(minLength: 0)
+                    .padding(.vertical, 12)
+                    .background(Color.primary.opacity(0.05))
+                    .cornerRadius(8)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
             }
+            
             VStack(spacing: 0) {
                 Divider()
-                Text("Made with 🫶🏻 by the NotchSuperior team")
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 5)
-                    .padding(.bottom, 7)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 10)
+                Link(destination: URL(string: "https://instagram.com/iamadarsha")!) {
+                    Text("Made with 🫶 by Adarsha")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 6)
+                        .padding(.bottom, 8)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 10)
+                }
+                .buttonStyle(.plain)
             }
             .frame(maxWidth: .infinity, alignment: .center)
         }

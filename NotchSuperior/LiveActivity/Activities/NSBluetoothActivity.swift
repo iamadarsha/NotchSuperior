@@ -83,7 +83,7 @@ struct NSBluetoothActivity: NSActivity {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 @MainActor
 final class NSBluetoothObserver: NSObject {
     static let shared = NSBluetoothObserver()

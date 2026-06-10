@@ -20,7 +20,7 @@ struct GlassEffectContainer<Content: View>: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 @MainActor
 struct NSLiveActivityView: View {
     @ObservedObject var engine = NSLiveActivityEngine.shared

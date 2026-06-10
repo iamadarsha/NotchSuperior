@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSFocusSettingsSection: View {
     @AppStorage("NSFocusWorkMinutes")  var workMin: Int = 25
     @AppStorage("NSFocusBreakMinutes") var breakMin: Int = 5

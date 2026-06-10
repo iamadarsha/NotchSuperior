@@ -1,7 +1,7 @@
 // NOTCHSUPERIOR ADDITION
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAISettingsSection: View {
     @ObservedObject var engine = NSAIEngine.shared
     @Environment(\.dismiss) var dismiss

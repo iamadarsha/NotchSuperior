@@ -229,7 +229,7 @@ struct ContentView: View {
                 }
             }
 
-            if #available(macOS 26.0, *), isActivityEnabled() {
+            if #available(macOS 14.0, *), isActivityEnabled() {
                 if liveActivityEngine.currentActivity != nil {
                     NSLiveActivityView()
                         .zIndex(50)
@@ -240,7 +240,7 @@ struct ContentView: View {
                 }
             }
 
-            if #available(macOS 26.0, *), clipboardOpen, isEnabled(.clipboardShortcut) {
+            if #available(macOS 14.0, *), clipboardOpen, isEnabled(.clipboardShortcut) {
                 NSClipboardView()
                     .frame(width: 640, height: 180)
                     .background(Color.black)
@@ -250,7 +250,7 @@ struct ContentView: View {
                     .zIndex(80)
             }
 
-            if #available(macOS 26.0, *), aiChatOpen {
+            if #available(macOS 14.0, *), aiChatOpen {
                 NSAIChatView()
                     .frame(width: 640, height: 320)
                     .background(Color.black)
@@ -260,7 +260,7 @@ struct ContentView: View {
                     .zIndex(80)
             }
 
-            if #available(macOS 26.0, *), terminalOpen {
+            if #available(macOS 14.0, *), terminalOpen {
                 NSTerminalDropView()
                     .frame(width: 640)
                     .background(Color.black)
@@ -270,7 +270,7 @@ struct ContentView: View {
                     .zIndex(80)
             }
 
-            if #available(macOS 26.0, *), commandEngine.isVisible {
+            if #available(macOS 14.0, *), commandEngine.isVisible {
                 NSCommandLauncherView()
                     .frame(width: 640)
                     .background(Color.black)
@@ -375,7 +375,7 @@ struct ContentView: View {
                       } else if isEnabled(.nowPlaying) && (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
-                      } else if #available(macOS 26.0, *), vm.notchState == .closed, (isEnabled(.gitStatus) || isEnabled(.dockerStatus) || isEnabled(.networkLatency)) {
+                      } else if #available(macOS 14.0, *), vm.notchState == .closed, (isEnabled(.gitStatus) || isEnabled(.dockerStatus) || isEnabled(.networkLatency)) {
                           NSDevStatusTile()
                               .frame(alignment: .center)
                       } else if !coordinator.expandingView.show && vm.notchState == .closed && (!musicManager.isPlaying && musicManager.isPlayerIdle) && Defaults[.showNotHumanFace] && !vm.hideOnClosed  {
@@ -438,7 +438,7 @@ struct ContentView: View {
                     case .home:
                         NotchHomeView(albumArtNamespace: albumArtNamespace)
                     case .shelf:
-                        if #available(macOS 26.0, *), isEnabled(.clipboardShortcut), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
+                        if #available(macOS 14.0, *), isEnabled(.clipboardShortcut), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
                             NSShelfView()
                         } else {
                             ShelfView()

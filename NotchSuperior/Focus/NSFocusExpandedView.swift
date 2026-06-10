@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSFocusExpandedView: View {
     weak var engine: NSFocusEngine?
     @ObservedObject var obs = NSFocusEngine.shared

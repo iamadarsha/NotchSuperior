@@ -1,7 +1,7 @@
 // NOTCHSUPERIOR ADDITION
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSCommandLauncherView: View {
     @ObservedObject var engine = NSCommandEngine.shared
     @State private var textInput = ""

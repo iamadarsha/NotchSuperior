@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSBehaviorProfilesView: View {
     @AppStorage("NSProfilePresenting") var presenting = false
     @AppStorage("NSProfileBatterySaver") var batterySaver = false

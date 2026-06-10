@@ -9,7 +9,7 @@
 import SwiftUI
 
 // Full-featured layout editor UI
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSLayoutSettingsView: View {
     @ObservedObject var engine = NSLayoutEngine.shared
     @State private var selectedProfileID: UUID? = nil
@@ -79,7 +79,7 @@ struct NSLayoutSettingsView: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSLayoutProfileDetailView: View {
     @State var profile: NSLayoutProfile
     @ObservedObject var engine = NSLayoutEngine.shared
@@ -250,7 +250,7 @@ struct NSLayoutProfileDetailView: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSNewProfileSheet: View {
     @Binding var isPresented: Bool
     @ObservedObject var engine = NSLayoutEngine.shared
@@ -293,7 +293,7 @@ struct NSNewProfileSheet: View {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS 14.0, *)
 struct NSAppOverrideSheet: View {
     let profileID: UUID
     @Binding var isPresented: Bool

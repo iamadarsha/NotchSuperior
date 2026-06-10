@@ -97,11 +97,11 @@ struct CameraPreviewLayerView: NSViewRepresentable {
     let previewLayer: AVCaptureVideoPreviewLayer
 
     func makeNSView(context: Context) -> NSView {
-        let view = NSView(frame: .zero)
+        let view = NSView()
+        view.wantsLayer = true
+        view.layer?.addSublayer(previewLayer)
         previewLayer.frame = view.bounds
         previewLayer.videoGravity = .resizeAspectFill
-        view.layer = previewLayer
-        view.wantsLayer = true
         return view
     }
 

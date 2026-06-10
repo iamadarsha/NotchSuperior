@@ -59,7 +59,7 @@ class NSFocusEngine: ObservableObject {
         secondsRemaining = session.workMinutes * 60
         scheduleTimer()
         
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSLiveActivityEngine.shared.post(NSFocusActivity(engine: self))
         }
     }
@@ -68,7 +68,7 @@ class NSFocusEngine: ObservableObject {
         timer?.invalidate()
         timer = nil
         isPaused = true
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSLiveActivityEngine.shared.post(NSFocusActivity(engine: self))
         }
     }
@@ -76,7 +76,7 @@ class NSFocusEngine: ObservableObject {
     func resume() {
         isPaused = false
         scheduleTimer()
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSLiveActivityEngine.shared.post(NSFocusActivity(engine: self))
         }
     }
@@ -88,7 +88,7 @@ class NSFocusEngine: ObservableObject {
         secondsRemaining = 0
         roundsDone = 0
         isPaused = false
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSLiveActivityEngine.shared.dismiss(for: NSFocusActivity.self)
         }
     }
@@ -131,7 +131,7 @@ class NSFocusEngine: ObservableObject {
             break
         }
         scheduleTimer()
-        if #available(macOS 26.0, *) {
+        if #available(macOS 14.0, *) {
             NSLiveActivityEngine.shared.post(NSFocusActivity(engine: self))
         }
     }
