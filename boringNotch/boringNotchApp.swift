@@ -354,57 +354,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .toggleClipboard) { [weak self] in
             guard let self = self else { return }
             Task { @MainActor in
-                let current = UserDefaults.standard.bool(forKey: "NSClipboardOpen")
-                let newValue = !current
-                UserDefaults.standard.set(newValue, forKey: "NSClipboardOpen")
-                if newValue {
-                    self.vm.open()
-                } else {
-                    self.vm.close()
-                }
+                self.togglePanel("NSClipboardOpen")
             }
         }
 
         KeyboardShortcuts.onKeyDown(for: .toggleAIChat) { [weak self] in
             guard let self = self else { return }
             Task { @MainActor in
-                let current = UserDefaults.standard.bool(forKey: "NSAIChatOpen")
-                let newValue = !current
-                UserDefaults.standard.set(newValue, forKey: "NSAIChatOpen")
-                if newValue {
-                    self.vm.open()
-                } else {
-                    self.vm.close()
-                }
+                self.togglePanel("NSAIChatOpen")
             }
         }
 
         KeyboardShortcuts.onKeyDown(for: .toggleTerminal) { [weak self] in
             guard let self = self else { return }
             Task { @MainActor in
-                let current = UserDefaults.standard.bool(forKey: "NSTerminalOpen")
-                let newValue = !current
-                UserDefaults.standard.set(newValue, forKey: "NSTerminalOpen")
-                if newValue {
-                    self.vm.open()
-                } else {
-                    self.vm.close()
-                }
+                self.togglePanel("NSTerminalOpen")
             }
         }
 
         KeyboardShortcuts.onKeyDown(for: .toggleCommandLauncher) { [weak self] in
             guard let self = self else { return }
             Task { @MainActor in
-                let current = NSCommandEngine.shared.isVisible
-                let newValue = !current
-                if newValue {
-                    NSCommandEngine.shared.show()
-                    self.vm.open()
-                } else {
-                    NSCommandEngine.shared.hide()
-                    self.vm.close()
-                }
+                self.togglePanel("NSCommandLauncher")
             }
         }
 
@@ -642,10 +613,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             onboardingWindowController = NSWindowController(window: window)
         }
 
-//        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         onboardingWindowController?.window?.makeKeyAndOrderFront(nil)
         onboardingWindowController?.window?.orderFrontRegardless()
+    }
+
+    @MainActor
+    private func togglePanel(_ key: String) {
+        let keys = ["NSClipboardOpen", "NSAIChatOpen", "NSTerminalOpen"]
+        let current = UserDefaults.standard.bool(forKey: key)
+        let isCommandLauncher = (key == "NSCommandLauncher")
+        let isCurrentlyOpen = isCommandLauncher ? NSCommandEngine.shared.isVisible : current
+        
+        if isCurrentlyOpen {
+            self.vm.close()
+        } else {
+            // Close all other panels first
+            for k in keys {
+                UserDefaults.standard.set(k == key, forKey: k)
+            }
+            if isCommandLauncher {
+                NSCommandEngine.shared.show()
+            } else {
+                NSCommandEngine.shared.hide()
+            }
+            self.vm.open()
+        }
     }
 }
 

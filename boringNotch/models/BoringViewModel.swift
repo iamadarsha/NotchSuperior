@@ -220,6 +220,7 @@ class BoringViewModel: NSObject, ObservableObject {
         
         UserDefaults.standard.set(false, forKey: "NSClipboardOpen")
         UserDefaults.standard.set(false, forKey: "NSAIChatOpen")
+        UserDefaults.standard.set(false, forKey: "NSTerminalOpen")
         NSCommandEngine.shared.hide()
 
         // Set the current view to shelf if it contains files and the user enables openShelfByDefault
