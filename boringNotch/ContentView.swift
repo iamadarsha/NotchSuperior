@@ -135,6 +135,11 @@ struct ContentView: View {
                             .frame(height: 1)
                             .padding(.horizontal, topCornerRadius)
                     }
+                    .overlay {
+                        if vm.notchState == .open {
+                            SiriGlowBorder(shape: currentNotchShape)
+                        }
+                    }
                     .shadow(
                         color: ((vm.notchState == .open || isHovering) && Defaults[.enableShadow])
                             ? .black.opacity(0.7) : .clear, radius: Defaults[.cornerRadiusScaling] ? 6 : 4
@@ -742,6 +747,76 @@ struct GeneralDropTargetDelegate: DropDelegate {
 
     func performDrop(info: DropInfo) -> Bool {
         return false
+    }
+}
+
+struct SiriGlowBorder: View {
+    let shape: NotchShape
+    @State private var rotationAngle1: Double = 0.0
+    @State private var rotationAngle2: Double = 180.0
+    @State private var pulseOpacity: Double = 0.8
+    @State private var glowPulse: CGFloat = 1.0
+
+    var body: some View {
+        ZStack {
+            // Layer 1: Broad Outer Aura
+            shape
+                .stroke(
+                    gradient(angle: rotationAngle1, reverse: false),
+                    lineWidth: 12.0
+                )
+                .blur(radius: 18.0)
+                .opacity(pulseOpacity * 0.45)
+                .scaleEffect(x: glowPulse, y: glowPulse)
+            
+            // Layer 2: Mid-range Glow
+            shape
+                .stroke(
+                    gradient(angle: rotationAngle2, reverse: true),
+                    lineWidth: 4.5
+                )
+                .blur(radius: 6.0)
+                .opacity(pulseOpacity * 0.75)
+                .scaleEffect(x: (glowPulse - 1.0) * 0.5 + 1.0, y: (glowPulse - 1.0) * 0.5 + 1.0)
+            
+            // Layer 3: Crisp Core Line
+            shape
+                .stroke(
+                    gradient(angle: rotationAngle1, reverse: false),
+                    lineWidth: 1.8
+                )
+                .blur(radius: 0.4)
+                .opacity(pulseOpacity)
+        }
+        .blendMode(.screen)
+        .onAppear {
+            withAnimation(.linear(duration: 6.5).repeatForever(autoreverses: false)) {
+                rotationAngle1 = 360.0
+            }
+            withAnimation(.linear(duration: 8.5).repeatForever(autoreverses: false)) {
+                rotationAngle2 = -180.0
+            }
+            withAnimation(.easeInOut(duration: 2.2).repeatForever(autoreverses: true)) {
+                pulseOpacity = 1.0
+                glowPulse = 1.03
+            }
+        }
+    }
+
+    private func gradient(angle: Double, reverse: Bool) -> AngularGradient {
+        let colors = [
+            Color(red: 0.58, green: 0.2, blue: 0.92), // siri violet
+            Color(red: 0.12, green: 0.35, blue: 0.98), // siri blue
+            Color(red: 0.18, green: 0.82, blue: 0.86), // siri cyan
+            Color(red: 0.96, green: 0.23, blue: 0.61), // siri pink
+            Color(red: 0.98, green: 0.62, blue: 0.25), // siri orange-yellow
+            Color(red: 0.58, green: 0.2, blue: 0.92)  // siri violet wrap
+        ]
+        return AngularGradient(
+            colors: reverse ? colors.reversed() : colors,
+            center: .center,
+            angle: .degrees(angle)
+        )
     }
 }
 

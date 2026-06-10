@@ -5,6 +5,7 @@
 //  Created by Harsh Vardhan  Goswami  on 04/08/24.
 //
 
+import AVFoundation
 import Combine
 import Defaults
 import SwiftUI
@@ -138,7 +139,7 @@ class BoringViewModel: NSObject, ObservableObject {
             if webcamManager.isSessionRunning {
                 webcamManager.stopSession()
                 isCameraExpanded = false
-            } else if webcamManager.cameraAvailable {
+            } else {
                 webcamManager.startSession()
                 isCameraExpanded = true
             }
@@ -166,9 +167,17 @@ class BoringViewModel: NSObject, ObservableObject {
 
         case .notDetermined:
             isRequestingAuthorization = true
-            webcamManager.checkAndRequestVideoAuthorization()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.isRequestingAuthorization = false
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.isRequestingAuthorization = false
+                    self.webcamManager.authorizationStatus = granted ? .authorized : .denied
+                    if granted {
+                        self.webcamManager.checkCameraAvailability()
+                        self.webcamManager.startSession()
+                        self.isCameraExpanded = true
+                    }
+                }
             }
 
         default:

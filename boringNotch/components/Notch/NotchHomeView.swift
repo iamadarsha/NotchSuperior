@@ -229,7 +229,7 @@ struct MusicControlsView: View {
         let padded = slotConfig.padded(to: sanitizedLimit, filler: .none)
         let result = Array(padded.prefix(sanitizedLimit))
         // If calendar and camera are both visible alongside music, hide the edge slots
-        let shouldHideEdges = Defaults[.showCalendar] && Defaults[.showMirror] && webcamManager.cameraAvailable && vm.isCameraExpanded
+        let shouldHideEdges = Defaults[.showCalendar] && Defaults[.showMirror] && vm.isCameraExpanded
         if shouldHideEdges && result.count >= 5 {
             return Array(result.dropFirst().dropLast())
         }
@@ -443,7 +443,7 @@ struct NotchHomeView: View {
     }
 
     private var shouldShowCamera: Bool {
-        Defaults[.showMirror] && webcamManager.cameraAvailable && vm.isCameraExpanded
+        Defaults[.showMirror] && vm.isCameraExpanded
     }
 
     private var mainContent: some View {
@@ -459,6 +459,7 @@ struct NotchHomeView: View {
         return HStack(alignment: .center, spacing: (shouldShowCamera && showCal) ? 10 : 15) {
             if showMusic {
                 MusicPlayerView(albumArtNamespace: albumArtNamespace)
+                    .frame(maxWidth: shouldShowCamera ? 220 : .infinity)
             }
 
             if showCal {
@@ -484,7 +485,7 @@ struct NotchHomeView: View {
                     .transition(.opacity)
             }
 
-            if isEnabled(.cameraPreview) && shouldShowCamera {
+            if shouldShowCamera {
                 CameraPreviewView(webcamManager: webcamManager)
                     .scaledToFit()
                     .opacity(vm.notchState == .closed ? 0 : 1)
