@@ -1,191 +1,127 @@
 <h1 align="center">
   <br>
-  <a href="http://theboring.name"><img src="https://framerusercontent.com/images/RFK4vs0kn8pRMuOO58JeyoemXA.png?scale-down-to=256" alt="NotchSuperior" width="150"></a>
+  <a href="https://github.com/iamadarsha/NotchSuperior"><img src="https://framerusercontent.com/images/RFK4vs0kn8pRMuOO58JeyoemXA.png?scale-down-to=256" alt="NotchSuperior Logo" width="160"></a>
   <br>
   NotchSuperior
   <br>
 </h1>
 
+<p align="center">
+  <strong>Transform your MacBook's notch into a fluid, responsive command center.</strong>
+</p>
 
 <p align="center">
-  <a title="Crowdin" target="_blank" href="https://crowdin.com/project/boring-notch"><img src="https://badges.crowdin.net/boring-notch/localized.svg"></a>
-  <img src="https://github.com/iamadarsha/NotchSuperior/actions/workflows/cicd.yml/badge.svg" alt="TheNotchSuperior Build & Test" style="margin-right: 10px;" />
+  <img src="https://github.com/iamadarsha/NotchSuperior/actions/workflows/cicd.yml/badge.svg" alt="Build Status" />
   <a href="https://discord.gg/c8JXA7qrPm">
-    <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/c8JXA7qrPm?style=flat" alt="Discord Badge" />
+    <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/c8JXA7qrPm?style=flat" alt="Discord" />
   </a>
   <a href="https://www.ko-fi.com/alexander5015">
-    <img src="https://srv-cdn.himpfen.io/badges/kofi/kofi-flat.svg" alt="Ko-Fi" />
+    <img src="https://srv-cdn.himpfen.io/badges/kofi/kofi-flat.svg" alt="Support" />
   </a>
 </p>
 
-<!--Welcome to **Boring.Notch**, the coolest way to make your MacBook's notch the star of the show! Forget about those boring status bars—our notch turns into a dynamic music control center, complete with a snazzy visualizer and all the music controls you need. It's like having a mini concert right at the top of your screen! -->
+---
 
-Say hello to **NotchSuperior**, the coolest way to make your MacBook’s notch the star of the show! Say goodbye to boring status bars: with NotchSuperior, your notch transforms into a dynamic music control center, complete with a vibrant visualizer and all the essential music controls you need. But that’s just the start! NotchSuperior also offers calendar integration, a handy file shelf with AirDrop support, a complete MacOS HUD replacement and more!
+Say hello to **NotchSuperior**, a premium, high-performance utility that transforms your MacBook's screen notch from a static cutout into a gorgeous, interactive overlay. 
+
+Built on the foundation of `boring.notch`, NotchSuperior introduces **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/2d5f69c1-6e7b-4bc2-a6f1-bb9e27cf88a8" alt="Demo GIF" />
+  <img src="https://github.com/user-attachments/assets/2d5f69c1-6e7b-4bc2-a6f1-bb9e27cf88a8" alt="NotchSuperior Preview Animation" width="600" />
 </p>
 
-<!--https://github.com/user-attachments/assets/19b87973-4b3a-4853-b532-7e82d1d6b040-->
----
-<!--## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Roadmap](#-roadmap)
-- [Building from Source](#building-from-source)
-- [Contributing](#-contributing)
-- [Join our Discord Server](#join-our-discord-server)
-- [Star History](#star-history)
-- [Buy us a coffee!](#buy-us-a-coffee)
-- [Acknowledgments](#-acknowledgments)-->
-
-## Installation
-
-**System Requirements:**
-- macOS **14 Sonoma** or later
-- Apple Silicon or Intel Mac
-
 ---
 
-### Option 1: Download and Install Manually
+## ⚡ Quick Install
 
-<a href="https://github.com/iamadarsha/NotchSuperior/releases/latest/download/NotchSuperior.dmg" target="_self"><img width="200" src="https://github.com/user-attachments/assets/e3179be1-8416-4b8a-b417-743e1ecc67d6" alt="Download for macOS" /></a>
+You can download, install, bypass security quarantines, and launch **NotchSuperior** immediately with a **single terminal command**.
 
-Once downloaded, open the `.dmg` and move **NotchSuperior** to your `/Applications` folder.
-
-> [!IMPORTANT]
-> We don't have an Apple Developer account (yet 👀), so macOS will warn you that NotchSuperior is from an unidentified developer on first launch. This is expected behavior.
->
-> You'll need to bypass this before the app will open. You only need to do this once. Use one of the methods below.
-
----
-
-#### Recommended: Terminal (Always Works)
-
-This is the quickest and easiest method. It only requires a single command and works consistently for all users. System Settings can sometimes fail and won't work for non-admin users.
-
-After moving NotchSuperior to your Applications folder, run:
+Open your Terminal app (`/Applications/Utilities/Terminal.app`) and paste the following:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/NotchSuperior.app
+curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/feature/notch-superior/install.sh | bash
 ```
 
-Then open the app normally.
+> [!NOTE]
+> **What this command does:**
+> 1. Downloads the latest verified release build of NotchSuperior.
+> 2. Mounts the installation image.
+> 3. Installs `NotchSuperior.app` into your `/Applications` folder.
+> 4. Automatically clears the macOS gatekeeper quarantine (`xattr`) so you don't have to manually bypass "unidentified developer" warnings.
+> 5. Launches the app instantly.
 
 ---
 
-#### Alternative: System Settings
+## ✨ Key Features
 
-> [!NOTE]
-> This method doesn't work for all users. If this doesn't work, use the Terminal method above.
+NotchSuperior is packed with features that fit seamlessly into macOS:
 
-1. Try to open the app — you'll see a security warning.
-2. Click **OK** to dismiss it.
-3. Open **System Settings** > **Privacy & Security**.
-4. Scroll to the bottom and click **Open Anyway** next to the NotchSuperior warning.
-5. Confirm if prompted.
+### 🌈 Apple Intelligence Siri Glow Border
+When expanded, the notch features a multi-layered neon border that breathes, pulses, and rotates organic fluid colors. The gradient uses Siri's cyan, violet, blue, and pink color spectrum to deliver a world-class visual experience.
+
+### 📷 Smart Camera Mirror
+A quick-toggle webcam preview. Hover over the camera icon to reveal a mirrored webcam crop inside the notch. Features native permissions verification and custom aspect crops.
+
+### 📅 Calendar & Reminders
+A live productivity hub. Scroll through current and upcoming meetings, check off active iCloud reminders, and open your calendar application directly from the notch interface.
+
+### 🎵 Now Playing & Waveform Visualizer
+Compatible with Apple Music, Spotify, YouTube Music, and web players. Features customizable playback controls (favorite buttons, volume control, track seek slider) and timeline synchronization.
+
+### 🧠 Secure Local AI & Voice Notes
+- **Voice Memos**: Record voice memos directly from the notch.
+- **On-Device STT**: Transcribes your voice notes locally using Apple's Speech Framework (no keys required).
+- **AI Workspace**: Slide down chat panels using secure Keychain-stored OpenAI, Claude, or Gemini API keys to summarize, rewrite, or debug.
+
+### 💻 Developer HUD & Terminal Drop-Down
+- **System Metrics Tile**: Displays active Git branch, Docker container status, and network latency pings.
+- **Guake-style Terminal**: Press `Ctrl + Opt + ~` to drop down a zsh terminal directly from the notch for swift CLI checks.
+
+### 📦 Notch Shelf & Drag-and-Drop
+Drag any file, folder, image, or text snippet to the top center of your screen to drop it onto the Notch Shelf. Includes AirDrop shortcuts and Quick Look previews.
 
 ---
 
-### Option 2: Install via Homebrew
+## 🛠️ Configuration & Customization
 
-You can also install using [Homebrew](https://brew.sh). The Homebrew installation automatically bypasses the macOS security warning described above.
+NotchSuperior features a completely redesigned macOS 15-style preferences panel. 
 
-```bash
-brew install --cask iamadarsha/notch-superior/boring-notch
-```
+- **General**: Customize start-on-login, preferred display targets, hover delay, and gesture sensitivity.
+- **Appearance**: Adjust theme modifiers (Liquid Glass, Minimal, OLED Black), accent tints, and backing glass opacity.
+- **Layout Profiles**: Drag-and-drop to reorder active widget slots or set app-specific layout profiles.
 
-## Usage
+---
 
-- Launch the app, and voilà—your notch is now the coolest part of your screen.
-- Hover over the notch to see it expand and reveal all its secrets.
-- Use the controls to manage your music like a rockstar.
-- Click the star in your menu bar to customize your notch to your heart's content.
+## 🏗️ Building from Source
 
-## 📋 Roadmap
-- [x] Playback live activity 🎧
-- [x] Calendar integration 📆
-- [x] Reminders integration ☑️
-- [x] Mirror 📷
-- [x] Charging indicator and current percentage 🔋
-- [x] Customizable gesture control 👆🏻
-- [x] Shelf functionality with AirDrop 📚
-- [x] Notch sizing customization, finetuning on different display sizes 🖥️
-- [x] System HUD replacements (volume, brightness, backlight) 🎚️💡⌨️
-- [ ] Bluetooth Live Activity (connect/disconnect for bluetooth devices) 
-- [ ] Weather integration ⛅️
-- [ ] Customizable Layout options 🛠️
-- [ ] Lock Screen Widgets 🔒
-- [ ] Extension system 🧩
-- [ ] Notifications (under consideration) 🔔
-<!-- - [ ] Clipboard history manager 📌 `Extension` -->
-<!-- - [ ] Download indicator of different browsers (Safari, Chromium browsers, Firefox) 🌍 `Extension`-->
-<!-- - [ ] Customizable function buttons 🎛️ -->
-<!-- - [ ] App switcher 🪄 -->
-
-<!-- ## 🧩 Extensions
-> [!NOTE]
-> We’re hard at work on some awesome extensions! Stay tuned, and we’ll keep you updated as soon as they’re released. -->
-
-## Building from Source
+If you prefer to compile NotchSuperior yourself, you can build it with Xcode:
 
 ### Prerequisites
+- macOS **14 Sonoma** or later
+- **Xcode 16** or later
 
-- **macOS 14 or later**: If you’re not on the latest macOS, we might need to send a search party.
-- **Xcode 16 or later**: This is where the magic happens, so make sure it’s up-to-date.
-
-### Installation
-
-1. **Clone the Repository**:
+### Build Instructions
+1. Clone the repository:
    ```bash
    git clone https://github.com/iamadarsha/NotchSuperior.git
    cd NotchSuperior
    ```
-
-2. **Open the Project in Xcode**:
+2. Open the project:
    ```bash
-   open NotchSuperior.xcodeproj
+   open boringNotch.xcodeproj
    ```
+3. Press `Cmd + R` to compile and run the target.
 
-3. **Build and Run**:
-    - Click the "Run" button or press `Cmd + R`. Watch the magic unfold!
+---
 
 ## 🤝 Contributing
 
-We’re all about good vibes and awesome contributions! Read [CONTRIBUTING.md](CONTRIBUTING.md) to learn how you can join the fun!
+We welcome community pull requests and feature ideas! Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
-## Join our Discord Server
+## 🌟 Support & Credits
+- **[MediaRemoteAdapter](https://github.com/ungive/mediaremote-adapter)** — Powering the macOS Now Playing source.
+- **[NotchDrop](https://github.com/Lakr233/NotchDrop)** — Foundational concept for drag-and-drop shelf mechanics.
+- Icon design by [@maxtron95](https://github.com/maxtron95).
+- Web design by [@himanshhhhuv](https://github.com/himanshhhhuv).
 
-<a href="https://discord.gg/GvYcYpAKTu" target="_blank"><img src="https://iili.io/28m3GHv.png" alt="Join The Boring Server!" style="height: 60px !important;width: 217px !important;" ></a>
-
-## Star History
-
-<a href="https://www.star-history.com/#iamadarsha/NotchSuperior&Timeline">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iamadarsha/NotchSuperior&type=Timeline&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=iamadarsha/NotchSuperior&type=Timeline" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=iamadarsha/NotchSuperior&type=Timeline" />
- </picture>
-</a>
-
-## Support us on Ko-fi!
-<!-- <a href="https://www.buymeacoffee.com/jfxh67wvfxq" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a> -->
-<a href="https://www.ko-fi.com/alexander5015" target="_blank"><img src="https://github.com/user-attachments/assets//a76175ef-7e93-475a-8b67-4922ba5964c2" alt="Support us on Ko-fi" style="height: 70px !important;width: 346px !important;" ></a>
-
-## 🎉 Acknowledgments
-
-We would like to express our gratitude to the authors and maintainers of the open-source projects that made this possible. 
-
-## Notable Projects
-- **[MediaRemoteAdapter](https://github.com/ungive/mediaremote-adapter)** –  An open-source project that allowed us to use the Now Playing source in macOS 15.4+
-- **[NotchDrop](https://github.com/Lakr233/NotchDrop)** – An open-source project that has been instrumental in developing the first version of the "Shelf" feature in NotchSuperior.
-
-For a full list of licenses and attributions, please see the [Third-Party Licenses](./THIRD_PARTY_LICENSES.md) file.
-
-### Icon credits: [@maxtron95](https://github.com/maxtron95)
-### Website credits: [@himanshhhhuv](https://github.com/himanshhhhuv)
-
-- **SwiftUI**: For making us look like coding wizards.
-- **You**: For being awesome and checking out **NotchSuperior**!
-
-
+If you love NotchSuperior, please consider starring the repository or [buying us a coffee on Ko-Fi](https://www.ko-fi.com/alexander5015)!
