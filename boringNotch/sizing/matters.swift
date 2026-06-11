@@ -12,9 +12,18 @@ import SwiftUI
 let downloadSneakSize: CGSize = .init(width: 65, height: 1)
 let batterySneakSize: CGSize = .init(width: 160, height: 1)
 
-let shadowPadding: CGFloat = 20
+// ── Glow canvas padding ───────────────────────────────────────────────────────
+// SiriGlowBorder Layer 1 uses blur(radius:18) + scaleEffect up to 1.03.
+// A Gaussian blur at radius 18 needs ≥54 pts of canvas on every edge.
+// 60 pts gives comfortable headroom on all display sizes including 2560×1440.
+let glowHorizontalPadding: CGFloat = 60   // total extra width (30 pts each side)
+let shadowPadding: CGFloat = 60           // increased from 20 → 60
+// ─────────────────────────────────────────────────────────────────────────────
 let openNotchSize: CGSize = .init(width: 640, height: 190)
-let windowSize: CGSize = .init(width: openNotchSize.width, height: openNotchSize.height + shadowPadding)
+let windowSize: CGSize = .init(
+    width:  openNotchSize.width  + glowHorizontalPadding,
+    height: openNotchSize.height + shadowPadding
+)
 let cornerRadiusInsets: (opened: (top: CGFloat, bottom: CGFloat), closed: (top: CGFloat, bottom: CGFloat)) = (opened: (top: 19, bottom: 24), closed: (top: 6, bottom: 14))
 
 enum MusicPlayerImageSizes {

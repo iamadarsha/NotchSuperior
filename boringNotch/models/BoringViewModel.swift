@@ -133,10 +133,11 @@ class BoringViewModel: NSObject, ObservableObject {
         if isRequestingAuthorization {
             return
         }
+        HapticHelper.trigger()
 
         switch webcamManager.authorizationStatus {
         case .authorized:
-            if webcamManager.isSessionRunning {
+            if isCameraExpanded {
                 webcamManager.stopSession()
                 isCameraExpanded = false
             } else {
@@ -204,6 +205,7 @@ class BoringViewModel: NSObject, ObservableObject {
         
         // Force music information update when notch is opened
         MusicManager.shared.forceUpdate()
+        HapticHelper.trigger()
     }
 
     func close() {
@@ -214,9 +216,15 @@ class BoringViewModel: NSObject, ObservableObject {
         self.notchSize = getClosedNotchSize(screenUUID: self.screenUUID)
         self.closedNotchSize = self.notchSize
         self.notchState = .closed
+        HapticHelper.trigger()
         self.isBatteryPopoverActive = false
         self.coordinator.sneakPeek.show = false
         self.edgeAutoOpenActive = false
+        
+        if self.isCameraExpanded {
+            self.webcamManager.stopSession()
+            self.isCameraExpanded = false
+        }
         
         UserDefaults.standard.set(false, forKey: "NSClipboardOpen")
         UserDefaults.standard.set(false, forKey: "NSAIChatOpen")

@@ -19,24 +19,38 @@ enum PanDirection {
 }
 
 extension View {
-    func panGesture(direction: PanDirection, threshold: CGFloat = 4, action: @escaping (CGFloat, NSEvent.Phase) -> Void) -> some View {
+    /// `isEnabled`: evaluated on every scroll event. When it returns false the
+    /// scroll monitor forwards the event untouched and does not call `action`.
+    /// Pass `{ coordinator.currentView == .home }` from ContentView so scrolling
+    /// inside Clipboard / AI Chat / Terminal views never shrinks the notch.
+    func panGesture(
+        direction: PanDirection,
+        threshold: CGFloat = 4,
+        isEnabled: @escaping () -> Bool = { true },
+        action: @escaping (CGFloat, NSEvent.Phase) -> Void
+    ) -> some View {
         self
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
+                        guard isEnabled() else { return }
                         let s = direction.signed(from: value.translation)
                         guard s > 0, s.magnitude >= threshold else { return }
                         action(s.magnitude, .changed)
                     }
-                    .onEnded { _ in action(0, .ended) }
+                    .onEnded { _ in
+                        guard isEnabled() else { return }
+                        action(0, .ended)
+                    }
             )
-            .background(ScrollMonitor(direction: direction, threshold: threshold, action: action))
+            .background(ScrollMonitor(direction: direction, threshold: threshold, isEnabled: isEnabled, action: action))
     }
 }
 
 private struct ScrollMonitor: NSViewRepresentable {
     let direction: PanDirection
     let threshold: CGFloat
+    let isEnabled: () -> Bool
     let action: (CGFloat, NSEvent.Phase) -> Void
 
     func makeNSView(context: Context) -> NSView {
@@ -47,23 +61,25 @@ private struct ScrollMonitor: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
     static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) { coordinator.removeMonitor() }
 
-    func makeCoordinator() -> Coordinator { 
-        Coordinator(direction: direction, threshold: threshold, action: action) 
+    func makeCoordinator() -> Coordinator {
+        Coordinator(direction: direction, threshold: threshold, isEnabled: isEnabled, action: action)
     }
 
     @MainActor final class Coordinator: NSObject {
         private let direction: PanDirection
         private let threshold: CGFloat
+        private let isEnabled: () -> Bool
         private let action: (CGFloat, NSEvent.Phase) -> Void
         private var monitor: Any?
         private var accumulated: CGFloat = 0
         private var active = false
-            private var endTask: Task<Void, Never>?
+        private var endTask: Task<Void, Never>?
         private let noiseThreshold: CGFloat = 0.2
 
-        init(direction: PanDirection, threshold: CGFloat, action: @escaping (CGFloat, NSEvent.Phase) -> Void) {
+        init(direction: PanDirection, threshold: CGFloat, isEnabled: @escaping () -> Bool, action: @escaping (CGFloat, NSEvent.Phase) -> Void) {
             self.direction = direction
             self.threshold = threshold
+            self.isEnabled = isEnabled
             self.action = action
         }
 
@@ -88,7 +104,9 @@ private struct ScrollMonitor: NSViewRepresentable {
             removeMonitor()
             monitor = NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { [weak self, weak view] event in
                 guard let self = self, event.window === view?.window else { return event }
-                self.handleScroll(event)
+                if self.isEnabled() || self.active {
+                    self.handleScroll(event)
+                }
                 return event
             }
         }
@@ -105,6 +123,18 @@ private struct ScrollMonitor: NSViewRepresentable {
         }
 
         private func handleScroll(_ event: NSEvent) {
+            // If the gesture is disabled (e.g. clipboard/notes view is open),
+            // pass the event through without triggering any pan action.
+            guard isEnabled() else {
+                // Still clean up active state so no phantom gesture lingers
+                if active {
+                    action(0, .ended)
+                    active = false
+                    accumulated = 0
+                }
+                return
+            }
+
             if event.phase == .ended || event.momentumPhase == .ended {
                 if active {
                     action(accumulated.magnitude, .ended)

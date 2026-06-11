@@ -30,6 +30,19 @@ struct NSClipboardView: View {
                     .foregroundStyle(.secondary)
                 TextField("Search clipboard...", text: $searchText)
                     .textFieldStyle(.plain)
+                
+                if selectedTab == .history && !engine.history.filter({ !$0.isPinned }).isEmpty {
+                    Button(action: {
+                        engine.clearUnpinned()
+                    }) {
+                        Image(systemName: "trash")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.red)
+                    }
+                    .buttonStyle(.plain)
+                    .transition(.opacity)
+                    .help("Clear Unpinned History")
+                }
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
@@ -46,7 +59,6 @@ struct NSClipboardView: View {
             .padding(.horizontal, 8)
             .padding(.top, 6)
 
-            // Content
             ScrollView {
                 LazyVStack(spacing: 4) {
                     switch selectedTab {
@@ -70,6 +82,7 @@ struct NSClipboardView: View {
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
             }
+            .applyScrollPhaseChange()
 
             if selectedTab == .snippets {
                 Divider()
@@ -103,6 +116,21 @@ struct NSClipboardView: View {
         guard !searchText.isEmpty else { return all }
         return all.filter {
             $0.displayTitle.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+}
+
+@available(macOS 14.0, *)
+extension View {
+    @ViewBuilder
+    func applyScrollPhaseChange() -> some View {
+        if #available(macOS 15.0, *) {
+            self.onScrollPhaseChange { _, newPhase in
+                BoringViewCoordinator.shared.clipboardIsScrolling =
+                    (newPhase == .interacting || newPhase == .decelerating)
+            }
+        } else {
+            self
         }
     }
 }

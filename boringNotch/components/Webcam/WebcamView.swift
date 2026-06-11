@@ -21,7 +21,6 @@ struct CameraPreviewView: View {
             ZStack {
                 if let previewLayer = webcamManager.previewLayer {
                     CameraPreviewLayerView(previewLayer: previewLayer)
-                        .scaleEffect(x: -1, y: 1)
                         .clipShape(RoundedRectangle(cornerRadius: Defaults[.mirrorShape] == .rectangle ? !Defaults[.cornerRadiusScaling] ? MusicPlayerImageSizes.cornerRadiusInset.closed : MusicPlayerImageSizes.cornerRadiusInset.opened : 100))
                         .frame(width: geometry.size.width, height: geometry.size.width)
                         .opacity(webcamManager.isSessionRunning ? 1 : 0)
@@ -34,81 +33,138 @@ struct CameraPreviewView: View {
                             .strokeBorder(.white.opacity(0.04), lineWidth: 1)
                             .frame(width: geometry.size.width, height: geometry.size.width)
                         VStack(spacing: 8) {
-                            Image(systemName: webcamManager.authorizationStatus == .denied ? "exclamationmark.triangle" : "web.camera")
-                                .foregroundStyle(.gray)
-                                .font(.system(size: geometry.size.width/3.5))
-                            Text(webcamManager.authorizationStatus == .denied ? "Access Denied" : "Mirror")
-                                .font(.caption2)
-                                .foregroundColor(.gray)
+                            if webcamManager.authorizationStatus == .denied {
+                                Image(systemName: "exclamationmark.triangle")
+                                    .foregroundStyle(.gray)
+                                    .font(.system(size: geometry.size.width/3.5))
+                                Text("Access Denied")
+                                    .font(.caption2)
+                                    .foregroundColor(.gray)
+                            } else if !webcamManager.cameraAvailable {
+                                Image(systemName: "video.slash")
+                                    .foregroundStyle(.gray)
+                                    .font(.system(size: geometry.size.width/3.5))
+                                Text("No Camera")
+                                    .font(.caption2)
+                                    .foregroundColor(.gray)
+                                Button(action: {
+                                    HapticHelper.trigger()
+                                    webcamManager.checkCameraAvailability()
+                                    webcamManager.startSession()
+                                }) {
+                                    Image(systemName: "arrow.clockwise")
+                                        .font(.system(size: 9))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .buttonStyle(.plain)
+                                .help("Retry connecting")
+                            } else {
+                                ProgressView()
+                                    .controlSize(.small)
+                            }
                         }
                     }
                 }
             }
-            .onTapGesture {
-                handleCameraTap()
+            .contextMenu {
+                if !webcamManager.availableDevices.isEmpty {
+                    Menu("Switch Camera") {
+                        ForEach(webcamManager.availableDevices, id: \.uniqueID) { device in
+                            Button(action: {
+                                HapticHelper.trigger()
+                                Defaults[.selectedCameraID] = device.uniqueID
+                                if webcamManager.isSessionRunning {
+                                    webcamManager.stopSession()
+                                    webcamManager.startSession()
+                                }
+                            }) {
+                                HStack {
+                                    if Defaults[.selectedCameraID] == device.uniqueID {
+                                        Image(systemName: "checkmark")
+                                    }
+                                    Text(device.localizedName)
+                                }
+                            }
+                        }
+                    }
+                }
+                Button("Refresh Camera List") {
+                    HapticHelper.trigger()
+                    webcamManager.checkCameraAvailability()
+                }
             }
             .onDisappear {
                 webcamManager.stopSession()
             }
         }
         .aspectRatio(1, contentMode: .fit)
-    }
-    
-    private func handleCameraTap() {
-        if isRequestingAuthorization {
-            return // Prevent multiple authorization requests
-        }
-        
-        switch webcamManager.authorizationStatus {
-        case .authorized:
-            if webcamManager.isSessionRunning {
-                webcamManager.stopSession()
-            } else if webcamManager.cameraAvailable {
+        .onAppear {
+            // Request permission first
+            webcamManager.checkAndRequestVideoAuthorization()
+            
+            // Auto-start camera when view appears
+            if !webcamManager.isSessionRunning {
                 webcamManager.startSession()
             }
-        case .denied, .restricted:
-            DispatchQueue.main.async {
-                let alert = NSAlert()
-                alert.messageText = "Camera Access Required"
-                alert.informativeText = "Please allow camera access in System Settings to use the mirror feature."
-                alert.addButton(withTitle: "Open System Settings")
-                alert.addButton(withTitle: "Cancel")
-
-                if alert.runModal() == .alertFirstButtonReturn {
-                    if let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Camera") {
-                        NSWorkspace.shared.open(settingsURL)
-                    }
-                }
-            }
-        case .notDetermined:
-            isRequestingAuthorization = true
-            webcamManager.checkAndRequestVideoAuthorization()
-            // Reset the request flag after a reasonable delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                isRequestingAuthorization = false
-            }
-        @unknown default:
-            break
         }
     }
 }
 
+
 struct CameraPreviewLayerView: NSViewRepresentable {
     let previewLayer: AVCaptureVideoPreviewLayer
 
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        view.wantsLayer = true
-        view.layer?.addSublayer(previewLayer)
-        previewLayer.frame = view.bounds
-        previewLayer.videoGravity = .resizeAspectFill
-        return view
+    func makeNSView(context: Context) -> _CameraHostView {
+        let host = _CameraHostView()
+        host.setPreviewLayer(previewLayer)
+        return host
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {
+    func updateNSView(_ nsView: _CameraHostView, context: Context) {
+        // Re-attach layer if session was recreated (stopSession → startSession
+        // creates a new AVCaptureVideoPreviewLayer instance).
+        if nsView.hostedLayer !== previewLayer {
+            nsView.setPreviewLayer(previewLayer)
+        }
+        nsView.needsLayout = true
+    }
+}
+
+/// Layer-hosting NSView: sets self.layer = previewLayer so AppKit drives
+/// all geometry. layout() is called every time bounds change (including the
+/// first real layout pass after SwiftUI commits a non-zero frame), which
+/// eliminates the zero-frame race in makeNSView.
+final class _CameraHostView: NSView {
+    private(set) var hostedLayer: AVCaptureVideoPreviewLayer?
+
+    override var wantsUpdateLayer: Bool { true }
+
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        // wantsLayer must be true before setting self.layer
+        wantsLayer = true
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        wantsLayer = true
+    }
+
+    func setPreviewLayer(_ layer: AVCaptureVideoPreviewLayer) {
+        // Remove previous layer if any
+        hostedLayer?.removeFromSuperlayer()
+        hostedLayer = layer
+        layer.videoGravity = .resizeAspectFill
+        // Layer-hosting: hand full geometry control to AppKit
+        self.layer = layer
+        needsLayout = true
+    }
+
+    override func layout() {
+        super.layout()
+        guard let l = hostedLayer else { return }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        previewLayer.frame = nsView.bounds
+        l.frame = self.bounds
         CATransaction.commit()
     }
 }

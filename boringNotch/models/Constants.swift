@@ -78,6 +78,9 @@ extension Defaults.Keys {
     // MARK: Behavior
     static let minimumHoverDuration = Key<TimeInterval>("minimumHoverDuration", default: 0.3)
     static let enableHaptics = Key<Bool>("enableHaptics", default: true)
+    static let notchCloseDelay = Key<TimeInterval>("notchCloseDelay", default: 2.0)
+    static let mediaHapticFeedback = Key<Bool>("mediaHapticFeedback", default: true)
+    static let showSiriGlowBorder = Key<Bool>("showSiriGlowBorder", default: true)
     static let openNotchOnHover = Key<Bool>("openNotchOnHover", default: true)
     static let extendHoverArea = Key<Bool>("extendHoverArea", default: false)
     static let notchHeightMode = Key<WindowHeightMode>(
@@ -103,6 +106,7 @@ extension Defaults.Keys {
     static let lightingEffect = Key<Bool>("lightingEffect", default: true)
     static let enableShadow = Key<Bool>("enableShadow", default: true)
     static let cornerRadiusScaling = Key<Bool>("cornerRadiusScaling", default: true)
+    static let cameraSize = Key<CGFloat>("cameraSize", default: 90.0)
 
     static let showNotHumanFace = Key<Bool>("showNotHumanFace", default: false)
     static let tileShowLabels = Key<Bool>("tileShowLabels", default: false)
@@ -189,6 +193,8 @@ extension Defaults.Keys {
     // Show or hide the title bar
     static let hideTitleBar = Key<Bool>("hideTitleBar", default: true)
     
+    static let selectedCameraID = Key<String?>("selectedCameraID", default: nil)
+    
     // Helper to determine the default media controller based on NowPlaying deprecation status
     static var defaultMediaController: MediaControllerType {
         if MusicManager.shared.isNowPlayingDeprecated {
@@ -199,4 +205,16 @@ extension Defaults.Keys {
     }
 
     static let didClearLegacyURLCacheV1 = Key<Bool>("didClearLegacyURLCache_v1", default: false)
+}
+
+struct HapticHelper {
+    static func trigger() {
+        guard Defaults[.enableHaptics] else { return }
+        NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .default)
+    }
+
+    static func triggerMedia() {
+        guard Defaults[.enableHaptics] && Defaults[.mediaHapticFeedback] else { return }
+        NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .default)
+    }
 }

@@ -212,18 +212,20 @@ class NSAIEngine: ObservableObject {
             ]
             req.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        case .claude:
-            req.setValue(apiKey, forHTTPHeaderField: "x-api-key")
-            req.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+        case .groq:
+            req.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            let body: [String: Any] = [
-                "model": "claude-opus-4-5",
-                "max_tokens": 2048,
-                "stream": true,
-                "system": systemPrompt,
-                "messages": messages.map { ["role":$0.role, "content":$0.content] }
+            
+            let systemMsg = NSAIChatMessage(id: UUID(), role: "system", content: systemPrompt, timestamp: Date())
+            let apiMessages = ([systemMsg] + messages).map { msg -> [String: String] in
+                ["role": msg.role, "content": msg.content]
+            }
+            let payload: [String: Any] = [
+                "model": "llama3-8b-8192", // Use a Groq model
+                "messages": apiMessages,
+                "stream": true
             ]
-            req.httpBody = try JSONSerialization.data(withJSONObject: body)
+            req.httpBody = try JSONSerialization.data(withJSONObject: payload)
 
         case .gemini:
             var components = URLComponents(string: provider.baseURL)!
@@ -265,15 +267,10 @@ class NSAIEngine: ObservableObject {
         else { return nil }
 
         switch provider {
-        case .openAI:
+        case .openAI, .groq:
             return (json["choices"] as? [[String:Any]])?.first
                 .flatMap { $0["delta"] as? [String:Any] }
                 .flatMap { $0["content"] as? String }
-        case .claude:
-            if let type_ = json["type"] as? String, type_ == "content_block_delta",
-               let delta = json["delta"] as? [String:Any],
-               let text = delta["text"] as? String { return text }
-            return nil
         case .gemini:
             return nil
         }

@@ -16,11 +16,12 @@ class SettingsWindowController: NSWindowController {
     
     private init() {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 700, height: 600),
+            contentRect: NSRect(x: 0, y: 0, width: 950, height: 600),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
+        window.minSize = NSSize(width: 950, height: 600)
         
         super.init(window: window)
         
@@ -66,6 +67,11 @@ class SettingsWindowController: NSWindowController {
         window.delegate = self
     }
     
+    func showWindow(tab: String) {
+        BoringViewCoordinator.shared.selectedSettingsTab = tab
+        showWindow()
+    }
+
     func showWindow() {
         // Set app to regular mode first
         NSApp.setActivationPolicy(.regular)

@@ -23,52 +23,69 @@ struct NSLayoutSettingsView: View {
     }
 
     var body: some View {
-        NavigationSplitView {
+        HStack(spacing: 0) {
             // Left: profile list
-            List(engine.profiles, selection: $selectedProfileID) { profile in
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(profile.name)
-                            .font(.system(size: 13, weight: .medium))
-                        Text(profile.preset.description)
-                            .font(.system(size: 10))
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
+            VStack(spacing: 0) {
+                List(engine.profiles, selection: $selectedProfileID) { profile in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(profile.name)
+                                .font(.system(size: 13, weight: .medium))
+                            Text(profile.preset.description)
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                        Spacer()
+                        if profile.id == engine.activeProfileID {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
+                                .font(.system(size: 13))
+                        }
                     }
-                    Spacer()
-                    if profile.id == engine.activeProfileID {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                            .font(.system(size: 13))
-                    }
-                }
-                .tag(profile.id)
-                .contextMenu {
-                    Button("Activate") { engine.activateProfile(profile.id) }
-                    if profile.preset == .custom {
-                        Button("Delete", role: .destructive) {
-                            engine.deleteProfile(profile.id)
+                    .tag(profile.id)
+                    .contextMenu {
+                        Button("Activate") { engine.activateProfile(profile.id) }
+                        if profile.preset == .custom {
+                            Button("Delete", role: .destructive) {
+                                engine.deleteProfile(profile.id)
+                            }
                         }
                     }
                 }
-            }
-            .toolbar {
-                ToolbarItem {
+                .listStyle(.plain)
+                
+                Divider()
+                
+                HStack {
+                    Spacer()
                     Button(action: { showNewProfileSheet = true }) {
                         Image(systemName: "plus")
                     }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                }
+                .background(Color(NSColor.controlBackgroundColor))
+            }
+            .frame(width: 220)
+
+            Divider()
+
+            // Right: detail
+            Group {
+                if let profile = selectedProfile {
+                    NSLayoutProfileDetailView(profile: profile)
+                        .id(profile.id) // Ensure detail updates on switch
+                } else {
+                    Text("Select a layout profile")
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .navigationTitle("Layouts")
-        } detail: {
-            if let profile = selectedProfile {
-                NSLayoutProfileDetailView(profile: profile)
-                    .id(profile.id) // Ensure detail updates on switch
-            } else {
-                Text("Select a layout profile")
-                    .foregroundStyle(.secondary)
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .navigationTitle("Layout Profiles")
         .onAppear {
             selectedProfileID = selectedProfileID ?? engine.activeProfileID
         }

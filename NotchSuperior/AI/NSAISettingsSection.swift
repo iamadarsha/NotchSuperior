@@ -8,7 +8,7 @@ struct NSAISettingsSection: View {
 
     // Temp input states for key entry
     @State private var openAIKey  = ""
-    @State private var claudeKey  = ""
+    @State private var groqKey    = ""
     @State private var geminiKey  = ""
     @State private var showKeys   = false
 
@@ -55,27 +55,27 @@ struct NSAISettingsSection: View {
                     }
 
                     HStack {
-                        Text("Claude")
+                        Text("Groq")
                             .frame(width: 70, alignment: .leading)
                         if showKeys {
-                            TextField("sk-ant-…", text: $claudeKey)
+                            TextField("gsk_…", text: $groqKey)
                                 .textFieldStyle(.roundedBorder)
                         } else {
-                            SecureField("sk-ant-…", text: $claudeKey)
+                            SecureField("gsk_…", text: $groqKey)
                                 .textFieldStyle(.roundedBorder)
                         }
                         Button("Save") {
-                            NSAIKeyStore.shared.save(key: claudeKey, for: .claude)
-                            claudeKey = ""
+                            NSAIKeyStore.shared.save(key: groqKey, for: .groq)
+                            groqKey = ""
                         }
-                        .disabled(claudeKey.isEmpty)
+                        .disabled(groqKey.isEmpty)
                         .buttonStyle(.bordered).controlSize(.small)
 
-                        if NSAIKeyStore.shared.hasKey(for: .claude) {
+                        if NSAIKeyStore.shared.hasKey(for: .groq) {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                             Button("Clear") {
-                                NSAIKeyStore.shared.delete(for: .claude)
+                                NSAIKeyStore.shared.delete(for: .groq)
                             }
                             .buttonStyle(.borderless).controlSize(.small)
                         }

@@ -21,6 +21,7 @@ let tabs: [TabModel] = {
     ]
     if #available(macOS 14.0, *) {
         list.append(TabModel(label: "Clipboard", icon: "doc.on.clipboard", view: .clipboard))
+        list.append(TabModel(label: "Notes", icon: "mic.fill", view: .notes))
     }
     return list
 }()

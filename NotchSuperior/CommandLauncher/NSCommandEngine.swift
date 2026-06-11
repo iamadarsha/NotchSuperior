@@ -57,7 +57,7 @@ class NSCommandEngine: ObservableObject {
                 keywords: ["note", "voice", "record", "memo"],
                 action: {
                     let note = NSAINoteEngine.shared.createNote(title: "Voice Note")
-                    NSAINoteEngine.shared.startRecording()
+                    NSAINoteEngine.shared.startRecording(for: note.id)
                 }),
             NSShortcutCommand(id: UUID(),
                 title: "Lock Screen",

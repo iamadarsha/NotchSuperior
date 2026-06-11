@@ -17,6 +17,7 @@ import SwiftUIIntrospect
 struct SettingsView: View {
     @State private var selectedTab = "General"
     @State private var accentColorUpdateTrigger = UUID()
+    @ObservedObject var coordinator = BoringViewCoordinator.shared
 
     let updaterController: SPUStandardUpdaterController?
 
@@ -274,12 +275,17 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 700)
+        .frame(minWidth: 850, minHeight: 600)
         .background(Color(NSColor.windowBackgroundColor))
         .tint(.effectiveAccent)
         .id(accentColorUpdateTrigger)
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("AccentColorChanged"))) { _ in
             accentColorUpdateTrigger = UUID()
+        }
+        .onReceive(coordinator.$selectedSettingsTab) { newTab in
+            if let tab = newTab {
+                self.selectedTab = tab
+            }
         }
     }
 }
@@ -304,6 +310,8 @@ struct GeneralSettings: View {
     @Default(.automaticallySwitchDisplay) var automaticallySwitchDisplay
     @Default(.enableGestures) var enableGestures
     @Default(.openNotchOnHover) var openNotchOnHover
+    @Default(.notchCloseDelay) var notchCloseDelay
+    @Default(.mediaHapticFeedback) var mediaHapticFeedback
     
 
     var body: some View {
@@ -484,7 +492,21 @@ struct GeneralSettings: View {
             Defaults.Toggle(key: .enableHaptics) {
                     Text("Enable haptic feedback")
             }
+            if Defaults[.enableHaptics] {
+                Defaults.Toggle(key: .mediaHapticFeedback) {
+                    Text("Media control haptic feedback")
+                }
+                .padding(.leading, 12)
+            }
             Toggle("Remember last tab", isOn: $coordinator.openLastTabByDefault)
+            Slider(value: $notchCloseDelay, in: 0.5...5.0, step: 0.5) {
+                HStack {
+                    Text("Notch close delay")
+                    Spacer()
+                    Text("\(notchCloseDelay, specifier: "%.1f")s")
+                        .foregroundStyle(.secondary)
+                }
+            }
             if openNotchOnHover {
                 Slider(value: $minimumHoverDuration, in: 0...1, step: 0.1) {
                     HStack {
@@ -1321,11 +1343,15 @@ struct Shelf: View {
 
 struct Appearance: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
+    @ObservedObject var webcamManager = WebcamManager.shared
     @Default(.mirrorShape) var mirrorShape
+    @Default(.cameraSize) var cameraSize
     @Default(.sliderColor) var sliderColor
     @Default(.useMusicVisualizer) var useMusicVisualizer
     @Default(.customVisualizers) var customVisualizers
     @Default(.selectedVisualizer) var selectedVisualizer
+    @Default(.showSiriGlowBorder) var showSiriGlowBorder
+    @Default(.selectedCameraID) var selectedCameraID
 
     let icons: [String] = ["logo2"]
     @State private var selectedIcon: String = "logo2"
@@ -1543,14 +1569,47 @@ struct Appearance: View {
                     Text("Enable camera mirror")
                 }
                     .disabled(!checkVideoInput())
+                
+                if Defaults[.showMirror] && !webcamManager.availableDevices.isEmpty {
+                    Picker("Active Camera", selection: $selectedCameraID) {
+                        Text("Default / Automatic").tag(nil as String?)
+                        ForEach(webcamManager.availableDevices, id: \.uniqueID) { device in
+                            Text(device.localizedName).tag(device.uniqueID as String?)
+                        }
+                    }
+                    .onChange(of: selectedCameraID) { _ in
+                        if webcamManager.isSessionRunning {
+                            webcamManager.stopSession()
+                            webcamManager.startSession()
+                        }
+                    }
+                }
+                
                 Picker("Mirror shape", selection: $mirrorShape) {
                     Text("Circle")
                         .tag(MirrorShapeEnum.circle)
                     Text("Square")
                         .tag(MirrorShapeEnum.rectangle)
                 }
+                if Defaults[.showMirror] {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Slider(value: $cameraSize, in: 60...150, step: 5) {
+                            Text("Camera preview size")
+                        } minimumValueLabel: {
+                            Text("60px")
+                        } maximumValueLabel: {
+                            Text("150px")
+                        }
+                        Text("Current: \(Int(cameraSize))px")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
                 Defaults.Toggle(key: .showNotHumanFace) {
                     Text("Show cool face animation while inactive")
+                }
+                Defaults.Toggle(key: .showSiriGlowBorder) {
+                    Text("Show Siri glow border around notch")
                 }
             } header: {
                 HStack {
@@ -1563,11 +1622,19 @@ struct Appearance: View {
     }
 
     func checkVideoInput() -> Bool {
-        if AVCaptureDevice.default(for: .video) != nil {
-            return true
+        var deviceTypes: [AVCaptureDevice.DeviceType] = [
+            .builtInWideAngleCamera,
+            .external
+        ]
+        if #available(macOS 14.0, *) {
+            deviceTypes.append(.continuityCamera)
         }
-
-        return false
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: deviceTypes,
+            mediaType: .video,
+            position: .unspecified
+        )
+        return !discoverySession.devices.isEmpty
     }
 }
 

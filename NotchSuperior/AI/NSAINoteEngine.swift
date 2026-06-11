@@ -1,9 +1,21 @@
 // ────────────────────────────────────────────────────────
 // NotchSuperior — NSAINoteEngine.swift
-// FIX 4: Removed fake-conversation injection pattern.
-//         Now calls NSAIEngine.summarize(text:systemPrompt:)
-//         directly — a clean, validated code path that does
-//         not pollute the conversations list.
+//
+// FIX (Issue 3 – Voice Notes Not Saving):
+//   Replaced AVAudioEngine + SFSpeechRecognizer streaming
+//   (race condition: recognitionTask?.cancel() killed the
+//   final result before liveTranscript was populated)
+//   with AVAudioRecorder → WAV file →
+//   SFSpeechURLRecognitionRequest (file-based, non-streaming).
+//
+//   Guarantees:
+//   1. Full audio on disk before recognition starts — no race.
+//   2. isFinal result always delivered — no cancel() problem.
+//   3. No AVAudioEngine tap-reuse crash on second recording.
+//   4. Transcript delivered async via @Published notes array.
+//      stopRecording() is now void (callers must not assign return).
+//
+// FIX 4 (previous): summarize() uses NSAIEngine.summarize() — unchanged.
 // ────────────────────────────────────────────────────────
 
 import Foundation
@@ -17,76 +29,184 @@ class NSAINoteEngine: ObservableObject {
 
     @Published var notes: [NSAINote] = []
     @Published var isProcessing = false
-
-    private var audioEngine = AVAudioEngine()
-    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    private var recognitionTask: SFSpeechRecognitionTask?
     @Published var isRecording = false
     @Published var liveTranscript = ""
 
-    // MARK: — Voice recording
-    func startRecording() {
-        SFSpeechRecognizer.requestAuthorization { [weak self] status in
-            guard status == .authorized else { return }
-            Task { @MainActor in self?.beginAudioCapture() }
-        }
-    }
+    // MARK: — Private recording state
+    private var audioRecorder: AVAudioRecorder?
+    private var currentRecordingURL: URL?
+    private var pendingNoteID: UUID?
 
-    private func beginAudioCapture() {
-        let recognizer = SFSpeechRecognizer(locale: Locale.current)
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let req = recognitionRequest else { return }
-        req.shouldReportPartialResults = true
-
-        recognitionTask = recognizer?.recognitionTask(with: req) { [weak self] result, _ in
-            if let result { self?.liveTranscript = result.bestTranscription.formattedString }
-        }
-
-        let inputNode = audioEngine.inputNode
-        let fmt = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: fmt) { buf, _ in
-            req.append(buf)
-        }
-        audioEngine.prepare()
-        try? audioEngine.start()
-        isRecording = true
-    }
-
-    func stopRecording() -> String {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-        recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
-        isRecording = false
-        let result = liveTranscript
+    // MARK: — startRecording(for:)
+    func startRecording(for noteID: UUID) {
+        pendingNoteID = noteID
         liveTranscript = ""
-        return result
+
+        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+        case .authorized:
+            beginFileRecording()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
+                Task { @MainActor [weak self] in
+                    if granted {
+                        self?.beginFileRecording()
+                    } else {
+                        self?.setTranscript(
+                            "⚠ Microphone access denied. Enable it in System Settings → Privacy & Security → Microphone.",
+                            for: noteID)
+                    }
+                }
+            }
+        default:
+            setTranscript(
+                "⚠ Microphone access denied. Enable it in System Settings → Privacy & Security → Microphone.",
+                for: noteID)
+        }
     }
 
-    // MARK: — AI summarization (FIX 4)
-    // Uses NSAIEngine.summarize(text:systemPrompt:) — a dedicated path
-    // that streams a one-shot completion without touching the conversations list.
-    func summarize(text: String, template: NSAINoteTemplate,
-                   noteID: UUID) async {
+    private func beginFileRecording() {
+        // Write to /tmp — always sandbox-writable, no extra entitlements needed.
+        let tmp = FileManager.default.temporaryDirectory
+        let url = tmp
+            .appendingPathComponent("ns_voicenote_\(UUID().uuidString)")
+            .appendingPathExtension("wav")
+        currentRecordingURL = url
+
+        // 16-bit PCM 16 kHz mono — optimal for SFSpeechRecognizer.
+        let settings: [String: Any] = [
+            AVFormatIDKey:             Int(kAudioFormatLinearPCM),
+            AVSampleRateKey:           16_000.0,
+            AVNumberOfChannelsKey:     1,
+            AVLinearPCMBitDepthKey:    16,
+            AVLinearPCMIsBigEndianKey: false,
+            AVLinearPCMIsFloatKey:     false
+        ]
+
+        do {
+            audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+            audioRecorder?.prepareToRecord()
+            audioRecorder?.record()
+            isRecording = true
+        } catch {
+            NSLog("[NSAINoteEngine] AVAudioRecorder init failed: \(error)")
+            audioRecorder = nil
+            currentRecordingURL = nil
+        }
+    }
+
+    // MARK: — stopRecording()
+    // Now VOID — transcript is delivered async via the notes @Published array.
+    // Callers must NOT assign a return value.
+    func stopRecording() {
+        guard let recorder = audioRecorder, let url = currentRecordingURL else {
+            isRecording = false
+            return
+        }
+        recorder.stop()
+        audioRecorder = nil
+        isRecording = false
+        transcribeFile(at: url, noteID: pendingNoteID)
+    }
+
+    // MARK: — File-based speech recognition
+    private func transcribeFile(at url: URL, noteID: UUID?) {
+        guard let noteID else {
+            cleanup(url: url); return
+        }
+        isProcessing = true
+
+        SFSpeechRecognizer.requestAuthorization { [weak self] authStatus in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                guard authStatus == .authorized else {
+                    self.setTranscript(
+                        "⚠ Speech recognition access denied. Enable it in System Settings → Privacy & Security → Speech Recognition.",
+                        for: noteID)
+                    self.isProcessing = false
+                    self.cleanup(url: url)
+                    return
+                }
+
+                guard let recognizer = SFSpeechRecognizer(locale: Locale.current),
+                      recognizer.isAvailable else {
+                    self.setTranscript(
+                        "⚠ Speech recognizer unavailable on this device or locale.",
+                        for: noteID)
+                    self.isProcessing = false
+                    self.cleanup(url: url)
+                    return
+                }
+
+                let request = SFSpeechURLRecognitionRequest(url: url)
+                request.shouldReportPartialResults = false   // file mode: final only
+
+                recognizer.recognitionTask(with: request) { [weak self] result, error in
+                    Task { @MainActor [weak self] in
+                        guard let self else { return }
+
+                        if let error {
+                            NSLog("[NSAINoteEngine] Recognition error: \(error)")
+                            self.setTranscript(
+                                "⚠ Recognition failed: \(error.localizedDescription)",
+                                for: noteID)
+                            self.isProcessing = false
+                            self.cleanup(url: url)
+                            return
+                        }
+
+                        guard let result, result.isFinal else { return }
+
+                        let text = result.bestTranscription.formattedString
+                        self.setTranscript(text.isEmpty ? "(no speech detected)" : text, for: noteID)
+                        self.isProcessing = false
+                        self.pendingNoteID = nil
+                        self.currentRecordingURL = nil
+                        self.cleanup(url: url)
+
+                        if !text.isEmpty {
+                            Task {
+                                if let note = self.notes.first(where: { $0.id == noteID }) {
+                                    await self.summarize(text: text, template: note.template, noteID: noteID)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: — Helpers
+    private func setTranscript(_ text: String, for noteID: UUID) {
+        if let idx = notes.firstIndex(where: { $0.id == noteID }) {
+            notes[idx].rawTranscript = text
+            save()
+        }
+    }
+
+    private func cleanup(url: URL) {
+        try? FileManager.default.removeItem(at: url)
+    }
+
+    // MARK: — AI summarization (FIX 4 — unchanged)
+    func summarize(text: String, template: NSAINoteTemplate, noteID: UUID) async {
         guard let idx = notes.firstIndex(where: { $0.id == noteID }) else { return }
         guard NSAIEngine.shared.isConfigured else {
             notes[idx].summary = "⚠ No AI key set. Add one in Settings → AI."
             return
         }
         isProcessing = true
-        notes[idx].summary = nil   // clear stale summary while processing
-
+        notes[idx].summary = nil
         let summary = await NSAIEngine.shared.summarize(
-            text: text,
-            systemPrompt: template.systemPrompt)
-
+            text: text, systemPrompt: template.systemPrompt)
         notes[idx].summary = summary
         notes[idx].updatedAt = Date()
         isProcessing = false
         save()
     }
 
-    // MARK: — CRUD
+    // MARK: — CRUD (all unchanged)
     func createNote(title: String = "New Note",
                     template: NSAINoteTemplate = .freeform) -> NSAINote {
         let note = NSAINote(id: UUID(), title: title, template: template,
@@ -113,19 +233,17 @@ class NSAINoteEngine: ObservableObject {
         let text = [note.title,
                     note.rawTranscript.map { "--- Transcript ---\n\($0)" } ?? "",
                     note.summary.map { "--- Summary ---\n\($0)" } ?? ""]
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n\n")
+            .filter { !$0.isEmpty }.joined(separator: "\n\n")
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
     }
 
-    // MARK: — Persistence
+    // MARK: — Persistence (all unchanged)
     private var storeURL: URL {
         let dir = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("NotchSuperior", isDirectory: true)
-        try? FileManager.default.createDirectory(at: dir,
-            withIntermediateDirectories: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("ai_notes.json")
     }
 

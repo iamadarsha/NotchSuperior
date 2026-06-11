@@ -7,58 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AAB000060609202600000001 /* NSDevModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000010609202600000001 /* NSDevModels.swift */; };
-		AAB000070609202600000001 /* NSDevEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000020609202600000001 /* NSDevEngine.swift */; };
-		AAB000080609202600000001 /* NSDevHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000030609202600000001 /* NSDevHUDView.swift */; };
-		AAB000090609202600000001 /* NSTerminalDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000040609202600000001 /* NSTerminalDropView.swift */; };
-		AAB0000A0609202600000001 /* NSDevSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000050609202600000001 /* NSDevSettingsSection.swift */; };
-		AA9000050609202600000001 /* NSLayoutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000010609202600000001 /* NSLayoutModels.swift */; };
-		AA9000060609202600000001 /* NSLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000020609202600000001 /* NSLayoutEngine.swift */; };
-		AA9000070609202600000001 /* NSLayoutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000030609202600000001 /* NSLayoutSettingsView.swift */; };
-		AA9000080609202600000001 /* NSBehaviorProfilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000040609202600000001 /* NSBehaviorProfilesView.swift */; };
-		AA8000020609202600000001 /* NSCommandModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000010609202600000001 /* NSCommandModels.swift */; };
-		AA8000040609202600000001 /* NSCommandEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000030609202600000001 /* NSCommandEngine.swift */; };
-		AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000050609202600000001 /* NSCommandLauncherView.swift */; };
-		AA7000020609202600000001 /* NSAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000010609202600000001 /* NSAIModels.swift */; };
-		AA7000040609202600000001 /* NSAIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000030609202600000001 /* NSAIKeyStore.swift */; };
-		AA7000060609202600000001 /* NSAIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000050609202600000001 /* NSAIEngine.swift */; };
-		AA7000080609202600000001 /* NSAIChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000070609202600000001 /* NSAIChatView.swift */; };
-		AA70000A0609202600000001 /* NSAINoteEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000090609202600000001 /* NSAINoteEngine.swift */; };
-		AA70000C0609202600000001 /* NSAINotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000B0609202600000001 /* NSAINotesView.swift */; };
-		AA70000E0609202600000001 /* NSAISettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000D0609202600000001 /* NSAISettingsSection.swift */; };
-		AA5000020609202600000001 /* NSClipboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010609202600000001 /* NSClipboardModels.swift */; };
-		AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000030609202600000001 /* NSClipboardEngine.swift */; };
-		AA5000060609202600000001 /* NSClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000050609202600000001 /* NSClipboardView.swift */; };
-		AA5000080609202600000001 /* NSClipboardItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000070609202600000001 /* NSClipboardItemRow.swift */; };
-		AA50000A0609202600000001 /* NSSnippetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000090609202600000001 /* NSSnippetRow.swift */; };
-		AA50000C0609202600000001 /* NSSnippetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50000B0609202600000001 /* NSSnippetEditorView.swift */; };
-		AA6000020609202600000001 /* NSFocusModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000010609202600000001 /* NSFocusModels.swift */; };
-		AA6000040609202600000001 /* NSFocusEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000030609202600000001 /* NSFocusEngine.swift */; };
-		AA6000060609202600000001 /* NSFocusExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000050609202600000001 /* NSFocusExpandedView.swift */; };
-		AA6000080609202600000001 /* NSFocusSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000070609202600000001 /* NSFocusSettingsSection.swift */; };
-		AA60000A0609202600000001 /* NSFocusActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000090609202600000001 /* NSFocusActivity.swift */; };
-		AA1000010609202600000001 /* NSTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000020609202600000001 /* NSTokens.swift */; };
-		AA1000030609202600000001 /* NSGlassModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000040609202600000001 /* NSGlassModifiers.swift */; };
-		AA1000050609202600000001 /* NSHUDTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000060609202600000001 /* NSHUDTheme.swift */; };
-		AA1000070609202600000001 /* NSHUDEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000080609202600000001 /* NSHUDEngine.swift */; };
-		AA1000090609202600000001 /* NSHUDOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000A0609202600000001 /* NSHUDOverlayView.swift */; };
-		AA10000E0609202600000001 /* NSHUDSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000F0609202600000001 /* NSHUDSettingsSection.swift */; };
-		AA1000110609202600000001 /* NSLiveActivityEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000120609202600000001 /* NSLiveActivityEngine.swift */; };
-		AA1000130609202600000001 /* NSLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000140609202600000001 /* NSLiveActivityView.swift */; };
-		AA1000150609202600000001 /* NSMediaActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000160609202600000001 /* NSMediaActivity.swift */; };
-		AA1000170609202600000001 /* NSTimerActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000180609202600000001 /* NSTimerActivity.swift */; };
-		AA1000190609202600000001 /* NSBatteryActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001A0609202600000001 /* NSBatteryActivity.swift */; };
-		AA10001B0609202600000001 /* NSPrivacyDotActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */; };
-		AA2000020609202600000001 /* NSDownloadActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000010609202600000001 /* NSDownloadActivity.swift */; };
-		AA2000040609202600000001 /* NSAirDropActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000030609202600000001 /* NSAirDropActivity.swift */; };
-		AA2000060609202600000001 /* NSBluetoothActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000050609202600000001 /* NSBluetoothActivity.swift */; };
-		AA2000080609202600000001 /* NSScreenRecordActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000070609202600000001 /* NSScreenRecordActivity.swift */; };
-		AA20000A0609202600000001 /* NSThirdPartyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000090609202600000001 /* NSThirdPartyActivity.swift */; };
-		AA3000020609202600000001 /* NSuperiorBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3000010609202600000001 /* NSuperiorBootstrap.swift */; };
-		AA4000020609202600000001 /* NSShelfModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010609202600000001 /* NSShelfModels.swift */; };
-		AA4000040609202600000001 /* NSShelfEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000030609202600000001 /* NSShelfEngine.swift */; };
-		AA4000060609202600000001 /* NSShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000050609202600000001 /* NSShelfView.swift */; };
-		AA4000080609202600000001 /* NSShelfItemActionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */; };
 		1100290C2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */; };
 		110029272E84FD4C00035A57 /* TemporaryFileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110029262E84FD4C00035A57 /* TemporaryFileStorageService.swift */; };
 		1100292A2E8691B400035A57 /* FileShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110029292E8691B400035A57 /* FileShareView.swift */; };
@@ -159,6 +107,7 @@
 		14E9FEAE2C7325770062E83F /* Button+Bouncing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9FEAD2C7325770062E83F /* Button+Bouncing.swift */; };
 		14FC6E502C7DED5600C7BEA5 /* DataTypes+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FC6E4F2C7DED5600C7BEA5 /* DataTypes+Extensions.swift */; };
 		507266DB2C908E2E00A2D00D /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507266DA2C908E2E00A2D00D /* HoverButton.swift */; };
+		5408648EFDC6B6E0A5DE44B0 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7404FD5872F95EB2859F5C1 /* AudioRecorder.swift */; };
 		5917FD112E57891600E87F1C /* MediaKeyInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917FD102E57891600E87F1C /* MediaKeyInterceptor.swift */; };
 		5955950D2E900ED800C66711 /* ApplicationRelauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5955950C2E900ED800C66711 /* ApplicationRelauncher.swift */; };
 		59D8C23C2E589FAA00147B33 /* VolumeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D8C23B2E589FAA00147B33 /* VolumeManager.swift */; };
@@ -167,6 +116,58 @@
 		9A987A0D2C73CA66005CA465 /* ShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A987A032C73CA66005CA465 /* ShelfView.swift */; };
 		9A987A102C73CA8D005CA465 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 9A987A0F2C73CA8D005CA465 /* Collections */; };
 		9AB0C6BD2C73C9CB00F7CD30 /* NotchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB0C6BB2C73C9CB00F7CD30 /* NotchHomeView.swift */; };
+		AA1000010609202600000001 /* NSTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000020609202600000001 /* NSTokens.swift */; };
+		AA1000030609202600000001 /* NSGlassModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000040609202600000001 /* NSGlassModifiers.swift */; };
+		AA1000050609202600000001 /* NSHUDTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000060609202600000001 /* NSHUDTheme.swift */; };
+		AA1000070609202600000001 /* NSHUDEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000080609202600000001 /* NSHUDEngine.swift */; };
+		AA1000090609202600000001 /* NSHUDOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000A0609202600000001 /* NSHUDOverlayView.swift */; };
+		AA10000E0609202600000001 /* NSHUDSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000F0609202600000001 /* NSHUDSettingsSection.swift */; };
+		AA1000110609202600000001 /* NSLiveActivityEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000120609202600000001 /* NSLiveActivityEngine.swift */; };
+		AA1000130609202600000001 /* NSLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000140609202600000001 /* NSLiveActivityView.swift */; };
+		AA1000150609202600000001 /* NSMediaActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000160609202600000001 /* NSMediaActivity.swift */; };
+		AA1000170609202600000001 /* NSTimerActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000180609202600000001 /* NSTimerActivity.swift */; };
+		AA1000190609202600000001 /* NSBatteryActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001A0609202600000001 /* NSBatteryActivity.swift */; };
+		AA10001B0609202600000001 /* NSPrivacyDotActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */; };
+		AA2000020609202600000001 /* NSDownloadActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000010609202600000001 /* NSDownloadActivity.swift */; };
+		AA2000040609202600000001 /* NSAirDropActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000030609202600000001 /* NSAirDropActivity.swift */; };
+		AA2000060609202600000001 /* NSBluetoothActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000050609202600000001 /* NSBluetoothActivity.swift */; };
+		AA2000080609202600000001 /* NSScreenRecordActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000070609202600000001 /* NSScreenRecordActivity.swift */; };
+		AA20000A0609202600000001 /* NSThirdPartyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000090609202600000001 /* NSThirdPartyActivity.swift */; };
+		AA3000020609202600000001 /* NSuperiorBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3000010609202600000001 /* NSuperiorBootstrap.swift */; };
+		AA4000020609202600000001 /* NSShelfModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010609202600000001 /* NSShelfModels.swift */; };
+		AA4000040609202600000001 /* NSShelfEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000030609202600000001 /* NSShelfEngine.swift */; };
+		AA4000060609202600000001 /* NSShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000050609202600000001 /* NSShelfView.swift */; };
+		AA4000080609202600000001 /* NSShelfItemActionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */; };
+		AA5000020609202600000001 /* NSClipboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010609202600000001 /* NSClipboardModels.swift */; };
+		AA5000040609202600000001 /* NSClipboardEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000030609202600000001 /* NSClipboardEngine.swift */; };
+		AA5000060609202600000001 /* NSClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000050609202600000001 /* NSClipboardView.swift */; };
+		AA5000080609202600000001 /* NSClipboardItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000070609202600000001 /* NSClipboardItemRow.swift */; };
+		AA50000A0609202600000001 /* NSSnippetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000090609202600000001 /* NSSnippetRow.swift */; };
+		AA50000C0609202600000001 /* NSSnippetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50000B0609202600000001 /* NSSnippetEditorView.swift */; };
+		AA6000020609202600000001 /* NSFocusModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000010609202600000001 /* NSFocusModels.swift */; };
+		AA6000040609202600000001 /* NSFocusEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000030609202600000001 /* NSFocusEngine.swift */; };
+		AA6000060609202600000001 /* NSFocusExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000050609202600000001 /* NSFocusExpandedView.swift */; };
+		AA6000080609202600000001 /* NSFocusSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000070609202600000001 /* NSFocusSettingsSection.swift */; };
+		AA60000A0609202600000001 /* NSFocusActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000090609202600000001 /* NSFocusActivity.swift */; };
+		AA7000020609202600000001 /* NSAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000010609202600000001 /* NSAIModels.swift */; };
+		AA7000040609202600000001 /* NSAIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000030609202600000001 /* NSAIKeyStore.swift */; };
+		AA7000060609202600000001 /* NSAIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000050609202600000001 /* NSAIEngine.swift */; };
+		AA7000080609202600000001 /* NSAIChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000070609202600000001 /* NSAIChatView.swift */; };
+		AA70000A0609202600000001 /* NSAINoteEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7000090609202600000001 /* NSAINoteEngine.swift */; };
+		AA70000C0609202600000001 /* NSAINotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000B0609202600000001 /* NSAINotesView.swift */; };
+		AA70000E0609202600000001 /* NSAISettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA70000D0609202600000001 /* NSAISettingsSection.swift */; };
+		AA8000020609202600000001 /* NSCommandModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000010609202600000001 /* NSCommandModels.swift */; };
+		AA8000040609202600000001 /* NSCommandEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000030609202600000001 /* NSCommandEngine.swift */; };
+		AA8000060609202600000001 /* NSCommandLauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8000050609202600000001 /* NSCommandLauncherView.swift */; };
+		AA9000050609202600000001 /* NSLayoutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000010609202600000001 /* NSLayoutModels.swift */; };
+		AA9000060609202600000001 /* NSLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000020609202600000001 /* NSLayoutEngine.swift */; };
+		AA9000070609202600000001 /* NSLayoutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000030609202600000001 /* NSLayoutSettingsView.swift */; };
+		AA9000080609202600000001 /* NSBehaviorProfilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9000040609202600000001 /* NSBehaviorProfilesView.swift */; };
+		AAB000060609202600000001 /* NSDevModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000010609202600000001 /* NSDevModels.swift */; };
+		AAB000070609202600000001 /* NSDevEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000020609202600000001 /* NSDevEngine.swift */; };
+		AAB000080609202600000001 /* NSDevHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000030609202600000001 /* NSDevHUDView.swift */; };
+		AAB000090609202600000001 /* NSTerminalDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000040609202600000001 /* NSTerminalDropView.swift */; };
+		AAB0000A0609202600000001 /* NSDevSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB000050609202600000001 /* NSDevSettingsSection.swift */; };
 		B10348D92C74E56000475897 /* ConditionalModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10348D82C74E56000475897 /* ConditionalModifier.swift */; };
 		B10F84A32C6C9596009F3026 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10F84A22C6C9596009F3026 /* TestView.swift */; };
 		B141C2412CA5F53F00AC8CC8 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141C2402CA5F53E00AC8CC8 /* SparkleView.swift */; };
@@ -194,6 +195,7 @@
 		B1F0A0022E60000100000001 /* BrightnessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F0A0012E60000100000001 /* BrightnessManager.swift */; };
 		B1F747F92EC7E94000F841DB /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F747F82EC7E94000F841DB /* LottieView.swift */; };
 		B1FEB4992C7686630066EBBC /* PanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FEB4982C7686630066EBBC /* PanGesture.swift */; };
+		C7163DD3444816A2A5F445FE /* VoiceNotesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA661C0F348DF4E3410ED918 /* VoiceNotesManager.swift */; };
 		F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -233,59 +235,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NOTCHSUPERIOR_README.md; sourceTree = "<group>"; };
-		AAB000010609202600000001 /* NSDevModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevModels.swift; sourceTree = "<group>"; };
-		AAB000020609202600000001 /* NSDevEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevEngine.swift; sourceTree = "<group>"; };
-		AAB000030609202600000001 /* NSDevHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevHUDView.swift; sourceTree = "<group>"; };
-		AAB000040609202600000001 /* NSTerminalDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTerminalDropView.swift; sourceTree = "<group>"; };
-		AAB000050609202600000001 /* NSDevSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevSettingsSection.swift; sourceTree = "<group>"; };
-		AA9000010609202600000001 /* NSLayoutModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutModels.swift; sourceTree = "<group>"; };
-		AA9000020609202600000001 /* NSLayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutEngine.swift; sourceTree = "<group>"; };
-		AA9000030609202600000001 /* NSLayoutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutSettingsView.swift; sourceTree = "<group>"; };
-		AA9000040609202600000001 /* NSBehaviorProfilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBehaviorProfilesView.swift; sourceTree = "<group>"; };
-		AA8000010609202600000001 /* NSCommandModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandModels.swift; sourceTree = "<group>"; };
-		AA8000030609202600000001 /* NSCommandEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandEngine.swift; sourceTree = "<group>"; };
-		AA8000050609202600000001 /* NSCommandLauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandLauncherView.swift; sourceTree = "<group>"; };
-		AA7000010609202600000001 /* NSAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIModels.swift; sourceTree = "<group>"; };
-		AA7000030609202600000001 /* NSAIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIKeyStore.swift; sourceTree = "<group>"; };
-		AA7000050609202600000001 /* NSAIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIEngine.swift; sourceTree = "<group>"; };
-		AA7000070609202600000001 /* NSAIChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIChatView.swift; sourceTree = "<group>"; };
-		AA7000090609202600000001 /* NSAINoteEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINoteEngine.swift; sourceTree = "<group>"; };
-		AA70000B0609202600000001 /* NSAINotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINotesView.swift; sourceTree = "<group>"; };
-		AA70000D0609202600000001 /* NSAISettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAISettingsSection.swift; sourceTree = "<group>"; };
-		AA5000010609202600000001 /* NSClipboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardModels.swift; sourceTree = "<group>"; };
-		AA5000030609202600000001 /* NSClipboardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardEngine.swift; sourceTree = "<group>"; };
-		AA5000050609202600000001 /* NSClipboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardView.swift; sourceTree = "<group>"; };
-		AA5000070609202600000001 /* NSClipboardItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardItemRow.swift; sourceTree = "<group>"; };
-		AA5000090609202600000001 /* NSSnippetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetRow.swift; sourceTree = "<group>"; };
-		AA50000B0609202600000001 /* NSSnippetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetEditorView.swift; sourceTree = "<group>"; };
-		AA6000010609202600000001 /* NSFocusModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusModels.swift; sourceTree = "<group>"; };
-		AA6000030609202600000001 /* NSFocusEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusEngine.swift; sourceTree = "<group>"; };
-		AA6000050609202600000001 /* NSFocusExpandedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusExpandedView.swift; sourceTree = "<group>"; };
-		AA6000070609202600000001 /* NSFocusSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusSettingsSection.swift; sourceTree = "<group>"; };
-		AA6000090609202600000001 /* NSFocusActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusActivity.swift; sourceTree = "<group>"; };
-		AA1000020609202600000001 /* NSTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTokens.swift; sourceTree = "<group>"; };
-		AA1000040609202600000001 /* NSGlassModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSGlassModifiers.swift; sourceTree = "<group>"; };
-		AA1000060609202600000001 /* NSHUDTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDTheme.swift; sourceTree = "<group>"; };
-		AA1000080609202600000001 /* NSHUDEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDEngine.swift; sourceTree = "<group>"; };
-		AA10000A0609202600000001 /* NSHUDOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDOverlayView.swift; sourceTree = "<group>"; };
-		AA10000F0609202600000001 /* NSHUDSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDSettingsSection.swift; sourceTree = "<group>"; };
-		AA1000120609202600000001 /* NSLiveActivityEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLiveActivityEngine.swift; sourceTree = "<group>"; };
-		AA1000140609202600000001 /* NSLiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLiveActivityView.swift; sourceTree = "<group>"; };
-		AA1000160609202600000001 /* NSMediaActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMediaActivity.swift; sourceTree = "<group>"; };
-		AA1000180609202600000001 /* NSTimerActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTimerActivity.swift; sourceTree = "<group>"; };
-		AA10001A0609202600000001 /* NSBatteryActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBatteryActivity.swift; sourceTree = "<group>"; };
-		AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPrivacyDotActivity.swift; sourceTree = "<group>"; };
-		AA2000010609202600000001 /* NSDownloadActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDownloadActivity.swift; sourceTree = "<group>"; };
-		AA2000030609202600000001 /* NSAirDropActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAirDropActivity.swift; sourceTree = "<group>"; };
-		AA2000050609202600000001 /* NSBluetoothActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBluetoothActivity.swift; sourceTree = "<group>"; };
-		AA2000070609202600000001 /* NSScreenRecordActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenRecordActivity.swift; sourceTree = "<group>"; };
-		AA2000090609202600000001 /* NSThirdPartyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSThirdPartyActivity.swift; sourceTree = "<group>"; };
-		AA3000010609202600000001 /* NSuperiorBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSuperiorBootstrap.swift; sourceTree = "<group>"; };
-		AA4000010609202600000001 /* NSShelfModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfModels.swift; sourceTree = "<group>"; };
-		AA4000030609202600000001 /* NSShelfEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfEngine.swift; sourceTree = "<group>"; };
-		AA4000050609202600000001 /* NSShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfView.swift; sourceTree = "<group>"; };
-		AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfItemActionsMenu.swift; sourceTree = "<group>"; };
 		1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProvider+LoadHelpers.swift"; sourceTree = "<group>"; };
 		110029262E84FD4C00035A57 /* TemporaryFileStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryFileStorageService.swift; sourceTree = "<group>"; };
 		110029292E8691B400035A57 /* FileShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileShareView.swift; sourceTree = "<group>"; };
@@ -389,6 +338,59 @@
 		9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSelectionView.swift; sourceTree = "<group>"; };
 		9A987A032C73CA66005CA465 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
 		9AB0C6BB2C73C9CB00F7CD30 /* NotchHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotchHomeView.swift; sourceTree = "<group>"; };
+		AA1000020609202600000001 /* NSTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTokens.swift; sourceTree = "<group>"; };
+		AA1000040609202600000001 /* NSGlassModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSGlassModifiers.swift; sourceTree = "<group>"; };
+		AA1000060609202600000001 /* NSHUDTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDTheme.swift; sourceTree = "<group>"; };
+		AA1000080609202600000001 /* NSHUDEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDEngine.swift; sourceTree = "<group>"; };
+		AA10000A0609202600000001 /* NSHUDOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDOverlayView.swift; sourceTree = "<group>"; };
+		AA10000F0609202600000001 /* NSHUDSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHUDSettingsSection.swift; sourceTree = "<group>"; };
+		AA1000120609202600000001 /* NSLiveActivityEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLiveActivityEngine.swift; sourceTree = "<group>"; };
+		AA1000140609202600000001 /* NSLiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLiveActivityView.swift; sourceTree = "<group>"; };
+		AA1000160609202600000001 /* NSMediaActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMediaActivity.swift; sourceTree = "<group>"; };
+		AA1000180609202600000001 /* NSTimerActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTimerActivity.swift; sourceTree = "<group>"; };
+		AA10001A0609202600000001 /* NSBatteryActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBatteryActivity.swift; sourceTree = "<group>"; };
+		AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPrivacyDotActivity.swift; sourceTree = "<group>"; };
+		AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NOTCHSUPERIOR_README.md; sourceTree = "<group>"; };
+		AA2000010609202600000001 /* NSDownloadActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDownloadActivity.swift; sourceTree = "<group>"; };
+		AA2000030609202600000001 /* NSAirDropActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAirDropActivity.swift; sourceTree = "<group>"; };
+		AA2000050609202600000001 /* NSBluetoothActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBluetoothActivity.swift; sourceTree = "<group>"; };
+		AA2000070609202600000001 /* NSScreenRecordActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenRecordActivity.swift; sourceTree = "<group>"; };
+		AA2000090609202600000001 /* NSThirdPartyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSThirdPartyActivity.swift; sourceTree = "<group>"; };
+		AA3000010609202600000001 /* NSuperiorBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSuperiorBootstrap.swift; sourceTree = "<group>"; };
+		AA4000010609202600000001 /* NSShelfModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfModels.swift; sourceTree = "<group>"; };
+		AA4000030609202600000001 /* NSShelfEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfEngine.swift; sourceTree = "<group>"; };
+		AA4000050609202600000001 /* NSShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfView.swift; sourceTree = "<group>"; };
+		AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfItemActionsMenu.swift; sourceTree = "<group>"; };
+		AA5000010609202600000001 /* NSClipboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardModels.swift; sourceTree = "<group>"; };
+		AA5000030609202600000001 /* NSClipboardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardEngine.swift; sourceTree = "<group>"; };
+		AA5000050609202600000001 /* NSClipboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardView.swift; sourceTree = "<group>"; };
+		AA5000070609202600000001 /* NSClipboardItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSClipboardItemRow.swift; sourceTree = "<group>"; };
+		AA5000090609202600000001 /* NSSnippetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetRow.swift; sourceTree = "<group>"; };
+		AA50000B0609202600000001 /* NSSnippetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSnippetEditorView.swift; sourceTree = "<group>"; };
+		AA6000010609202600000001 /* NSFocusModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusModels.swift; sourceTree = "<group>"; };
+		AA6000030609202600000001 /* NSFocusEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusEngine.swift; sourceTree = "<group>"; };
+		AA6000050609202600000001 /* NSFocusExpandedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusExpandedView.swift; sourceTree = "<group>"; };
+		AA6000070609202600000001 /* NSFocusSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusSettingsSection.swift; sourceTree = "<group>"; };
+		AA6000090609202600000001 /* NSFocusActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFocusActivity.swift; sourceTree = "<group>"; };
+		AA7000010609202600000001 /* NSAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIModels.swift; sourceTree = "<group>"; };
+		AA7000030609202600000001 /* NSAIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIKeyStore.swift; sourceTree = "<group>"; };
+		AA7000050609202600000001 /* NSAIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIEngine.swift; sourceTree = "<group>"; };
+		AA7000070609202600000001 /* NSAIChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAIChatView.swift; sourceTree = "<group>"; };
+		AA7000090609202600000001 /* NSAINoteEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINoteEngine.swift; sourceTree = "<group>"; };
+		AA70000B0609202600000001 /* NSAINotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAINotesView.swift; sourceTree = "<group>"; };
+		AA70000D0609202600000001 /* NSAISettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAISettingsSection.swift; sourceTree = "<group>"; };
+		AA8000010609202600000001 /* NSCommandModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandModels.swift; sourceTree = "<group>"; };
+		AA8000030609202600000001 /* NSCommandEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandEngine.swift; sourceTree = "<group>"; };
+		AA8000050609202600000001 /* NSCommandLauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCommandLauncherView.swift; sourceTree = "<group>"; };
+		AA9000010609202600000001 /* NSLayoutModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutModels.swift; sourceTree = "<group>"; };
+		AA9000020609202600000001 /* NSLayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutEngine.swift; sourceTree = "<group>"; };
+		AA9000030609202600000001 /* NSLayoutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutSettingsView.swift; sourceTree = "<group>"; };
+		AA9000040609202600000001 /* NSBehaviorProfilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBehaviorProfilesView.swift; sourceTree = "<group>"; };
+		AAB000010609202600000001 /* NSDevModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevModels.swift; sourceTree = "<group>"; };
+		AAB000020609202600000001 /* NSDevEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevEngine.swift; sourceTree = "<group>"; };
+		AAB000030609202600000001 /* NSDevHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevHUDView.swift; sourceTree = "<group>"; };
+		AAB000040609202600000001 /* NSTerminalDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTerminalDropView.swift; sourceTree = "<group>"; };
+		AAB000050609202600000001 /* NSDevSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDevSettingsSection.swift; sourceTree = "<group>"; };
 		B10348D82C74E56000475897 /* ConditionalModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalModifier.swift; sourceTree = "<group>"; };
 		B10F84A22C6C9596009F3026 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		B141C2402CA5F53E00AC8CC8 /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
@@ -413,11 +415,13 @@
 		B1F0A0012E60000100000001 /* BrightnessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessManager.swift; sourceTree = "<group>"; };
 		B1F747F82EC7E94000F841DB /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		B1FEB4982C7686630066EBBC /* PanGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanGesture.swift; sourceTree = "<group>"; };
+		B7404FD5872F95EB2859F5C1 /* AudioRecorder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		BA661C0F348DF4E3410ED918 /* VoiceNotesManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VoiceNotesManager.swift; sourceTree = "<group>"; };
 		F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActivityManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		11F7485C2EC9AABA00F841DB /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		11F7485C2EC9AABA00F841DB /* Exceptions for "BoringNotchXPCHelper" folder in "BoringNotchXPCHelper" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -427,8 +431,29 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		112FB72F2CCF12CC0015238C /* private */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = private; sourceTree = "<group>"; };
-		11F748502EC9AABA00F841DB /* BoringNotchXPCHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (11F7485C2EC9AABA00F841DB /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BoringNotchXPCHelper; sourceTree = "<group>"; };
+		112FB72F2CCF12CC0015238C /* private */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = private;
+			sourceTree = "<group>";
+		};
+		11F748502EC9AABA00F841DB /* BoringNotchXPCHelper */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				11F7485C2EC9AABA00F841DB /* Exceptions for "BoringNotchXPCHelper" folder in "BoringNotchXPCHelper" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = BoringNotchXPCHelper;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -462,146 +487,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AAB000000609202600000001 /* DevTools */ = {
-			isa = PBXGroup;
-			children = (
-				AAB000010609202600000001 /* NSDevModels.swift */,
-				AAB000020609202600000001 /* NSDevEngine.swift */,
-				AAB000030609202600000001 /* NSDevHUDView.swift */,
-				AAB000040609202600000001 /* NSTerminalDropView.swift */,
-				AAB000050609202600000001 /* NSDevSettingsSection.swift */,
-			);
-			path = DevTools;
-			sourceTree = "<group>";
-		};
-		AA9000000609202600000001 /* Layout */ = {
-			isa = PBXGroup;
-			children = (
-				AA9000010609202600000001 /* NSLayoutModels.swift */,
-				AA9000020609202600000001 /* NSLayoutEngine.swift */,
-				AA9000030609202600000001 /* NSLayoutSettingsView.swift */,
-				AA9000040609202600000001 /* NSBehaviorProfilesView.swift */,
-			);
-			path = Layout;
-			sourceTree = "<group>";
-		};
-		AA8000000609202600000001 /* CommandLauncher */ = {
-			isa = PBXGroup;
-			children = (
-				AA8000030609202600000001 /* NSCommandEngine.swift */,
-				AA8000050609202600000001 /* NSCommandLauncherView.swift */,
-				AA8000010609202600000001 /* NSCommandModels.swift */,
-			);
-			path = CommandLauncher;
-			sourceTree = "<group>";
-		};
-		AA7000000609202600000001 /* AI */ = {
-			isa = PBXGroup;
-			children = (
-				AA7000010609202600000001 /* NSAIModels.swift */,
-				AA7000030609202600000001 /* NSAIKeyStore.swift */,
-				AA7000050609202600000001 /* NSAIEngine.swift */,
-				AA7000070609202600000001 /* NSAIChatView.swift */,
-				AA7000090609202600000001 /* NSAINoteEngine.swift */,
-				AA70000B0609202600000001 /* NSAINotesView.swift */,
-				AA70000D0609202600000001 /* NSAISettingsSection.swift */,
-			);
-			path = AI;
-			sourceTree = "<group>";
-		};
-		AA10000B0609202600000001 /* DesignSystem */ = {
-			isa = PBXGroup;
-			children = (
-				AA1000040609202600000001 /* NSGlassModifiers.swift */,
-				AA1000020609202600000001 /* NSTokens.swift */,
-			);
-			path = DesignSystem;
-			sourceTree = "<group>";
-		};
-		AA10000C0609202600000001 /* HUD */ = {
-			isa = PBXGroup;
-			children = (
-				AA1000080609202600000001 /* NSHUDEngine.swift */,
-				AA10000A0609202600000001 /* NSHUDOverlayView.swift */,
-				AA1000060609202600000001 /* NSHUDTheme.swift */,
-			);
-			path = HUD;
-			sourceTree = "<group>";
-		};
-		AA1000100609202600000001 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				AA10000F0609202600000001 /* NSHUDSettingsSection.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		AA10001D0609202600000001 /* Activities */ = {
-			isa = PBXGroup;
-			children = (
-				AA6000090609202600000001 /* NSFocusActivity.swift */,
-				AA1000160609202600000001 /* NSMediaActivity.swift */,
-				AA1000180609202600000001 /* NSTimerActivity.swift */,
-				AA10001A0609202600000001 /* NSBatteryActivity.swift */,
-				AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */,
-				AA2000010609202600000001 /* NSDownloadActivity.swift */,
-				AA2000030609202600000001 /* NSAirDropActivity.swift */,
-				AA2000050609202600000001 /* NSBluetoothActivity.swift */,
-				AA2000070609202600000001 /* NSScreenRecordActivity.swift */,
-				AA2000090609202600000001 /* NSThirdPartyActivity.swift */,
-			);
-			path = Activities;
-			sourceTree = "<group>";
-		};
-		AA10001E0609202600000001 /* LiveActivity */ = {
-			isa = PBXGroup;
-			children = (
-				AA10001D0609202600000001 /* Activities */,
-				AA1000120609202600000001 /* NSLiveActivityEngine.swift */,
-				AA1000140609202600000001 /* NSLiveActivityView.swift */,
-			);
-			path = LiveActivity;
-			sourceTree = "<group>";
-		};
-		AA3000030609202600000001 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				AA3000010609202600000001 /* NSuperiorBootstrap.swift */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		AA4000090609202600000001 /* Shelf */ = {
-			isa = PBXGroup;
-			children = (
-				AA4000030609202600000001 /* NSShelfEngine.swift */,
-				AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */,
-				AA4000010609202600000001 /* NSShelfModels.swift */,
-				AA4000050609202600000001 /* NSShelfView.swift */,
-			);
-			path = Shelf;
-			sourceTree = "<group>";
-		};
-		AA10000D0609202600000001 /* NotchSuperior */ = {
-			isa = PBXGroup;
-			children = (
-				AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */,
-				AAB000000609202600000001 /* DevTools */,
-				AA9000000609202600000001 /* Layout */,
-				AA8000000609202600000001 /* CommandLauncher */,
-				AA7000000609202600000001 /* AI */,
-				AA5000000609202600000001 /* Clipboard */,
-				AA6000000609202600000001 /* Focus */,
-				AA3000030609202600000001 /* Core */,
-				AA10000B0609202600000001 /* DesignSystem */,
-				AA10000C0609202600000001 /* HUD */,
-				AA10001E0609202600000001 /* LiveActivity */,
-				AA1000100609202600000001 /* Settings */,
-				AA4000090609202600000001 /* Shelf */,
-			);
-			path = NotchSuperior;
-			sourceTree = "<group>";
-		};
 		1113ABB82E80E27000EC13B2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -763,6 +648,8 @@
 				14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */,
 				B1F0A0012E60000100000001 /* BrightnessManager.swift */,
 				59D8C23B2E589FAA00147B33 /* VolumeManager.swift */,
+				B7404FD5872F95EB2859F5C1 /* AudioRecorder.swift */,
+				BA661C0F348DF4E3410ED918 /* VoiceNotesManager.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -904,6 +791,170 @@
 			path = Shelf;
 			sourceTree = "<group>";
 		};
+		AA10000B0609202600000001 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				AA1000040609202600000001 /* NSGlassModifiers.swift */,
+				AA1000020609202600000001 /* NSTokens.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		AA10000C0609202600000001 /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				AA1000080609202600000001 /* NSHUDEngine.swift */,
+				AA10000A0609202600000001 /* NSHUDOverlayView.swift */,
+				AA1000060609202600000001 /* NSHUDTheme.swift */,
+			);
+			path = HUD;
+			sourceTree = "<group>";
+		};
+		AA10000D0609202600000001 /* NotchSuperior */ = {
+			isa = PBXGroup;
+			children = (
+				AA10002F0609202600000001 /* NOTCHSUPERIOR_README.md */,
+				AAB000000609202600000001 /* DevTools */,
+				AA9000000609202600000001 /* Layout */,
+				AA8000000609202600000001 /* CommandLauncher */,
+				AA7000000609202600000001 /* AI */,
+				AA5000000609202600000001 /* Clipboard */,
+				AA6000000609202600000001 /* Focus */,
+				AA3000030609202600000001 /* Core */,
+				AA10000B0609202600000001 /* DesignSystem */,
+				AA10000C0609202600000001 /* HUD */,
+				AA10001E0609202600000001 /* LiveActivity */,
+				AA1000100609202600000001 /* Settings */,
+				AA4000090609202600000001 /* Shelf */,
+			);
+			path = NotchSuperior;
+			sourceTree = "<group>";
+		};
+		AA1000100609202600000001 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000F0609202600000001 /* NSHUDSettingsSection.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AA10001D0609202600000001 /* Activities */ = {
+			isa = PBXGroup;
+			children = (
+				AA6000090609202600000001 /* NSFocusActivity.swift */,
+				AA1000160609202600000001 /* NSMediaActivity.swift */,
+				AA1000180609202600000001 /* NSTimerActivity.swift */,
+				AA10001A0609202600000001 /* NSBatteryActivity.swift */,
+				AA10001C0609202600000001 /* NSPrivacyDotActivity.swift */,
+				AA2000010609202600000001 /* NSDownloadActivity.swift */,
+				AA2000030609202600000001 /* NSAirDropActivity.swift */,
+				AA2000050609202600000001 /* NSBluetoothActivity.swift */,
+				AA2000070609202600000001 /* NSScreenRecordActivity.swift */,
+				AA2000090609202600000001 /* NSThirdPartyActivity.swift */,
+			);
+			path = Activities;
+			sourceTree = "<group>";
+		};
+		AA10001E0609202600000001 /* LiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				AA10001D0609202600000001 /* Activities */,
+				AA1000120609202600000001 /* NSLiveActivityEngine.swift */,
+				AA1000140609202600000001 /* NSLiveActivityView.swift */,
+			);
+			path = LiveActivity;
+			sourceTree = "<group>";
+		};
+		AA3000030609202600000001 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AA3000010609202600000001 /* NSuperiorBootstrap.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AA4000090609202600000001 /* Shelf */ = {
+			isa = PBXGroup;
+			children = (
+				AA4000030609202600000001 /* NSShelfEngine.swift */,
+				AA4000070609202600000001 /* NSShelfItemActionsMenu.swift */,
+				AA4000010609202600000001 /* NSShelfModels.swift */,
+				AA4000050609202600000001 /* NSShelfView.swift */,
+			);
+			path = Shelf;
+			sourceTree = "<group>";
+		};
+		AA5000000609202600000001 /* Clipboard */ = {
+			isa = PBXGroup;
+			children = (
+				AA5000030609202600000001 /* NSClipboardEngine.swift */,
+				AA5000070609202600000001 /* NSClipboardItemRow.swift */,
+				AA5000010609202600000001 /* NSClipboardModels.swift */,
+				AA5000050609202600000001 /* NSClipboardView.swift */,
+				AA50000B0609202600000001 /* NSSnippetEditorView.swift */,
+				AA5000090609202600000001 /* NSSnippetRow.swift */,
+			);
+			path = Clipboard;
+			sourceTree = "<group>";
+		};
+		AA6000000609202600000001 /* Focus */ = {
+			isa = PBXGroup;
+			children = (
+				AA6000030609202600000001 /* NSFocusEngine.swift */,
+				AA6000050609202600000001 /* NSFocusExpandedView.swift */,
+				AA6000010609202600000001 /* NSFocusModels.swift */,
+				AA6000070609202600000001 /* NSFocusSettingsSection.swift */,
+			);
+			path = Focus;
+			sourceTree = "<group>";
+		};
+		AA7000000609202600000001 /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				AA7000010609202600000001 /* NSAIModels.swift */,
+				AA7000030609202600000001 /* NSAIKeyStore.swift */,
+				AA7000050609202600000001 /* NSAIEngine.swift */,
+				AA7000070609202600000001 /* NSAIChatView.swift */,
+				AA7000090609202600000001 /* NSAINoteEngine.swift */,
+				AA70000B0609202600000001 /* NSAINotesView.swift */,
+				AA70000D0609202600000001 /* NSAISettingsSection.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		AA8000000609202600000001 /* CommandLauncher */ = {
+			isa = PBXGroup;
+			children = (
+				AA8000030609202600000001 /* NSCommandEngine.swift */,
+				AA8000050609202600000001 /* NSCommandLauncherView.swift */,
+				AA8000010609202600000001 /* NSCommandModels.swift */,
+			);
+			path = CommandLauncher;
+			sourceTree = "<group>";
+		};
+		AA9000000609202600000001 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				AA9000010609202600000001 /* NSLayoutModels.swift */,
+				AA9000020609202600000001 /* NSLayoutEngine.swift */,
+				AA9000030609202600000001 /* NSLayoutSettingsView.swift */,
+				AA9000040609202600000001 /* NSBehaviorProfilesView.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		AAB000000609202600000001 /* DevTools */ = {
+			isa = PBXGroup;
+			children = (
+				AAB000010609202600000001 /* NSDevModels.swift */,
+				AAB000020609202600000001 /* NSDevEngine.swift */,
+				AAB000030609202600000001 /* NSDevHUDView.swift */,
+				AAB000040609202600000001 /* NSTerminalDropView.swift */,
+				AAB000050609202600000001 /* NSDevSettingsSection.swift */,
+			);
+			path = DevTools;
+			sourceTree = "<group>";
+		};
 		B141C23B2CA5F50900AC8CC8 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -1003,30 +1054,6 @@
 			path = Tips;
 			sourceTree = "<group>";
 		};
-		AA5000000609202600000001 /* Clipboard */ = {
-			isa = PBXGroup;
-			children = (
-				AA5000030609202600000001 /* NSClipboardEngine.swift */,
-				AA5000070609202600000001 /* NSClipboardItemRow.swift */,
-				AA5000010609202600000001 /* NSClipboardModels.swift */,
-				AA5000050609202600000001 /* NSClipboardView.swift */,
-				AA50000B0609202600000001 /* NSSnippetEditorView.swift */,
-				AA5000090609202600000001 /* NSSnippetRow.swift */,
-			);
-			path = Clipboard;
-			sourceTree = "<group>";
-		};
-		AA6000000609202600000001 /* Focus */ = {
-			isa = PBXGroup;
-			children = (
-				AA6000030609202600000001 /* NSFocusEngine.swift */,
-				AA6000050609202600000001 /* NSFocusExpandedView.swift */,
-				AA6000010609202600000001 /* NSFocusModels.swift */,
-				AA6000070609202600000001 /* NSFocusSettingsSection.swift */,
-			);
-			path = Focus;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1046,8 +1073,6 @@
 				11F748502EC9AABA00F841DB /* BoringNotchXPCHelper */,
 			);
 			name = BoringNotchXPCHelper;
-			packageProductDependencies = (
-			);
 			productName = BoringNotchXPCHelper;
 			productReference = 11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */;
 			productType = "com.apple.product-type.xpc-service";
@@ -1342,6 +1367,8 @@
 				1100290C2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift in Sources */,
 				11CFC6632E09918400748C80 /* MusicControllerSelectionView.swift in Sources */,
 				B1F0A0022E60000100000001 /* BrightnessManager.swift in Sources */,
+				5408648EFDC6B6E0A5DE44B0 /* AudioRecorder.swift in Sources */,
+				C7163DD3444816A2A5F445FE /* VoiceNotesManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

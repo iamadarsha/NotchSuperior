@@ -27,6 +27,20 @@ class MusicManager: ObservableObject {
 
     // Active controller
     private var activeController: (any MediaControllerProtocol)?
+    
+    // Fast MediaRemote command sender — same mechanism as keyboard media keys
+    private let MRMediaRemoteSendCommand: (@convention(c) (Int, AnyObject?) -> Void)? = {
+        guard let bundle = CFBundleCreate(
+            kCFAllocatorDefault,
+            NSURL(fileURLWithPath: "/System/Library/PrivateFrameworks/MediaRemote.framework")),
+              let ptr = CFBundleGetFunctionPointerForName(bundle, "MRMediaRemoteSendCommand" as CFString)
+        else { return nil }
+        return unsafeBitCast(ptr, to: (@convention(c) (Int, AnyObject?) -> Void).self)
+    }()
+    
+    // Debounce window: ignore controller-pushed state updates for 1.2s after a media command
+    private var lastCommandTime: Date = .distantPast
+    private var targetPlaybackState: Bool? = nil
 
     // Published properties for UI
     @Published var songTitle: String = "I'm Handsome"
@@ -178,11 +192,25 @@ class MusicManager: ObservableObject {
         forceUpdate()
     }
 
-    // MARK: - Update Methods
     @MainActor
     private func updateFromPlaybackState(_ state: PlaybackState) {
+        let timeSinceCommand = Date().timeIntervalSince(lastCommandTime)
+        let commandPending = timeSinceCommand < 2.0
+        
+        var shouldAcceptStateUpdate = true
+        if commandPending, let target = targetPlaybackState {
+            if state.isPlaying == target {
+                // The player has transitioned to our target state! Accept it and stop debouncing.
+                targetPlaybackState = nil
+                lastCommandTime = .distantPast
+            } else {
+                // The update does not match our target state. It is stale, so ignore it.
+                shouldAcceptStateUpdate = false
+            }
+        }
+        
         // Check for playback state changes (playing/paused)
-        if state.isPlaying != self.isPlaying {
+        if shouldAcceptStateUpdate && state.isPlaying != self.isPlaying {
             NSLog("Playback state changed: \(state.isPlaying ? "Playing" : "Paused")")
             withAnimation(.smooth) {
                 self.isPlaying = state.isPlaying
@@ -255,7 +283,7 @@ class MusicManager: ObservableObject {
             self.album = state.album
         }
 
-        if timeChanged {
+        if shouldAcceptStateUpdate && timeChanged {
             self.elapsedTime = state.currentTime
         }
 
@@ -263,7 +291,7 @@ class MusicManager: ObservableObject {
             self.songDuration = state.duration
         }
 
-        if playbackRateChanged {
+        if shouldAcceptStateUpdate && playbackRateChanged {
             self.playbackRate = state.playbackRate
         }
         
@@ -595,35 +623,47 @@ class MusicManager: ObservableObject {
     // MARK: - Public Methods for controlling playback
     func playPause() {
         let targetState = !isPlaying
+        lastCommandTime = Date()
+        targetPlaybackState = targetState
+        HapticHelper.triggerMedia()
         DispatchQueue.main.async {
             withAnimation(.smooth) {
                 self.isPlaying = targetState
             }
         }
-        Task {
-            await activeController?.togglePlay()
+        // Use direct MediaRemote command for instant response (no AppleScript lag)
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(2, nil) // kMRTogglePlayPause = 2
+        } else {
+            Task { await activeController?.togglePlay() }
         }
     }
 
     func play() {
+        lastCommandTime = Date()
+        targetPlaybackState = true
+        HapticHelper.triggerMedia()
         DispatchQueue.main.async {
-            withAnimation(.smooth) {
-                self.isPlaying = true
-            }
+            withAnimation(.smooth) { self.isPlaying = true }
         }
-        Task {
-            await activeController?.play()
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(0, nil) // kMRPlay = 0
+        } else {
+            Task { await activeController?.play() }
         }
     }
 
     func pause() {
+        lastCommandTime = Date()
+        targetPlaybackState = false
+        HapticHelper.triggerMedia()
         DispatchQueue.main.async {
-            withAnimation(.smooth) {
-                self.isPlaying = false
-            }
+            withAnimation(.smooth) { self.isPlaying = false }
         }
-        Task {
-            await activeController?.pause()
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(1, nil) // kMRPause = 1
+        } else {
+            Task { await activeController?.pause() }
         }
     }
 
@@ -641,27 +681,38 @@ class MusicManager: ObservableObject {
     
     func togglePlay() {
         let targetState = !isPlaying
+        lastCommandTime = Date()
+        targetPlaybackState = targetState
+        HapticHelper.triggerMedia()
         DispatchQueue.main.async {
-            withAnimation(.smooth) {
-                self.isPlaying = targetState
-            }
+            withAnimation(.smooth) { self.isPlaying = targetState }
         }
-        Task {
-            await activeController?.togglePlay()
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(2, nil)
+        } else {
+            Task { await activeController?.togglePlay() }
         }
     }
 
     func nextTrack() {
+        lastCommandTime = Date()
+        HapticHelper.triggerMedia()
         self.triggerFlipAnimation()
-        Task {
-            await activeController?.nextTrack()
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(4, nil) // kMRNextTrack = 4
+        } else {
+            Task { await activeController?.nextTrack() }
         }
     }
 
     func previousTrack() {
+        lastCommandTime = Date()
+        HapticHelper.triggerMedia()
         self.triggerFlipAnimation()
-        Task {
-            await activeController?.previousTrack()
+        if let sendCmd = MRMediaRemoteSendCommand {
+            sendCmd(5, nil) // kMRPreviousTrack = 5
+        } else {
+            Task { await activeController?.previousTrack() }
         }
     }
 
@@ -673,6 +724,7 @@ class MusicManager: ObservableObject {
     func skip(seconds: TimeInterval) {
         let newPos = min(max(0, elapsedTime + seconds), songDuration)
         seek(to: newPos)
+        HapticHelper.triggerMedia()
     }
     
     func setVolume(to level: Double) {

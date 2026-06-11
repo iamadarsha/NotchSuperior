@@ -128,7 +128,6 @@ struct ContentView: View {
                     )
                     .padding([.horizontal, .bottom], vm.notchState == .open ? 12 : 0)
                     .background(.black)
-                    .clipShape(currentNotchShape)
                     .overlay(alignment: .top) {
                         Rectangle()
                             .fill(.black)
@@ -136,10 +135,12 @@ struct ContentView: View {
                             .padding(.horizontal, topCornerRadius)
                     }
                     .overlay {
-                        if vm.notchState == .open {
+                        if vm.notchState == .open && Defaults[.showSiriGlowBorder] {
                             SiriGlowBorder(shape: currentNotchShape)
+                                .allowsHitTesting(false)
                         }
                     }
+                    .clipShape(currentNotchShape)
                     .shadow(
                         color: ((vm.notchState == .open || isHovering) && Defaults[.enableShadow])
                             ? .black.opacity(0.7) : .clear, radius: Defaults[.cornerRadiusScaling] ? 6 : 4
@@ -163,26 +164,32 @@ struct ContentView: View {
                     .onHover { hovering in
                         handleHover(hovering)
                     }
-                    .onTapGesture {
-                        doOpen()
-                    }
                     .conditionalModifier(Defaults[.enableGestures]) { view in
                         view
-                            .panGesture(direction: .down) { translation, phase in
+                            .panGesture(
+                                direction: .down,
+                                isEnabled: { coordinator.currentView == .home }
+                            ) { translation, phase in
                                 handleDownGesture(translation: translation, phase: phase)
                             }
                     }
                     .conditionalModifier(Defaults[.closeGestureEnabled] && Defaults[.enableGestures]) { view in
                         view
-                            .panGesture(direction: .up) { translation, phase in
+                            .panGesture(
+                                direction: .up,
+                                isEnabled: { coordinator.currentView == .home }
+                            ) { translation, phase in
                                 handleUpGesture(translation: translation, phase: phase)
                             }
+                    }
+                    .onTapGesture {
+                        doOpen()
                     }
                     .onReceive(NotificationCenter.default.publisher(for: .sharingDidFinish)) { _ in
                         if vm.notchState == .open && !isHovering && !vm.isBatteryPopoverActive {
                             hoverTask?.cancel()
                             hoverTask = Task {
-                                try? await Task.sleep(for: .milliseconds(100))
+                                try? await Task.sleep(for: .seconds(2))
                                 guard !Task.isCancelled else { return }
                                 await MainActor.run {
                                     if self.vm.notchState == .open && !self.isHovering && !self.vm.isBatteryPopoverActive && !SharingStateManager.shared.preventNotchClose {
@@ -203,7 +210,7 @@ struct ContentView: View {
                         if !vm.isBatteryPopoverActive && !isHovering && vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
                             hoverTask?.cancel()
                             hoverTask = Task {
-                                try? await Task.sleep(for: .milliseconds(100))
+                                try? await Task.sleep(for: .seconds(2))
                                 guard !Task.isCancelled else { return }
                                 await MainActor.run {
                                     if !self.vm.isBatteryPopoverActive && !self.isHovering && self.vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
@@ -233,6 +240,9 @@ struct ContentView: View {
                         .frame(width: computedChinWidth, height: vm.chinHeight)
                 }
             }
+            // Expand the VStack to the full window width so SiriGlowBorder's blur
+            // can render into the glowHorizontalPadding canvas (30 pts each side).
+            .frame(maxWidth: .infinity)
 
             if #available(macOS 14.0, *), isActivityEnabled() {
                 if liveActivityEngine.currentActivity != nil {
@@ -449,13 +459,9 @@ struct ContentView: View {
                             ShelfView()
                         }
                     case .clipboard:
-                        if #available(macOS 14.0, *) {
-                            NSClipboardView()
-                                .transition(.opacity)
-                        } else {
-                            Text("Clipboard requires macOS 14.0+")
-                                .foregroundColor(.secondary)
-                        }
+                        NSClipboardView()
+                    case .notes:
+                        NSAINotesView()
                     }
                 }
                 .transition(
@@ -647,15 +653,14 @@ struct ContentView: View {
                 }
             }
         } else {
+            withAnimation(animationSpring) {
+                self.isHovering = false
+            }
             hoverTask = Task {
-                try? await Task.sleep(for: .milliseconds(100))
+                try? await Task.sleep(for: .seconds(2))
                 guard !Task.isCancelled else { return }
                 
                 await MainActor.run {
-                    withAnimation(animationSpring) {
-                        self.isHovering = false
-                    }
-                    
                     if self.vm.notchState == .open && !self.vm.isBatteryPopoverActive && !SharingStateManager.shared.preventNotchClose {
                         self.vm.close()
                     }
@@ -690,7 +695,7 @@ struct ContentView: View {
     }
 
     private func handleUpGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        guard vm.notchState == .open && !vm.isHoveringCalendar else { return }
+        guard vm.notchState == .open && !vm.isHoveringCalendar && !coordinator.clipboardIsScrolling && coordinator.currentView != .clipboard && coordinator.currentView != .notes && !clipboardOpen && !aiChatOpen else { return }
 
         withAnimation(animationSpring) {
             gestureProgress = (translation / Defaults[.gestureSensitivity]) * -20

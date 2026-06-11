@@ -1,23 +1,33 @@
 // NOTCHSUPERIOR ADDITION
 import Foundation
 
-// Supported providers
+// Supported providers — OpenAI, Groq, Gemini only. Claude removed.
 enum NSAIProvider: String, Codable, CaseIterable {
-    case openAI    = "openai"
-    case claude    = "claude"
-    case gemini    = "gemini"
+    case openAI  = "openai"
+    case groq    = "groq"
+    case gemini  = "gemini"
+
     var displayName: String {
         switch self {
         case .openAI:  return "OpenAI (GPT-4o)"
-        case .claude:  return "Anthropic (Claude)"
+        case .groq:    return "Groq (LLaMA)"
         case .gemini:  return "Google (Gemini)"
         }
     }
+
     var baseURL: String {
         switch self {
         case .openAI:  return "https://api.openai.com/v1/chat/completions"
-        case .claude:  return "https://api.anthropic.com/v1/messages"
+        case .groq:    return "https://api.groq.com/openai/v1/chat/completions"
         case .gemini:  return "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+        }
+    }
+
+    var whisperEndpoint: String? {
+        switch self {
+        case .openAI:  return "https://api.openai.com/v1/audio/transcriptions"
+        case .groq:    return "https://api.groq.com/openai/v1/audio/transcriptions"
+        case .gemini:  return nil   // Gemini uses generateContent, not Whisper
         }
     }
 }
@@ -38,7 +48,7 @@ struct NSAIConversation: Identifiable, Codable {
     var updatedAt: Date
 }
 
-struct NSAINote: Identifiable, Codable {
+struct NSAINote: Identifiable, Codable, Equatable {
     let id: UUID
     var title: String
     var rawTranscript: String?   // original voice or typed text

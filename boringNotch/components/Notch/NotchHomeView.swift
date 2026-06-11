@@ -55,6 +55,8 @@ struct AlbumArtView: View {
             .opacity(musicManager.isPlaying ? 0.5 : 0)
     }
 
+    @State private var isHovered: Bool = false
+
     private var albumArtButton: some View {
         ZStack {
             Button {
@@ -66,9 +68,13 @@ struct AlbumArtView: View {
                 }
             }
             .buttonStyle(PlainButtonStyle())
-            .scaleEffect(musicManager.isPlaying ? 1 : 0.85)
+            .scaleEffect(isHovered ? (musicManager.isPlaying ? 1.05 : 0.9) : (musicManager.isPlaying ? 1 : 0.85))
+            .animation(.interpolatingSpring(stiffness: 300, damping: 15), value: isHovered)
             
             albumArtDarkOverlay
+        }
+        .onHover { hovering in
+            isHovered = hovering
         }
     }
 
@@ -424,6 +430,7 @@ struct NotchHomeView: View {
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     let albumArtNamespace: Namespace.ID
+    @Default(.cameraSize) private var cameraSize
 
     private func isEnabled(_ slot: NSWidgetSlot) -> Bool {
         if #available(macOS 14.0, *) {
@@ -456,9 +463,9 @@ struct NotchHomeView: View {
             return false
         }()
         
-        let calWidth: CGFloat = {
+        let calMaxWidth: CGFloat? = {
             if !showMusic && !shouldShowCamera && !showDev {
-                return 580
+                return .infinity
             } else if shouldShowCamera {
                 return 170
             } else {
@@ -475,7 +482,7 @@ struct NotchHomeView: View {
             if showCal {
                 ZStack(alignment: .topTrailing) {
                     CalendarView()
-                        .frame(width: calWidth)
+                        .frame(maxWidth: calMaxWidth)
                         .onHover { isHovering in
                             vm.isHoveringCalendar = isHovering
                         }
@@ -497,7 +504,7 @@ struct NotchHomeView: View {
 
             if shouldShowCamera {
                 CameraPreviewView(webcamManager: webcamManager)
-                    .scaledToFit()
+                    .frame(width: cameraSize, height: cameraSize)
                     .opacity(vm.notchState == .closed ? 0 : 1)
                     .blur(radius: vm.notchState == .closed ? 20 : 0)
                     .animation(.interactiveSpring(response: 0.32, dampingFraction: 0.76, blendDuration: 0), value: shouldShowCamera)

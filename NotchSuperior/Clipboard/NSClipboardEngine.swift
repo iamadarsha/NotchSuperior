@@ -140,6 +140,7 @@ final class NSClipboardEngine: ObservableObject {
     func pin(_ item: NSClipboardItem) {
         if let i = history.firstIndex(where: { $0.id == item.id }) {
             history[i].isPinned.toggle()
+            HapticHelper.trigger()
             save()
         }
     }
@@ -147,6 +148,7 @@ final class NSClipboardEngine: ObservableObject {
     func delete(_ item: NSClipboardItem) {
         guard !item.isPinned else { return }
         history.removeAll { $0.id == item.id }
+        HapticHelper.trigger()
         save()
     }
 
@@ -168,6 +170,13 @@ final class NSClipboardEngine: ObservableObject {
             pb.writeObjects([URL(fileURLWithPath: path) as NSURL])
         }
         lastChangeCount = pb.changeCount
+        HapticHelper.trigger()
+    }
+
+    func clearUnpinned() {
+        history.removeAll { !$0.isPinned }
+        HapticHelper.trigger()
+        save()
     }
 
     func setLabel(_ label: String, for item: NSClipboardItem) {
@@ -181,11 +190,13 @@ final class NSClipboardEngine: ObservableObject {
     func addSnippet(title: String, body: String, shortcut: String? = nil) {
         snippets.insert(NSSnippet(id: UUID(), title: title, body: body,
             shortcut: shortcut, tags: [], createdAt: Date()), at: 0)
+        HapticHelper.trigger()
         save()
     }
 
     func deleteSnippet(_ s: NSSnippet) {
         snippets.removeAll { $0.id == s.id }
+        HapticHelper.trigger()
         save()
     }
 
@@ -194,6 +205,7 @@ final class NSClipboardEngine: ObservableObject {
         pb.clearContents()
         pb.setString(s.body, forType: .string)
         lastChangeCount = pb.changeCount
+        HapticHelper.trigger()
     }
 
     // MARK: — Persistence

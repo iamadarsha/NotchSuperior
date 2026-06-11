@@ -6,6 +6,7 @@
 //
 import AVFoundation
 import SwiftUI
+import Defaults
 
 class WebcamManager: NSObject, ObservableObject {
     static let shared = WebcamManager()
@@ -30,6 +31,12 @@ class WebcamManager: NSObject, ObservableObject {
     }
     
     @Published var cameraAvailable: Bool = false {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    
+    @Published var availableDevices: [AVCaptureDevice] = [] {
         didSet {
             objectWillChange.send()
         }
@@ -114,17 +121,61 @@ class WebcamManager: NSObject, ObservableObject {
     }
     
     /// Checks if any camera devices are available and sets up capture session if needed
-    func checkCameraAvailability() {
-        let availableDevices = AVCaptureDevice.DiscoverySession(
-            deviceTypes: [.external, .builtInWideAngleCamera],
+    private func findBestCamera() -> AVCaptureDevice? {
+        var deviceTypes: [AVCaptureDevice.DeviceType] = [
+            .builtInWideAngleCamera,
+            .external
+        ]
+        if #available(macOS 14.0, *) {
+            deviceTypes.append(.continuityCamera)
+        }
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: deviceTypes,
             mediaType: .video,
             position: .unspecified
-        ).devices
+        )
+        let devices = discoverySession.devices
         
-        let hasAvailableDevices = !availableDevices.isEmpty
+        // Log all found cameras
+        for dev in devices {
+            NSLog("Found camera: \(dev.localizedName) (ID: \(dev.uniqueID))")
+        }
+        
+        // If the user preferred a specific camera and it is available, use it!
+        if let preferredID = Defaults[.selectedCameraID],
+           let preferredDevice = devices.first(where: { $0.uniqueID == preferredID }) {
+            return preferredDevice
+        }
+        
+        // Choose external first, then built-in, then continuity/others
+        if let external = devices.first(where: { $0.deviceType == .external }) {
+            return external
+        }
+        if let builtIn = devices.first(where: { $0.deviceType == .builtInWideAngleCamera }) {
+            return builtIn
+        }
+        return devices.first
+    }
+
+    /// Checks if any camera devices are available and sets up capture session if needed
+    func checkCameraAvailability() {
+        var deviceTypes: [AVCaptureDevice.DeviceType] = [
+            .builtInWideAngleCamera,
+            .external
+        ]
+        if #available(macOS 14.0, *) {
+            deviceTypes.append(.continuityCamera)
+        }
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: deviceTypes,
+            mediaType: .video,
+            position: .unspecified
+        )
+        let devices = discoverySession.devices
         
         DispatchQueue.main.async {
-            self.cameraAvailable = hasAvailableDevices
+            self.availableDevices = devices
+            self.cameraAvailable = !devices.isEmpty
         }
     }
     
@@ -142,14 +193,7 @@ class WebcamManager: NSObject, ObservableObject {
             let session = AVCaptureSession()
             
             do {
-                // Get available devices and prefer external camera if available
-                let discoverySession = AVCaptureDevice.DiscoverySession(
-                    deviceTypes: [.external, .builtInWideAngleCamera],
-                    mediaType: .video,
-                    position: .unspecified
-                )
-                
-                guard let videoDevice = discoverySession.devices.first else {
+                guard let videoDevice = self.findBestCamera() else {
                     NSLog("No video devices available")
                     DispatchQueue.main.async {
                         self.isSessionRunning = false
@@ -190,11 +234,10 @@ class WebcamManager: NSObject, ObservableObject {
                     previewLayer.videoGravity = .resizeAspectFill
                     self.previewLayer = previewLayer
                     
+                    NSLog("Capture session setup completed successfully")
                     // Setup is complete, let the caller know
                     completion(true)
                 }
-                
-                NSLog("Capture session setup completed successfully")
             } catch {
                 NSLog("Failed to setup capture session: \(error.localizedDescription)")
                 DispatchQueue.main.async {
@@ -289,8 +332,10 @@ class WebcamManager: NSObject, ObservableObject {
             
             session.startRunning()
             
-            // Update state on main thread
-            self.updateSessionState()
+            // Update state on main thread — set directly to true after startRunning
+            DispatchQueue.main.async {
+                self.isSessionRunning = true
+            }
             
             NSLog("Capture session started successfully")
         }
