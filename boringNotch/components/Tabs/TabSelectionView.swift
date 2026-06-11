@@ -14,10 +14,16 @@ struct TabModel: Identifiable {
     let view: NotchViews
 }
 
-let tabs = [
-    TabModel(label: "Home", icon: "house.fill", view: .home),
-    TabModel(label: "Shelf", icon: "tray.fill", view: .shelf)
-]
+let tabs: [TabModel] = {
+    var list = [
+        TabModel(label: "Home", icon: "house.fill", view: .home),
+        TabModel(label: "Shelf", icon: "tray.fill", view: .shelf)
+    ]
+    if #available(macOS 14.0, *) {
+        list.append(TabModel(label: "Clipboard", icon: "doc.on.clipboard", view: .clipboard))
+    }
+    return list
+}()
 
 struct TabSelectionView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared

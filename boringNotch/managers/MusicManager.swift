@@ -594,18 +594,34 @@ class MusicManager: ObservableObject {
 
     // MARK: - Public Methods for controlling playback
     func playPause() {
+        let targetState = !isPlaying
+        DispatchQueue.main.async {
+            withAnimation(.smooth) {
+                self.isPlaying = targetState
+            }
+        }
         Task {
             await activeController?.togglePlay()
         }
     }
 
     func play() {
+        DispatchQueue.main.async {
+            withAnimation(.smooth) {
+                self.isPlaying = true
+            }
+        }
         Task {
             await activeController?.play()
         }
     }
 
     func pause() {
+        DispatchQueue.main.async {
+            withAnimation(.smooth) {
+                self.isPlaying = false
+            }
+        }
         Task {
             await activeController?.pause()
         }
@@ -624,18 +640,26 @@ class MusicManager: ObservableObject {
     }
     
     func togglePlay() {
+        let targetState = !isPlaying
+        DispatchQueue.main.async {
+            withAnimation(.smooth) {
+                self.isPlaying = targetState
+            }
+        }
         Task {
             await activeController?.togglePlay()
         }
     }
 
     func nextTrack() {
+        self.triggerFlipAnimation()
         Task {
             await activeController?.nextTrack()
         }
     }
 
     func previousTrack() {
+        self.triggerFlipAnimation()
         Task {
             await activeController?.previousTrack()
         }

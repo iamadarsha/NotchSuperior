@@ -456,6 +456,16 @@ struct NotchHomeView: View {
             return false
         }()
         
+        let calWidth: CGFloat = {
+            if !showMusic && !shouldShowCamera && !showDev {
+                return 580
+            } else if shouldShowCamera {
+                return 170
+            } else {
+                return 215
+            }
+        }()
+        
         return HStack(alignment: .center, spacing: (shouldShowCamera && showCal) ? 10 : 15) {
             if showMusic {
                 MusicPlayerView(albumArtNamespace: albumArtNamespace)
@@ -465,7 +475,7 @@ struct NotchHomeView: View {
             if showCal {
                 ZStack(alignment: .topTrailing) {
                     CalendarView()
-                        .frame(width: shouldShowCamera ? 170 : 215)
+                        .frame(width: calWidth)
                         .onHover { isHovering in
                             vm.isHoveringCalendar = isHovering
                         }

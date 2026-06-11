@@ -448,6 +448,14 @@ struct ContentView: View {
                         } else {
                             ShelfView()
                         }
+                    case .clipboard:
+                        if #available(macOS 14.0, *) {
+                            NSClipboardView()
+                                .transition(.opacity)
+                        } else {
+                            Text("Clipboard requires macOS 14.0+")
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
                 .transition(
