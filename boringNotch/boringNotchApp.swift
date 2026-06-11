@@ -461,6 +461,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         previousScreens = NSScreen.screens
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if coordinator.firstLaunch {
+            showOnboardingWindow()
+        } else {
+            SettingsWindowController.shared.showWindow()
+        }
+        return true
+    }
+
     func playWelcomeSound() {
         let audioPlayer = AudioPlayer()
         audioPlayer.play(fileName: "boring", fileExtension: "m4a")

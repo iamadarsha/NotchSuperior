@@ -31,5 +31,9 @@
 	<string>NotchSuperior uses your calendar to display upcoming events directly in the notch.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>NotchSuperior displays your active reminders in the notch.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>NotchSuperior monitors Bluetooth status to display the battery levels of connected devices like AirPods.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>NotchSuperior monitors Bluetooth status to display the battery levels of connected devices like AirPods.</string>
 </dict>
 </plist>
