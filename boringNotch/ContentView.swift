@@ -134,17 +134,20 @@ struct ContentView: View {
                             .frame(height: 1)
                             .padding(.horizontal, topCornerRadius)
                     }
+                    .clipShape(currentNotchShape)
+                    .shadow(
+                        color: ((vm.notchState == .open || isHovering) && Defaults[.enableShadow])
+                            ? .black.opacity(0.7) : .clear, radius: Defaults[.cornerRadiusScaling] ? 6 : 4
+                    )
+                    // Glow overlay placed AFTER clipShape so its blur can render
+                    // into the glowHorizontalPadding canvas (30 pts per side) without
+                    // being hard-clipped to the notch shape boundary.
                     .overlay {
                         if vm.notchState == .open && Defaults[.showSiriGlowBorder] {
                             SiriGlowBorder(shape: currentNotchShape)
                                 .allowsHitTesting(false)
                         }
                     }
-                    .clipShape(currentNotchShape)
-                    .shadow(
-                        color: ((vm.notchState == .open || isHovering) && Defaults[.enableShadow])
-                            ? .black.opacity(0.7) : .clear, radius: Defaults[.cornerRadiusScaling] ? 6 : 4
-                    )
                     .padding(
                         .bottom,
                         vm.effectiveClosedNotchHeight == 0 ? 10 : 0
@@ -168,7 +171,7 @@ struct ContentView: View {
                         view
                             .panGesture(
                                 direction: .down,
-                                isEnabled: { coordinator.currentView == .home }
+                                isEnabled: { coordinator.currentView == .home && !clipboardOpen && !aiChatOpen }
                             ) { translation, phase in
                                 handleDownGesture(translation: translation, phase: phase)
                             }
@@ -177,7 +180,7 @@ struct ContentView: View {
                         view
                             .panGesture(
                                 direction: .up,
-                                isEnabled: { coordinator.currentView == .home }
+                                isEnabled: { coordinator.currentView == .home && !clipboardOpen && !aiChatOpen }
                             ) { translation, phase in
                                 handleUpGesture(translation: translation, phase: phase)
                             }

@@ -150,11 +150,10 @@ final class _CameraHostView: NSView {
     }
 
     func setPreviewLayer(_ layer: AVCaptureVideoPreviewLayer) {
-        // Remove previous layer if any
-        hostedLayer?.removeFromSuperlayer()
         hostedLayer = layer
         layer.videoGravity = .resizeAspectFill
-        // Layer-hosting: hand full geometry control to AppKit
+        // Layer-hosting: replacing self.layer atomically is sufficient;
+        // calling removeFromSuperlayer() on a root layer is unsafe and unnecessary.
         self.layer = layer
         needsLayout = true
     }
@@ -164,7 +163,10 @@ final class _CameraHostView: NSView {
         guard let l = hostedLayer else { return }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        l.frame = self.bounds
+        // Keep the root layer's bounds in sync with the view's bounds so the
+        // preview fills the view on every layout pass (including the first
+        // real pass that follows SwiftUI's initial zero-size assignment).
+        l.bounds = self.bounds
         CATransaction.commit()
     }
 }
