@@ -4,9 +4,11 @@ import SwiftUI
 // ─────────────────────────────────────────────────────────────────────────────
 // NSAINotesView — Settings pane for voice notes.
 //
-// Uses HSplitView (NOT NavigationSplitView) because this view is already
-// embedded inside SettingsView's own NavigationSplitView.  Nesting two
-// NavigationSplitViews causes the left sidebar to collapse and become invisible.
+// Uses a plain HStack (NOT NavigationSplitView, NOT HSplitView) because:
+//  • This view is embedded inside SettingsView's NavigationSplitView —
+//    nesting two NavigationSplitViews collapses the inner sidebar.
+//  • HSplitView allows the user to drag the divider to zero width, hiding
+//    the sidebar. A fixed-width HStack is always visible.
 // ─────────────────────────────────────────────────────────────────────────────
 
 @available(macOS 14.0, *)
@@ -15,11 +17,14 @@ struct NSAINotesView: View {
     @State private var selectedNoteID: UUID? = nil
 
     var body: some View {
-        HSplitView {
+        HStack(spacing: 0) {
             notesList
+                .frame(width: 220)
+            Divider()
             detailPane
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(minWidth: 560, minHeight: 400)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("Voice Notes")
         .onAppear {
             if selectedNoteID == nil {
@@ -114,7 +119,7 @@ struct NSAINotesView: View {
                 .listStyle(.sidebar)
             }
         }
-        .frame(minWidth: 190, idealWidth: 210, maxWidth: 250)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
     }
 
