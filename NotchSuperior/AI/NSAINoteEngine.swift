@@ -140,6 +140,8 @@ class NSAINoteEngine: ObservableObject {
 
                 let request = SFSpeechURLRecognitionRequest(url: url)
                 request.shouldReportPartialResults = false   // file mode: final only
+                // Force on-device processing — no data sent to Apple servers, works offline.
+                request.requiresOnDeviceRecognition = true
 
                 recognizer.recognitionTask(with: request) { [weak self] result, error in
                     Task { @MainActor [weak self] in
