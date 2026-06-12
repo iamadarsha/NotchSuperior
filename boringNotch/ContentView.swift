@@ -53,6 +53,7 @@ struct ContentView: View {
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
+    @State private var mouseClickMonitor: Any?
 
     @State private var gestureProgress: CGFloat = .zero
 
@@ -210,10 +211,16 @@ struct ContentView: View {
                         }
                     }
                     .onChange(of: vm.notchState) { _, newState in
-                        if newState == .closed && isHovering {
-                            withAnimation {
-                                isHovering = false
-                            }
+                        if newState == .open {
+                            // Start auto-close timer whenever the notch opens, regardless
+                            // of how it was triggered (tap, keyboard shortcut, etc.).
+                            // The hover handlers will cancel/restart this timer as needed.
+                            scheduleAutoClose()
+                            installClickOutsideMonitor()
+                        } else {
+                            hoverTask?.cancel()
+                            removeClickOutsideMonitor()
+                            if isHovering { withAnimation { isHovering = false } }
                         }
                     }
                     .onChange(of: vm.isBatteryPopoverActive) {
@@ -636,50 +643,59 @@ struct ContentView: View {
     private func handleHover(_ hovering: Bool) {
         if coordinator.firstLaunch { return }
         hoverTask?.cancel()
-        
+
         if hovering {
-            withAnimation(animationSpring) {
-                isHovering = true
-            }
-            
-            if vm.notchState == .closed && Defaults[.enableHaptics] {
-                haptics.toggle()
-            }
-            
-            guard vm.notchState == .closed,
-                  !coordinator.sneakPeek.show,
-                  Defaults[.openNotchOnHover] else { return }
-            
+            withAnimation(animationSpring) { isHovering = true }
+            if vm.notchState == .closed && Defaults[.enableHaptics] { haptics.toggle() }
+            guard vm.notchState == .closed, !coordinator.sneakPeek.show, Defaults[.openNotchOnHover] else { return }
             hoverTask = Task {
                 try? await Task.sleep(for: .seconds(Defaults[.minimumHoverDuration]))
                 guard !Task.isCancelled else { return }
-                
                 await MainActor.run {
-                    guard self.vm.notchState == .closed,
-                          self.isHovering,
-                          !self.coordinator.sneakPeek.show else { return }
-                    
+                    guard self.vm.notchState == .closed, self.isHovering, !self.coordinator.sneakPeek.show else { return }
                     self.doOpen()
                 }
             }
         } else {
-            withAnimation(animationSpring) {
-                self.isHovering = false
-            }
-            hoverTask = Task {
-                // Use the user-configured close delay instead of a hardcoded value.
-                try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
-                guard !Task.isCancelled else { return }
+            withAnimation(animationSpring) { self.isHovering = false }
+            // Restart the auto-close countdown every time the cursor leaves.
+            scheduleAutoClose()
+        }
+    }
 
-                await MainActor.run {
-                    if self.vm.notchState == .open && !self.isHovering
-                        && !self.vm.isBatteryPopoverActive
-                        && !SharingStateManager.shared.preventNotchClose
-                    {
-                        self.vm.close()
-                    }
-                }
+    private func scheduleAutoClose() {
+        hoverTask?.cancel()
+        guard vm.notchState == .open else { return }
+        hoverTask = Task {
+            try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                guard self.vm.notchState == .open,
+                      !self.isHovering,
+                      !self.vm.isBatteryPopoverActive,
+                      !SharingStateManager.shared.preventNotchClose else { return }
+                self.vm.close()
             }
+        }
+    }
+
+    // MARK: - Click-outside monitor
+
+    private func installClickOutsideMonitor() {
+        removeClickOutsideMonitor()
+        // Global monitor fires for mouse-down events delivered to OTHER processes,
+        // i.e. any click that lands outside our notch window → close immediately.
+        mouseClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak vm] _ in
+            guard let vm, vm.notchState == .open else { return }
+            guard !SharingStateManager.shared.preventNotchClose else { return }
+            DispatchQueue.main.async { vm.close() }
+        }
+    }
+
+    private func removeClickOutsideMonitor() {
+        if let monitor = mouseClickMonitor {
+            NSEvent.removeMonitor(monitor)
+            mouseClickMonitor = nil
         }
     }
 
