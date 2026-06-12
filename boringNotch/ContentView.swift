@@ -471,7 +471,7 @@ struct ContentView: View {
                     case .clipboard:
                         NSClipboardView()
                     case .notes:
-                        NSAINotesView()
+                        NSNotchNotesView()
                     }
                 }
                 .transition(
