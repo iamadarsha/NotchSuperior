@@ -2,56 +2,64 @@
 
 # ────────────────────────────────────────────────────────
 # NotchSuperior — install.sh
-# One-liner to run:
+# One-liner installer:
 # curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/main/install.sh | bash
 # ────────────────────────────────────────────────────────
 
 set -e
 
-# ANSI styling
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-echo -e "${PURPLE}🚀 Starting NotchSuperior installation...${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${PURPLE}  NotchSuperior — Installer${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-# Define installer targets
-DMG_URL="https://github.com/iamadarsha/NotchSuperior/releases/download/v2.7.3/NotchSuperior.dmg"
-TEMP_DMG="/tmp/NotchSuperior.dmg"
+# Require macOS 14+
+OS_MAJOR=$(sw_vers -productVersion | cut -d. -f1)
+if [ "$OS_MAJOR" -lt 14 ]; then
+    echo -e "${RED}Error: NotchSuperior requires macOS 14.0 (Sonoma) or later.${NC}"
+    exit 1
+fi
+
+DMG_URL="https://github.com/iamadarsha/NotchSuperior/releases/download/v1.0.0/NotchSuperior-v1.0.0.dmg"
+TEMP_DMG="/tmp/NotchSuperior_install.dmg"
 MOUNT_DIR="/tmp/NotchSuperiorMount"
 
-# Download the DMG
-echo -e "${BLUE}📥 Downloading NotchSuperior DMG...${NC}"
-curl -L -# -o "$TEMP_DMG" "$DMG_URL"
+echo -e "${BLUE}Downloading NotchSuperior...${NC}"
+curl -L --progress-bar -o "$TEMP_DMG" "$DMG_URL"
 
-# Mount the DMG
-echo -e "${BLUE}📦 Mounting installer...${NC}"
-if [ -d "$MOUNT_DIR" ]; then
-    rm -rf "$MOUNT_DIR"
-fi
-mkdir -p "$MOUNT_DIR"
+echo -e "${BLUE}Mounting disk image...${NC}"
+[ -d "$MOUNT_DIR" ] && hdiutil detach "$MOUNT_DIR" -quiet 2>/dev/null || true
 hdiutil attach "$TEMP_DMG" -mountpoint "$MOUNT_DIR" -nobrowse -quiet
 
-# Copy to Applications
-echo -e "${BLUE}🚚 Installing to Applications folder...${NC}"
-if [ -d "/Applications/NotchSuperior.app" ]; then
-    echo -e "${RED}⚠️  Existing NotchSuperior installation found. Overwriting...${NC}"
-    rm -rf "/Applications/NotchSuperior.app"
+# Try /Applications first, fall back to ~/Applications
+INSTALL_DIR="/Applications"
+if [ ! -w "$INSTALL_DIR" ]; then
+    INSTALL_DIR="$HOME/Applications"
+    mkdir -p "$INSTALL_DIR"
+    echo -e "${CYAN}Installing to ~/Applications (no write access to /Applications)${NC}"
 fi
-cp -R "$MOUNT_DIR/NotchSuperior.app" "/Applications/"
 
-# Unmount and clean up
-echo -e "${BLUE}🧹 Cleaning up installer files...${NC}"
+echo -e "${BLUE}Installing to ${INSTALL_DIR}...${NC}"
+[ -d "$INSTALL_DIR/NotchSuperior.app" ] && rm -rf "$INSTALL_DIR/NotchSuperior.app"
+cp -R "$MOUNT_DIR/NotchSuperior.app" "$INSTALL_DIR/"
+
+# Remove macOS quarantine flag so the app opens without Gatekeeper warning
+xattr -dr com.apple.quarantine "$INSTALL_DIR/NotchSuperior.app" 2>/dev/null || true
+
+echo -e "${BLUE}Cleaning up...${NC}"
 hdiutil detach "$MOUNT_DIR" -quiet || true
-rm -rf "$MOUNT_DIR"
 rm -f "$TEMP_DMG"
 
-# Completion
-echo -e "${GREEN}🎉 NotchSuperior has been successfully installed in your /Applications folder!${NC}"
-echo -e "${CYAN}🚀 Launching NotchSuperior...${NC}"
-open "/Applications/NotchSuperior.app"
+echo -e "${GREEN}Installed successfully!${NC}"
+echo -e "${CYAN}Launching NotchSuperior...${NC}"
+open "$INSTALL_DIR/NotchSuperior.app"
 
-echo -e "${GREEN}✨ All set! Enjoy your NotchSuperior experience 🫶${NC}"
+echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}  Done! Hover over the camera notch to get started.${NC}"
+echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

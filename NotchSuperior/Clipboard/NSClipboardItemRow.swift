@@ -13,6 +13,26 @@ struct NSClipboardItemRow: View {
     let item: NSClipboardItem
     @ObservedObject var engine = NSClipboardEngine.shared
 
+    @State private var copied = false
+    @State private var isHighlighted = false
+
+    private static let relativeFmt: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .abbreviated
+        return f
+    }()
+
+    private var resolvedTitle: String {
+        if item.type == .url, let text = item.text, let host = URL(string: text)?.host {
+            return host
+        }
+        return item.displayTitle
+    }
+
+    private var relativeTimestamp: String {
+        Self.relativeFmt.localizedString(for: item.addedAt, relativeTo: Date())
+    }
+
     var body: some View {
         HStack(spacing: 8) {
             // Type icon
@@ -39,15 +59,26 @@ struct NSClipboardItemRow: View {
                                 RoundedRectangle(cornerRadius: 4)
                                     .stroke(Color.white.opacity(0.2), lineWidth: 1)
                             }
-                        Text(item.displayTitle)
-                            .font(.system(size: 12))
-                            .lineLimit(1)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(resolvedTitle)
+                                .font(.system(size: 12))
+                                .lineLimit(1)
+                            Text(relativeTimestamp)
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 } else {
-                    Text(item.displayTitle)
-                        .font(.system(size: 12))
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(resolvedTitle)
+                            .font(.system(size: 12))
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(relativeTimestamp)
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
             }
 
@@ -61,17 +92,28 @@ struct NSClipboardItemRow: View {
             }
             .buttonStyle(.borderless)
 
-            // Copy button
-            Button(action: { engine.copyToPasteboard(item) }) {
-                Image(systemName: "doc.on.doc")
+            // Copy button / copied checkmark
+            Button(action: { performCopy() }) {
+                Image(systemName: copied ? "checkmark" : "doc.on.doc")
                     .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(copied ? .green : .secondary)
+                    .animation(.easeInOut(duration: 0.2), value: copied)
             }
             .buttonStyle(.borderless)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white.opacity(isHighlighted ? 0.05 : 0))
+                )
+        )
+        .contentShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture { performCopy() }
+        .onHover { isHighlighted = $0 }
         .contextMenu {
             Button("Copy") { engine.copyToPasteboard(item) }
             Button(item.isPinned ? "Unpin" : "Pin") { engine.pin(item) }
@@ -80,6 +122,12 @@ struct NSClipboardItemRow: View {
             Button("Delete", role: .destructive) { engine.delete(item) }
                 .disabled(item.isPinned)
         }
+    }
+
+    private func performCopy() {
+        engine.copyToPasteboard(item)
+        copied = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { copied = false }
     }
 
     private var typeIcon: String {
@@ -92,18 +140,18 @@ struct NSClipboardItemRow: View {
         case .unknown: return "questionmark"
         }
     }
-    
+
     private func showLabelDialog() {
         let alert = NSAlert()
         alert.messageText = "Set Label for Clipboard Item"
         alert.informativeText = "Enter a custom display label for this clipboard item:"
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
-        
+
         let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
         input.stringValue = item.label ?? ""
         alert.accessoryView = input
-        
+
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
             let label = input.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -154,11 +154,18 @@ struct ContentView: View {
                     )
                 
                 mainLayout
-                    .frame(height: vm.notchState == .open ? vm.notchSize.height : nil)
+                    // Cap width to the notch content area so the transparent glow
+                    // padding on each side (glowHorizontalPadding/2 per side) does not
+                    // participate in hover detection — previously the full 700pt window
+                    // width kept isHovering=true even after the cursor left the notch.
+                    .frame(
+                        width: vm.notchState == .open ? openNotchSize.width : nil,
+                        height: vm.notchState == .open ? vm.notchSize.height : nil
+                    )
                     .conditionalModifier(true) { view in
                         let openAnimation = Animation.spring(response: 0.42, dampingFraction: 0.8, blendDuration: 0)
                         let closeAnimation = Animation.spring(response: 0.45, dampingFraction: 1.0, blendDuration: 0)
-                        
+
                         return view
                             .animation(vm.notchState == .open ? openAnimation : closeAnimation, value: vm.notchState)
                             .animation(.smooth, value: gestureProgress)
@@ -660,11 +667,15 @@ struct ContentView: View {
                 self.isHovering = false
             }
             hoverTask = Task {
-                try? await Task.sleep(for: .seconds(2))
+                // Use the user-configured close delay instead of a hardcoded value.
+                try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
                 guard !Task.isCancelled else { return }
-                
+
                 await MainActor.run {
-                    if self.vm.notchState == .open && !self.vm.isBatteryPopoverActive && !SharingStateManager.shared.preventNotchClose {
+                    if self.vm.notchState == .open && !self.isHovering
+                        && !self.vm.isBatteryPopoverActive
+                        && !SharingStateManager.shared.preventNotchClose
+                    {
                         self.vm.close()
                     }
                 }
