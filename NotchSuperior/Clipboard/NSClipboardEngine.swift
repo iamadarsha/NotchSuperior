@@ -194,6 +194,14 @@ final class NSClipboardEngine: ObservableObject {
         save()
     }
 
+    func updateSnippet(_ id: UUID, title: String, body: String, shortcut: String?) {
+        guard let i = snippets.firstIndex(where: { $0.id == id }) else { return }
+        snippets[i].title = title
+        snippets[i].body = body
+        snippets[i].shortcut = shortcut
+        save()
+    }
+
     func deleteSnippet(_ s: NSSnippet) {
         snippets.removeAll { $0.id == s.id }
         HapticHelper.trigger()

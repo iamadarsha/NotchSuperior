@@ -88,10 +88,17 @@ struct NSAIChatView: View {
                         }
                         .padding(8)
                     }
-                    .onChange(of: conv.messages.count) { _ in
+                    .onChange(of: conv.messages.count) { _, _ in
                         withAnimation {
                             proxy.scrollTo(conv.messages.last?.id.uuidString ?? "streaming",
                                            anchor: .bottom)
+                        }
+                    }
+                    .onChange(of: engine.isStreaming) { _, streaming in
+                        if streaming {
+                            withAnimation {
+                                proxy.scrollTo("streaming", anchor: .bottom)
+                            }
                         }
                     }
                 }
@@ -148,7 +155,13 @@ struct NSAIChatView: View {
         }
         .onAppear {
             if selectedConvID == nil {
-                selectedConvID = engine.conversations.first?.id
+                if let existing = engine.conversations.first {
+                    selectedConvID = existing.id
+                } else if engine.isConfigured {
+                    // Auto-start a conversation so user lands directly in chat
+                    let conv = engine.newConversation()
+                    selectedConvID = conv.id
+                }
             }
         }
     }

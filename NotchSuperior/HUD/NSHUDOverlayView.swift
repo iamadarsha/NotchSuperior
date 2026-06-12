@@ -85,7 +85,7 @@ struct NSHUDOverlayView: View {
                     .overlay(alignment: .leading) {
                         Capsule()
                             .fill(Color.accentColor)
-                            .frame(width: max(10, 220 * CGFloat(value)), height: NSTokens.progressHeight)
+                            .frame(width: max(10, 220 * CGFloat(min(1, max(0, value)))), height: NSTokens.progressHeight)
                     }
             }
         }

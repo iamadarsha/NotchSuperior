@@ -15,6 +15,7 @@ struct NSClipboardItemRow: View {
 
     @State private var copied = false
     @State private var isHighlighted = false
+    @State private var now = Date()
 
     private static let relativeFmt: RelativeDateTimeFormatter = {
         let f = RelativeDateTimeFormatter()
@@ -30,7 +31,7 @@ struct NSClipboardItemRow: View {
     }
 
     private var relativeTimestamp: String {
-        Self.relativeFmt.localizedString(for: item.addedAt, relativeTo: Date())
+        Self.relativeFmt.localizedString(for: item.addedAt, relativeTo: now)
     }
 
     var body: some View {
@@ -114,6 +115,9 @@ struct NSClipboardItemRow: View {
         .contentShape(RoundedRectangle(cornerRadius: 8))
         .onTapGesture { performCopy() }
         .onHover { isHighlighted = $0 }
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
+            now = Date()
+        }
         .contextMenu {
             Button("Copy") { engine.copyToPasteboard(item) }
             Button(item.isPinned ? "Unpin" : "Pin") { engine.pin(item) }

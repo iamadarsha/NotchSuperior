@@ -19,13 +19,13 @@ struct NSCommandLauncherView: View {
                     .textFieldStyle(.plain)
                     .font(.system(size: 14, weight: .regular))
                     .focused($isTextFieldFocused)
+                    .disabled(engine.isRunning)
                     .onChange(of: textInput) { _, newValue in
                         engine.search(newValue)
                     }
                     .onSubmit {
-                        Task {
-                            await engine.executeSelected()
-                        }
+                        guard !engine.isRunning else { return }
+                        Task { await engine.executeSelected() }
                     }
                 
                 if engine.isRunning {
@@ -36,9 +36,21 @@ struct NSCommandLauncherView: View {
             .padding(.horizontal, 12)
             .frame(height: 44)
             
-            if !engine.results.isEmpty {
+            if engine.results.isEmpty && !textInput.isEmpty {
                 Divider()
-                
+                VStack(spacing: 6) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 20))
+                        .foregroundStyle(.tertiary)
+                    Text("No commands found")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+            } else if !engine.results.isEmpty {
+                Divider()
+
                 // Results List
                 ScrollViewReader { proxy in
                     ScrollView {

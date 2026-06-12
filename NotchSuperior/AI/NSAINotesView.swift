@@ -60,7 +60,7 @@ struct NSAINoteDetailView: View {
             TextField("Note title", text: $note.title)
                 .font(.system(size: 14, weight: .semibold))
                 .textFieldStyle(.plain)
-                .onChange(of: note.title) { _ in engine.updateNote(note) }
+                .onChange(of: note.title) { _, _ in engine.updateNote(note) }
 
             // Template picker
             Picker("Template", selection: $note.template) {
@@ -150,7 +150,7 @@ struct NSAINoteDetailView: View {
         }
         .padding(12)
         // Refresh local @State `note` when async transcript lands in engine.notes.
-        .onChange(of: engine.notes) { _ in
+        .onChange(of: engine.notes) { _, _ in
             if let updated = engine.notes.first(where: { $0.id == note.id }) {
                 note = updated
             }
@@ -204,7 +204,7 @@ struct NSNotchNotesView: View {
                         isPulsing = true
                     }
                 }
-                .onChange(of: engine.isRecording) { newValue in
+                .onChange(of: engine.isRecording) { _, newValue in
                     isPulsing = newValue
                 }
                 

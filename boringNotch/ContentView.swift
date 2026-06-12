@@ -200,7 +200,7 @@ struct ContentView: View {
                         if vm.notchState == .open && !isHovering && !vm.isBatteryPopoverActive {
                             hoverTask?.cancel()
                             hoverTask = Task {
-                                try? await Task.sleep(for: .seconds(2))
+                                try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
                                 guard !Task.isCancelled else { return }
                                 await MainActor.run {
                                     if self.vm.notchState == .open && !self.isHovering && !self.vm.isBatteryPopoverActive && !SharingStateManager.shared.preventNotchClose {
@@ -212,12 +212,14 @@ struct ContentView: View {
                     }
                     .onChange(of: vm.notchState) { _, newState in
                         if newState == .open {
-                            // Start auto-close timer whenever the notch opens, regardless
-                            // of how it was triggered (tap, keyboard shortcut, etc.).
-                            // The hover handlers will cancel/restart this timer as needed.
+                            // Resume clipboard polling so any copy while notch was
+                            // closed is captured immediately on first open.
+                            NSClipboardEngine.shared.resumePolling()
                             scheduleAutoClose()
                             installClickOutsideMonitor()
                         } else {
+                            // Pause polling while closed to reduce CPU wakeups.
+                            NSClipboardEngine.shared.pausePolling()
                             hoverTask?.cancel()
                             removeClickOutsideMonitor()
                             if isHovering { withAnimation { isHovering = false } }
@@ -225,16 +227,7 @@ struct ContentView: View {
                     }
                     .onChange(of: vm.isBatteryPopoverActive) {
                         if !vm.isBatteryPopoverActive && !isHovering && vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
-                            hoverTask?.cancel()
-                            hoverTask = Task {
-                                try? await Task.sleep(for: .seconds(2))
-                                guard !Task.isCancelled else { return }
-                                await MainActor.run {
-                                    if !self.vm.isBatteryPopoverActive && !self.isHovering && self.vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
-                                        self.vm.close()
-                                    }
-                                }
-                            }
+                            scheduleAutoClose()
                         }
                     }
                     .sensoryFeedback(.alignment, trigger: haptics)

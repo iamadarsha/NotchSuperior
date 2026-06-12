@@ -42,14 +42,13 @@ struct NSSnippetEditorView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         if let s = snippet {
-                            // update existing — mutate via engine
-                            if let i = engine.snippets.firstIndex(where: { $0.id == s.id }) {
-                                engine.snippets[i].title = title
-                                engine.snippets[i].body  = bodyText
-                                engine.snippets[i].shortcut = shortcut.isEmpty ? nil : shortcut
-                            }
+                            engine.updateSnippet(s.id,
+                                title: title,
+                                body: bodyText,
+                                shortcut: shortcut.isEmpty ? nil : shortcut)
                         } else {
-                            engine.addSnippet(title: title, body: bodyText, shortcut: shortcut.isEmpty ? nil : shortcut)
+                            engine.addSnippet(title: title, body: bodyText,
+                                shortcut: shortcut.isEmpty ? nil : shortcut)
                         }
                         dismiss()
                     }

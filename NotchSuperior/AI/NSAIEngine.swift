@@ -221,7 +221,7 @@ class NSAIEngine: ObservableObject {
                 ["role": msg.role, "content": msg.content]
             }
             let payload: [String: Any] = [
-                "model": "llama3-8b-8192", // Use a Groq model
+                "model": "llama-3.3-70b-versatile",
                 "messages": apiMessages,
                 "stream": true
             ]

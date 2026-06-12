@@ -19,6 +19,7 @@ struct NSSnippetRow: View {
                 Text(snippet.title)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.primary)
+                    .lineLimit(1)
                 Text(snippet.body)
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)

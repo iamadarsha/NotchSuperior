@@ -423,7 +423,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
                     let task = Task { [weak viewModel] in
                         do {
-                            try await Task.sleep(for: .seconds(1.5))
+                            try await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
                             await MainActor.run {
                                 viewModel?.close()
                             }
