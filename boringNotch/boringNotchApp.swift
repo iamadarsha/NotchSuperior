@@ -271,14 +271,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let screenFrame = screen.frame
-        // The window is now taller than the visible notch shape by `shadowPadding` pts
-        // (60 pts, up from 20). Raise the window origin by shadowPadding so the notch
-        // top stays flush with the top of the screen on every display. Without this
-        // offset the notch would appear 40 pts lower than intended.
         window.setFrameOrigin(
             NSPoint(
                 x: screenFrame.origin.x + (screenFrame.width / 2) - window.frame.width / 2,
-                y: screenFrame.origin.y + screenFrame.height - window.frame.height + shadowPadding
+                y: screenFrame.origin.y + screenFrame.height - window.frame.height
             ))
         window.alphaValue = 1
     }
