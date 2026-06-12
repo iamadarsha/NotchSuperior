@@ -40,9 +40,9 @@ struct NSBehaviorProfilesView: View {
         }
         .formStyle(.grouped)
         .navigationTitle("Behavior Profiles")
-        .onChange(of: presenting) { _ in applyBehavior() }
-        .onChange(of: batterySaver) { _ in applyBehavior() }
-        .onChange(of: focusMode) { _ in applyBehavior() }
+        .onChange(of: presenting) { _, _ in applyBehavior() }
+        .onChange(of: batterySaver) { _, _ in applyBehavior() }
+        .onChange(of: focusMode) { _, _ in applyBehavior() }
     }
 
     private func applyBehavior() {

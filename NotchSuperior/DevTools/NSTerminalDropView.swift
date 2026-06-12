@@ -37,7 +37,7 @@ struct NSTerminalDropView: View {
                 }
                 .frame(minHeight: 120, maxHeight: 200)
                 .background(Color.black.opacity(0.85), in: RoundedRectangle(cornerRadius: 10))
-                .onChange(of: outputLines.count) { _ in
+                .onChange(of: outputLines.count) { _, _ in
                     withAnimation {
                         proxy.scrollTo(outputLines.count - 1, anchor: .bottom)
                     }

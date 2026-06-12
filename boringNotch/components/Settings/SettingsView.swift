@@ -1577,7 +1577,7 @@ struct Appearance: View {
                             Text(device.localizedName).tag(device.uniqueID as String?)
                         }
                     }
-                    .onChange(of: selectedCameraID) { _ in
+                    .onChange(of: selectedCameraID) { _, _ in
                         if webcamManager.isSessionRunning {
                             webcamManager.stopSession()
                             webcamManager.startSession()
