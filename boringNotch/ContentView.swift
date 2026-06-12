@@ -474,6 +474,10 @@ struct ContentView: View {
                         NSNotchNotesView()
                     }
                 }
+                // Hard-cap tab content to the open notch content area.
+                // Prevents any tab view from expanding the window beyond openNotchSize.
+                .frame(maxWidth: openNotchSize.width, maxHeight: openNotchSize.height)
+                .clipped()
                 .transition(
                     .scale(scale: 0.8, anchor: .top)
                     .combined(with: .opacity)
