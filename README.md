@@ -1,102 +1,134 @@
-<h1 align="center">
-  <br>
-  <a href="https://github.com/iamadarsha/NotchSuperior">
-    <!-- Animated SVG Banner -->
-    <img src="banner.svg" alt="NotchSuperior Banner" width="100%">
-  </a>
-  <br>
-</h1>
+<div align="center">
 
-<p align="center">
-  <strong>Transform your MacBook's notch into a fluid, responsive, and gorgeous command center.</strong>
+<a href="https://github.com/iamadarsha/NotchSuperior">
+  <img src="banner.svg" alt="NotchSuperior" width="100%">
+</a>
+
+<br/>
+
+### Turn your MacBook's notch into a fluid, intelligent command center.
+
+<p>
+  <a href="https://github.com/iamadarsha/NotchSuperior/actions/workflows/cicd.yml"><img src="https://github.com/iamadarsha/NotchSuperior/actions/workflows/cicd.yml/badge.svg" alt="Build" /></a>
+  <a href="https://github.com/iamadarsha/NotchSuperior/releases/latest"><img src="https://img.shields.io/github/v/release/iamadarsha/NotchSuperior?color=8A7CFF&label=release" alt="Release" /></a>
+  <img src="https://img.shields.io/badge/macOS-13.0%2B-000000?logo=apple&logoColor=white" alt="macOS 13+" />
+  <img src="https://img.shields.io/badge/Swift-SwiftUI-FA7343?logo=swift&logoColor=white" alt="Swift" />
+  <a href="https://discord.gg/c8JXA7qrPm"><img src="https://img.shields.io/discord/1234567890?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord" /></a>
 </p>
 
-<p align="center">
-  <img src="https://github.com/iamadarsha/NotchSuperior/actions/workflows/cicd.yml/badge.svg" alt="Build Status" />
-  <a href="https://discord.gg/c8JXA7qrPm">
-    <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/c8JXA7qrPm?style=flat" alt="Discord" />
-  </a>
-  <a href="https://www.ko-fi.com/alexander5015">
-    <img src="https://srv-cdn.himpfen.io/badges/kofi/kofi-flat.svg" alt="Support" />
-  </a>
-  <a href="https://instagram.com/iamadarsha">
-    <img src="https://img.shields.io/badge/Instagram-@iamadarsha-E4405F?style=flat&logo=instagram&logoColor=white" alt="Creator Instagram" />
-  </a>
+<p>
+  <a href="#-install">Install</a> ·
+  <a href="#-features">Features</a> ·
+  <a href="#-keyboard-shortcuts">Shortcuts</a> ·
+  <a href="#-build-from-source">Build</a> ·
+  <a href="#-extension-sdk">SDK</a>
 </p>
+
+</div>
 
 ---
 
-Say hello to **NotchSuperior**, a premium, high-performance utility that transforms your MacBook's screen notch from a static cutout into a gorgeous, interactive overlay. 
+**NotchSuperior** transforms the static cutout at the top of your MacBook into a gorgeous, interactive overlay — media controls, a file shelf, clipboard history, voice notes with on-device transcription, live system stats, a camera mirror, and secure local AI chat. All native SwiftUI. No telemetry. No account required.
 
-Built with **Apple Intelligence Siri-style glow animations**, secure **local AI chat & voice transcriptions**, **Guake-style developer terminals**, customizable **layout profiles**, and a unified system **HUD replacement**, NotchSuperior is the ultimate extension for your macOS workflow.
+<br/>
 
----
+## ⚡ Install
 
-## ⚡ Quick Install
-
-You can download, install, bypass security quarantines, and launch **NotchSuperior** immediately with a **single terminal command**.
-
-Open your Terminal app (`/Applications/Utilities/Terminal.app`) and paste the following:
+One command — downloads the latest signed build, clears the Gatekeeper quarantine, and launches it:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/iamadarsha/NotchSuperior/main/install.sh | bash
 ```
 
 <details>
-<summary><strong>🔍 Click to see what this command does under the hood</strong></summary>
+<summary><strong>What does this do?</strong></summary>
 
-1. Downloads the latest verified release build of `NotchSuperior.dmg`.
-2. Mounts the installation volume.
-3. Installs `NotchSuperior.app` into your `/Applications` folder.
-4. Automatically clears the macOS gatekeeper quarantine flags (`xattr`) so you don't have to manually bypass "unidentified developer" warnings.
-5. Instantly launches the application.
+<br/>
+
+1. Downloads the latest verified `NotchSuperior.dmg` release.
+2. Mounts the disk image.
+3. Copies `NotchSuperior.app` into `/Applications` (falls back to `~/Applications`).
+4. Removes the `com.apple.quarantine` flag so you skip the "unidentified developer" prompt.
+5. Launches the app.
+
 </details>
 
----
+> Prefer to click? Grab the `.dmg` from the [**latest release**](https://github.com/iamadarsha/NotchSuperior/releases/latest), drag it to Applications, and open.
 
-## ✨ Key Features
+<br/>
 
-| Feature Area | Description | SwiftUI / macOS Technologies |
-|---|---|---|
-| **🌈 Siri Glow Border** | A multi-layered animated border that breathes, pulses, and rotates organic siri gradient colors when expanded. | Counters-rotating Angular Gradients, `.blendMode(.screen)` |
-| **📷 Smart Camera Mirror** | A quick webcam preview that expands dynamically when hovered. Native permission flows built-in. | AVFoundation, AVCaptureSession, `.notDetermined` auto-grant |
-| **📅 Calendar & Reminders** | Live productivity events. Scroll meetings, check off active iCloud reminders, and click to view. | EventKit, CalendarStore, iCloud Integration |
-| **🎵 Now Playing HUD** | Music controls, timeline scrubbers, and real-time audio spectrogram visualizer. | MediaRemote, Apple Music & Spotify API, Lottie |
-| **🧠 Local AI Notes** | Record voice memos, transcribe locally on-device, and query local LLMs using secure Keychain API keys. | Speech Framework, Keychain, SSE stream reconnection |
-| **💻 Developer HUD** | Live dashboard displaying Git branch status, Docker container counts, and network ping times. | Process calling `/bin/zsh` on detached background threads |
-| **📦 Dynamic Shelf** | Drag any file, folder, image, or text to the top-center notch to drop it onto your Shelf. | Drag & Drop delegates, Quick Look, AirDrop integration |
+## ✨ Features
 
----
+| | Feature | What it does |
+|:--:|---|---|
+| 🎵 | **Now Playing** | Album art, scrubbable timeline, and transport controls for Apple Music, Spotify & more. |
+| 📦 | **Dynamic Shelf** | Drag any file, image, or text onto the notch to stash it. Drag back out anywhere. |
+| 📋 | **Clipboard Manager** | Searchable history with date grouping, pinned items, and reusable text snippets. |
+| 🎙️ | **Voice Notes** | Record and transcribe **on-device** (no API key), then summarize with your own AI provider. |
+| 📊 | **System Stats** | Live CPU, RAM, network, disk, and battery — with sparklines, in one glance. |
+| 📷 | **Camera Mirror** | Quick front-camera preview with one-tap snapshot to your Desktop. |
+| 🧠 | **Local AI Chat** | Talk to OpenAI, Claude, or Gemini. Keys live in your macOS Keychain — never leave your Mac. |
+| 🌈 | **Siri Glow** | A breathing, multi-layer aurora border when the notch expands. |
+| 📅 | **Calendar & Reminders** | Upcoming events and checkable iCloud reminders via EventKit. |
+| 💻 | **Developer HUD** | Git branch, Docker containers, and network latency at a glance. |
+| ⌨️ | **Command Launcher** | A fast keyboard-driven launcher right from the notch. |
+| 🔔 | **Live Activities** | Weather, downloads, battery, AirDrop, focus timers — surfaced in the closed notch. |
 
-## 🛠️ Interactive Configuration & Details
+<br/>
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>I</kbd> | Toggle the notch open / closed |
+| <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>V</kbd> | Open the Clipboard manager |
+| <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>A</kbd> | Open AI Chat |
+| <kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>~</kbd> | Drop down the developer terminal |
+| <kbd>⌘</kbd> <kbd>1</kbd> … <kbd>9</kbd> | Copy clipboard item _n_ |
+
+> Shortcuts are fully rebindable in **Settings → Shortcuts**.
+
+<br/>
+
+## 🛠️ Tips & Setup
 
 <details>
-<summary><strong>💻 How to use the Drop-down Developer Terminal</strong></summary>
+<summary><strong>🎙️ On-device voice notes & AI summaries</strong></summary>
 
-Press **`Ctrl + Opt + ~`** to drop down a responsive zsh terminal directly from your notch. 
-- Fully functional shell environment.
-- Respects active path directory settings.
-- Automatically disappears when you click outside or press escape.
+<br/>
+
+1. Tap the **Notes** tab and hit record — speech is transcribed locally via Apple's Speech framework, no key required.
+2. To summarize, open **Settings → AI**, pick a provider (OpenAI / Claude / Gemini), and paste your key. It's stored in the System Keychain (`kSecAttrAccessibleWhenUnlocked`) and never transmitted anywhere but the provider you choose.
+
 </details>
 
 <details>
-<summary><strong>🧠 Setting up Secure Local AI & Voice Notes</strong></summary>
+<summary><strong>💻 Drop-down developer terminal</strong></summary>
 
-1. Open **Settings > AI** in the menu bar.
-2. Select your provider (**OpenAI, Claude, or Gemini**).
-3. Paste your API Key. It is securely saved in your macOS System Keychain (`kSecAttrAccessibleWhenUnlocked`).
-4. Record voice notes from the notch. On-device Speech-to-Text runs locally using Apple's Speech Framework (no keys needed!).
+<br/>
+
+Press <kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>~</kbd> for a Guake-style zsh terminal from the notch. It respects your shell environment and dismisses on click-away or <kbd>Esc</kbd>.
+
 </details>
 
 <details>
-<summary><strong>🔌 Integrating with NSExtensionSDK (Third-Party Push)</strong></summary>
+<summary><strong>📦 Camera snapshots</strong></summary>
 
-NotchSuperior features a public Swift Package `NSExtensionSDK` that allows other macOS apps to push custom Live Activities to the notch.
+<br/>
+
+Open the **Camera** tab for a mirrored preview, then tap the shutter to save a timestamped PNG straight to your Desktop.
+
+</details>
+
+<br/>
+
+## 🔌 Extension SDK
+
+Other macOS apps can push custom Live Activities to the notch via the public `NSExtensionSDK` Swift package:
 
 ```swift
 import NSExtensionSDK
 
-// 1. Configure your activity payload
 let request = NSLiveActivityRequest(
     title: "Uploading Assets",
     subtitle: "24 of 100 files completed",
@@ -107,47 +139,44 @@ let request = NSLiveActivityRequest(
     actionNotificationName: "com.myapp.upload.cancel"
 )
 
-// 2. Post to NotchSuperior
 NSLiveActivityClient.shared.post(request: request)
 
-// 3. Listen for action callbacks
 let observer = NSLiveActivityClient.shared.observeAction(for: "com.myapp.upload.cancel") {
     print("User canceled the upload from the Notch!")
 }
 ```
-</details>
 
----
+<br/>
 
-## 🏗️ Building from Source
+## 🏗️ Build from Source
 
-If you prefer to compile NotchSuperior yourself, you can build it with Xcode:
+**Requirements:** macOS 13.0+ and Xcode 16+.
 
-### Prerequisites
-- macOS **13.0** or later
-- **Xcode 16** or later
+```bash
+git clone https://github.com/iamadarsha/NotchSuperior.git
+cd NotchSuperior
+open boringNotch.xcodeproj
+```
 
-### Build Instructions
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/iamadarsha/NotchSuperior.git
-   cd NotchSuperior
-   ```
-2. Open the project:
-   ```bash
-   open boringNotch.xcodeproj
-   ```
-3. Press `Cmd + R` to compile and run the target.
+Then press <kbd>⌘</kbd> <kbd>R</kbd> to build and run.
 
----
+<br/>
 
 ## 🤝 Contributing
 
-We welcome community pull requests and feature ideas! Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+Pull requests and ideas are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
-## 🌟 Support & Credits
-- **[MediaRemoteAdapter](https://github.com/ungive/mediaremote-adapter)** — Powering the macOS Now Playing source.
-- **[NotchDrop](https://github.com/Lakr233/NotchDrop)** — Foundational concept for drag-and-drop shelf mechanics.
-- Created and maintained by **[@iamadarsha](https://instagram.com/iamadarsha)**.
+## 🌟 Credits
 
-If you love NotchSuperior, please consider starring the repository ⭐
+- [**MediaRemoteAdapter**](https://github.com/ungive/mediaremote-adapter) — powers the macOS Now Playing source.
+- [**NotchDrop**](https://github.com/Lakr233/NotchDrop) — foundational concept for the drag-and-drop shelf.
+- Built on the open-source [**boring.notch**](https://github.com/TheBoredTeam/boring.notch) project.
+- Created and maintained by [**@iamadarsha**](https://instagram.com/iamadarsha).
+
+<br/>
+
+<div align="center">
+
+If NotchSuperior makes your Mac better, please **star the repo** ⭐
+
+</div>

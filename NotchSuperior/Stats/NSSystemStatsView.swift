@@ -209,10 +209,13 @@ private struct BatteryCard: View {
                     .foregroundStyle(.secondary)
             }
 
+            // Percentage — always a single, fixed-height line (no wrapping, no jitter).
             Text("\(engine.batteryPercent)%")
                 .font(.system(size: 12, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .lineLimit(1)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
@@ -229,13 +232,14 @@ private struct BatteryCard: View {
             }
             .frame(height: 4)
 
-            Spacer(minLength: 0)
-
+            // Footer pinned to a fixed-height area so the card's vertical rhythm matches
+            // the sparkline cards and the value above never shifts up/down.
             Text(timeString)
                 .font(.system(size: 9, design: .rounded))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         }
         .padding(9)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

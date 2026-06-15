@@ -54,6 +54,7 @@ struct ContentView: View {
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
     @State private var mouseClickMonitor: Any?
+    @State private var localClickMonitor: Any?
 
     @State private var gestureProgress: CGFloat = .zero
 
@@ -692,10 +693,19 @@ struct ContentView: View {
             guard !Task.isCancelled else { return }
             await MainActor.run {
                 guard self.vm.notchState == .open,
-                      !self.isHovering,
                       !self.vm.isBatteryPopoverActive,
                       !SharingStateManager.shared.preventNotchClose else { return }
-                self.vm.close()
+                // Authoritative check based on real cursor position — independent of the
+                // SwiftUI hover state, which can get stuck `true` if the leave event is
+                // dropped. If the cursor is still over the notch, poll again instead of
+                // closing; this guarantees the notch closes promptly once the cursor
+                // actually leaves.
+                if self.vm.isMouseHovering() {
+                    self.scheduleAutoClose()
+                } else {
+                    self.isHovering = false
+                    self.vm.close()
+                }
             }
         }
     }
@@ -704,12 +714,24 @@ struct ContentView: View {
 
     private func installClickOutsideMonitor() {
         removeClickOutsideMonitor()
-        // Global monitor fires for mouse-down events delivered to OTHER processes,
-        // i.e. any click that lands outside our notch window → close immediately.
+        // Global monitor: fires for mouse-down events delivered to OTHER processes,
+        // i.e. any click that lands in another app's window → close immediately.
         mouseClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak vm] _ in
             guard let vm, vm.notchState == .open else { return }
             guard !SharingStateManager.shared.preventNotchClose else { return }
             DispatchQueue.main.async { vm.close() }
+        }
+        // Local monitor: fires for clicks delivered to OUR OWN window. The window is
+        // wider than the visible notch, so clicks in the transparent margins must also
+        // dismiss. Clicks on the actual notch content (buttons/tabs) keep it open and
+        // are passed through untouched.
+        localClickMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak vm] event in
+            guard let vm, vm.notchState == .open else { return event }
+            guard !SharingStateManager.shared.preventNotchClose else { return event }
+            if !vm.isMouseHovering() {
+                DispatchQueue.main.async { vm.close() }
+            }
+            return event
         }
     }
 
@@ -717,6 +739,10 @@ struct ContentView: View {
         if let monitor = mouseClickMonitor {
             NSEvent.removeMonitor(monitor)
             mouseClickMonitor = nil
+        }
+        if let monitor = localClickMonitor {
+            NSEvent.removeMonitor(monitor)
+            localClickMonitor = nil
         }
     }
 
