@@ -11,7 +11,9 @@ import SwiftUI
 
 @available(macOS 14.0, *)
 struct NSWeatherActivity: NSActivity {
-    let id = UUID()
+    // Stable ID so re-posting replaces the existing entry rather than accumulating.
+    static let stableID = UUID(uuidString: "BB000001-0000-0000-0000-000000000001")!
+    let id: UUID = NSWeatherActivity.stableID
     let priority = 3    // lower than media/battery
     let ttl: TimeInterval? = nil    // persists until dismissed
 

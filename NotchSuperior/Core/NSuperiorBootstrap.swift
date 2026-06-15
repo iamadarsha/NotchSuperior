@@ -6,11 +6,13 @@
 // ────────────────────────────────────────────────────────
 
 import Foundation
+import Combine
 
 @MainActor
 final class NSuperiorBootstrap {
     static let shared = NSuperiorBootstrap()
 
+    private var cancellables = Set<AnyCancellable>()
     private init() {}
 
     func start() {
@@ -53,13 +55,13 @@ final class NSuperiorBootstrap {
         NSDevEngine.shared.start()
 
         // Fetch weather on startup (Open-Meteo, zero API key).
-        // Posts NSWeatherActivity to the live activity engine when result arrives.
+        // Posts NSWeatherActivity to live activity when result arrives.
+        // Posts NSNetworkActivity when significant network traffic is detected.
         if #available(macOS 14.0, *) {
             Task { @MainActor in
                 NSWeatherEngine.shared.refresh()
-                // Poll weather every 10 minutes via Combine observer (set up by engine itself)
-                // Re-post the live activity each time weather updates
                 observeWeatherUpdates()
+                observeNetworkActivity()
             }
         }
     }
@@ -67,16 +69,33 @@ final class NSuperiorBootstrap {
     @available(macOS 14.0, *)
     @MainActor
     private func observeWeatherUpdates() {
-        // Use a detached task that watches NSWeatherEngine.shared.weather
+        // Post immediately whenever weather changes (fires on first result too, no 30s delay).
+        NSWeatherEngine.shared.$weather
+            .compactMap { $0 }
+            .removeDuplicates { $0.tempC == $1.tempC && $0.weatherCode == $1.weatherCode }
+            .receive(on: RunLoop.main)
+            .sink { w in
+                NSLiveActivityEngine.shared.post(NSWeatherActivity(data: w))
+            }
+            .store(in: &cancellables)
+    }
+
+    @available(macOS 14.0, *)
+    @MainActor
+    private func observeNetworkActivity() {
+        // Start the stats engine so it polls network data
+        NSSystemStatsEngine.shared.startMonitoring()
         Task { @MainActor in
-            var lastPostedTemp: Double? = nil
             while true {
-                try? await Task.sleep(nanoseconds: 30_000_000_000)  // check every 30s
-                if let w = NSWeatherEngine.shared.weather {
-                    if lastPostedTemp != w.tempC {
-                        lastPostedTemp = w.tempC
-                        NSLiveActivityEngine.shared.post(NSWeatherActivity(data: w))
-                    }
+                try? await Task.sleep(nanoseconds: 4_000_000_000)  // every 4s
+                let dl = NSSystemStatsEngine.shared.downloadSpeedMB
+                let ul = NSSystemStatsEngine.shared.uploadSpeedMB
+                // Only show live activity when there's measurable traffic (> 50 KB/s)
+                if dl > 0.05 || ul > 0.05 {
+                    NSLiveActivityEngine.shared.post(NSNetworkActivity(downloadMB: dl, uploadMB: ul))
+                } else {
+                    // Use stable UUID so we dismiss the exact entry we posted
+                    NSLiveActivityEngine.shared.dismiss(NSNetworkActivity.stableID)
                 }
             }
         }

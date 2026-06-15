@@ -11,7 +11,9 @@ import SwiftUI
 
 @available(macOS 14.0, *)
 struct NSNetworkActivity: NSActivity {
-    let id = UUID()
+    // Stable ID so re-posting with new speeds replaces the existing entry.
+    static let stableID = UUID(uuidString: "BB000002-0000-0000-0000-000000000002")!
+    let id: UUID = NSNetworkActivity.stableID
     let priority = 2
     let ttl: TimeInterval? = nil
 

@@ -30,6 +30,7 @@ final class NSSystemStatsEngine: ObservableObject {
 
     @Published var diskUsedGB: Double = 0
     @Published var diskTotalGB: Double = 1
+    @Published var diskHistory: [Double] = Array(repeating: 0, count: 30)
 
     @Published var batteryPercent: Int = 0
     @Published var isCharging: Bool = false
@@ -37,6 +38,7 @@ final class NSSystemStatsEngine: ObservableObject {
 
     // MARK: - Private state
     private var timer: Timer?
+    private var retainCount = 0
     private var prevCPUInfo: processor_info_array_t?
     private var prevCPUInfoCount: mach_msg_type_number_t = 0
     private var prevNumCPUs: natural_t = 0
@@ -55,6 +57,7 @@ final class NSSystemStatsEngine: ObservableObject {
     // MARK: - Lifecycle
 
     func startMonitoring() {
+        retainCount += 1
         guard timer == nil else { return }
         refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
@@ -63,6 +66,8 @@ final class NSSystemStatsEngine: ObservableObject {
     }
 
     func stopMonitoring() {
+        retainCount = max(0, retainCount - 1)
+        guard retainCount == 0 else { return }
         timer?.invalidate()
         timer = nil
     }
@@ -90,6 +95,8 @@ final class NSSystemStatsEngine: ObservableObject {
         let (dUsed, dTotal) = readDiskUsage()
         diskUsedGB = dUsed
         diskTotalGB = dTotal > 0 ? dTotal : diskTotalGB
+        let diskFraction = diskTotalGB > 0 ? diskUsedGB / diskTotalGB : 0
+        diskHistory = Array(diskHistory.dropFirst()) + [diskFraction]
 
         let (pct, charging, mins) = readBattery()
         batteryPercent = pct

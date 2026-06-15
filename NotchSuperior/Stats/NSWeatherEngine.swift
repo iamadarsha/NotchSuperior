@@ -44,7 +44,13 @@ struct NSWeatherData {
     let symbol: String
     let label: String
 
-    var tempString: String { String(format: "%.0f°C", tempC) }
+    var tempF: Double { tempC * 9 / 5 + 32 }
+    var tempString: String {
+        let usesMetric = Locale.current.measurementSystem == .metric
+        return usesMetric
+            ? String(format: "%.0f°C", tempC)
+            : String(format: "%.0f°F", tempF)
+    }
 }
 
 @MainActor

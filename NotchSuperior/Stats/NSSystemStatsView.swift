@@ -33,10 +33,9 @@ struct NSSystemStatsView: View {
             StatCard(
                 title: "Disk",
                 valueText: String(format: "%.0f / %.0f GB", engine.diskUsedGB, engine.diskTotalGB),
-                history: [engine.diskTotalGB > 0 ? engine.diskUsedGB / engine.diskTotalGB : 0],
+                history: engine.diskHistory,
                 color: .purple,
-                icon: "internaldrive",
-                showSparkline: false
+                icon: "internaldrive"
             )
         }
         .padding(.horizontal, 12)
@@ -64,8 +63,6 @@ private struct StatCard: View {
     let history: [Double]
     let color: Color
     let icon: String
-    var showSparkline: Bool = true
-
     private var fraction: Double { history.last ?? 0 }
 
     var body: some View {
@@ -104,15 +101,9 @@ private struct StatCard: View {
             .frame(height: 5)
 
             // Sparkline
-            if showSparkline && history.count > 1 {
+            if history.count > 1 {
                 SparklineView(data: history, color: color)
                     .frame(height: 40)
-            } else if !showSparkline {
-                // Show byte labels instead
-                Text(String(format: "%.0f GB used", history.first.map { $0 } ?? 0))
-                    .font(.system(size: 9))
-                    .foregroundStyle(.tertiary)
-                    .frame(height: 40, alignment: .top)
             }
         }
         .padding(10)
