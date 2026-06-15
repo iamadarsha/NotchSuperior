@@ -55,6 +55,9 @@ struct ContentView: View {
     @State private var anyDropDebounceTask: Task<Void, Never>?
     @State private var mouseClickMonitor: Any?
     @State private var localClickMonitor: Any?
+    // Independent auto-close watchdog — decoupled from SwiftUI hover events.
+    @State private var autoCloseWatchdog: Task<Void, Never>?
+    @State private var mouseLeftAt: Date?
 
     @State private var gestureProgress: CGFloat = .zero
 
@@ -214,17 +217,10 @@ struct ContentView: View {
                         doOpen()
                     }
                     .onReceive(NotificationCenter.default.publisher(for: .sharingDidFinish)) { _ in
-                        if vm.notchState == .open && !isHovering && !vm.isBatteryPopoverActive {
-                            hoverTask?.cancel()
-                            hoverTask = Task {
-                                try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
-                                guard !Task.isCancelled else { return }
-                                await MainActor.run {
-                                    if self.vm.notchState == .open && !self.isHovering && !self.vm.isBatteryPopoverActive && !SharingStateManager.shared.preventNotchClose {
-                                        self.vm.close()
-                                    }
-                                }
-                            }
+                        // When a share session ends, make sure the watchdog is running so
+                        // the notch resumes its normal auto-close countdown.
+                        if vm.notchState == .open && autoCloseWatchdog == nil {
+                            startAutoCloseWatchdog()
                         }
                     }
                     .onChange(of: vm.notchState) { _, newState in
@@ -232,19 +228,15 @@ struct ContentView: View {
                             // Resume clipboard polling so any copy while notch was
                             // closed is captured immediately on first open.
                             NSClipboardEngine.shared.resumePolling()
-                            scheduleAutoClose()
+                            startAutoCloseWatchdog()
                             installClickOutsideMonitor()
                         } else {
                             // Pause polling while closed to reduce CPU wakeups.
                             NSClipboardEngine.shared.pausePolling()
                             hoverTask?.cancel()
+                            stopAutoCloseWatchdog()
                             removeClickOutsideMonitor()
                             if isHovering { withAnimation { isHovering = false } }
-                        }
-                    }
-                    .onChange(of: vm.isBatteryPopoverActive) {
-                        if !vm.isBatteryPopoverActive && !isHovering && vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
-                            scheduleAutoClose()
                         }
                     }
                     .sensoryFeedback(.alignment, trigger: haptics)
@@ -680,34 +672,55 @@ struct ContentView: View {
             }
         } else {
             withAnimation(animationSpring) { self.isHovering = false }
-            // Restart the auto-close countdown every time the cursor leaves.
-            scheduleAutoClose()
+            // Closing is handled entirely by the auto-close watchdog (which polls the
+            // real cursor position), so nothing to schedule here.
         }
     }
 
-    private func scheduleAutoClose() {
-        hoverTask?.cancel()
-        guard vm.notchState == .open else { return }
-        hoverTask = Task {
-            try? await Task.sleep(for: .seconds(Defaults[.notchCloseDelay]))
-            guard !Task.isCancelled else { return }
-            await MainActor.run {
-                guard self.vm.notchState == .open,
-                      !self.vm.isBatteryPopoverActive,
-                      !SharingStateManager.shared.preventNotchClose else { return }
-                // Authoritative check based on real cursor position — independent of the
-                // SwiftUI hover state, which can get stuck `true` if the leave event is
-                // dropped. If the cursor is still over the notch, poll again instead of
-                // closing; this guarantees the notch closes promptly once the cursor
-                // actually leaves.
-                if self.vm.isMouseHovering() {
-                    self.scheduleAutoClose()
+    // MARK: - Auto-close watchdog
+
+    /// A self-contained loop that closes the notch once the cursor has stayed
+    /// outside it for `notchCloseDelay`. It relies solely on the real cursor
+    /// position (`vm.isMouseHovering()`), NOT on SwiftUI `onHover` events — those
+    /// can be dropped or re-fired, which previously left the notch stuck open.
+    private func startAutoCloseWatchdog() {
+        stopAutoCloseWatchdog()
+        mouseLeftAt = nil
+        autoCloseWatchdog = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(200))
+                guard !Task.isCancelled else { return }
+                guard vm.notchState == .open else { return }
+
+                let blocked = vm.isBatteryPopoverActive
+                    || SharingStateManager.shared.preventNotchClose
+                    || coordinator.clipboardIsScrolling
+
+                if blocked || vm.isMouseHovering() {
+                    // Cursor is over the notch (or close is temporarily blocked) —
+                    // reset the "left" timer.
+                    mouseLeftAt = nil
                 } else {
-                    self.isHovering = false
-                    self.vm.close()
+                    // Cursor is away. Start / continue the countdown.
+                    let now = Date()
+                    if let left = mouseLeftAt {
+                        if now.timeIntervalSince(left) >= Defaults[.notchCloseDelay] {
+                            isHovering = false
+                            vm.close()
+                            return
+                        }
+                    } else {
+                        mouseLeftAt = now
+                    }
                 }
             }
         }
+    }
+
+    private func stopAutoCloseWatchdog() {
+        autoCloseWatchdog?.cancel()
+        autoCloseWatchdog = nil
+        mouseLeftAt = nil
     }
 
     // MARK: - Click-outside monitor
