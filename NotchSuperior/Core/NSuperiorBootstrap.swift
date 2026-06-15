@@ -51,5 +51,34 @@ final class NSuperiorBootstrap {
         // the engine to never start when the layout profile was loaded
         // asynchronously or from a fresh (empty) default profile.
         NSDevEngine.shared.start()
+
+        // Fetch weather on startup (Open-Meteo, zero API key).
+        // Posts NSWeatherActivity to the live activity engine when result arrives.
+        if #available(macOS 14.0, *) {
+            Task { @MainActor in
+                NSWeatherEngine.shared.refresh()
+                // Poll weather every 10 minutes via Combine observer (set up by engine itself)
+                // Re-post the live activity each time weather updates
+                observeWeatherUpdates()
+            }
+        }
+    }
+
+    @available(macOS 14.0, *)
+    @MainActor
+    private func observeWeatherUpdates() {
+        // Use a detached task that watches NSWeatherEngine.shared.weather
+        Task { @MainActor in
+            var lastPostedTemp: Double? = nil
+            while true {
+                try? await Task.sleep(nanoseconds: 30_000_000_000)  // check every 30s
+                if let w = NSWeatherEngine.shared.weather {
+                    if lastPostedTemp != w.tempC {
+                        lastPostedTemp = w.tempC
+                        NSLiveActivityEngine.shared.post(NSWeatherActivity(data: w))
+                    }
+                }
+            }
+        }
     }
 }

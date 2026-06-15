@@ -16,12 +16,14 @@ struct TabModel: Identifiable {
 
 let tabs: [TabModel] = {
     var list = [
-        TabModel(label: "Home", icon: "house.fill", view: .home),
-        TabModel(label: "Shelf", icon: "tray.fill", view: .shelf)
+        TabModel(label: "Home",      icon: "house.fill",         view: .home),
+        TabModel(label: "Shelf",     icon: "tray.fill",          view: .shelf)
     ]
     if #available(macOS 14.0, *) {
-        list.append(TabModel(label: "Clipboard", icon: "doc.on.clipboard", view: .clipboard))
-        list.append(TabModel(label: "Notes", icon: "mic.fill", view: .notes))
+        list.append(TabModel(label: "Clipboard", icon: "doc.on.clipboard",  view: .clipboard))
+        list.append(TabModel(label: "Notes",     icon: "mic.fill",           view: .notes))
+        list.append(TabModel(label: "Stats",     icon: "chart.bar.fill",     view: .stats))
+        list.append(TabModel(label: "Camera",    icon: "camera.fill",        view: .camera))
     }
     return list
 }()

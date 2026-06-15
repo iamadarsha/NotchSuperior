@@ -193,6 +193,22 @@ struct ContentView: View {
                                 handleUpGesture(translation: translation, phase: phase)
                             }
                     }
+                    // Horizontal swipe → skip tracks (left = next, right = previous)
+                    .conditionalModifier(Defaults[.enableGestures]) { view in
+                        view
+                            .panGesture(
+                                direction: .left,
+                                isEnabled: { coordinator.currentView == .home && musicManager.isPlaying }
+                            ) { _, phase in
+                                if phase == .ended { MusicManager.shared.nextTrack() }
+                            }
+                            .panGesture(
+                                direction: .right,
+                                isEnabled: { coordinator.currentView == .home && musicManager.isPlaying }
+                            ) { _, phase in
+                                if phase == .ended { MusicManager.shared.previousTrack() }
+                            }
+                    }
                     .onTapGesture {
                         doOpen()
                     }
@@ -472,6 +488,14 @@ struct ContentView: View {
                         NSClipboardView()
                     case .notes:
                         NSNotchNotesView()
+                    case .stats:
+                        if #available(macOS 14.0, *) {
+                            NSSystemStatsView()
+                        }
+                    case .camera:
+                        if #available(macOS 14.0, *) {
+                            NSCameraView()
+                        }
                     }
                 }
                 // Hard-cap tab content to the open notch content area.
@@ -722,7 +746,7 @@ struct ContentView: View {
     }
 
     private func handleUpGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        guard vm.notchState == .open && !vm.isHoveringCalendar && !coordinator.clipboardIsScrolling && coordinator.currentView != .clipboard && coordinator.currentView != .notes && !clipboardOpen && !aiChatOpen else { return }
+        guard vm.notchState == .open && !vm.isHoveringCalendar && !coordinator.clipboardIsScrolling && coordinator.currentView != .clipboard && coordinator.currentView != .notes && coordinator.currentView != .stats && coordinator.currentView != .camera && !clipboardOpen && !aiChatOpen else { return }
 
         withAnimation(animationSpring) {
             gestureProgress = (translation / Defaults[.gestureSensitivity]) * -20

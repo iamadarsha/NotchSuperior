@@ -197,6 +197,12 @@
 		B1FEB4992C7686630066EBBC /* PanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FEB4982C7686630066EBBC /* PanGesture.swift */; };
 		C7163DD3444816A2A5F445FE /* VoiceNotesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA661C0F348DF4E3410ED918 /* VoiceNotesManager.swift */; };
 		F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */; };
+		BB0000030609202600000001 /* NSSystemStatsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000020609202600000001 /* NSSystemStatsEngine.swift */; };
+		BB0000050609202600000001 /* NSSystemStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000040609202600000001 /* NSSystemStatsView.swift */; };
+		BB0000070609202600000001 /* NSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000060609202600000001 /* NSCameraView.swift */; };
+		BB0000090609202600000001 /* NSWeatherEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000080609202600000001 /* NSWeatherEngine.swift */; };
+		BB00001B0609202600000001 /* NSWeatherActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00001A0609202600000001 /* NSWeatherActivity.swift */; };
+		BB00001D0609202600000001 /* NSNetworkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00001C0609202600000001 /* NSNetworkActivity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -356,6 +362,12 @@
 		AA2000050609202600000001 /* NSBluetoothActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBluetoothActivity.swift; sourceTree = "<group>"; };
 		AA2000070609202600000001 /* NSScreenRecordActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenRecordActivity.swift; sourceTree = "<group>"; };
 		AA2000090609202600000001 /* NSThirdPartyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSThirdPartyActivity.swift; sourceTree = "<group>"; };
+		BB0000020609202600000001 /* NSSystemStatsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSystemStatsEngine.swift; sourceTree = "<group>"; };
+		BB0000040609202600000001 /* NSSystemStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSystemStatsView.swift; sourceTree = "<group>"; };
+		BB0000060609202600000001 /* NSCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCameraView.swift; sourceTree = "<group>"; };
+		BB0000080609202600000001 /* NSWeatherEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWeatherEngine.swift; sourceTree = "<group>"; };
+		BB00001A0609202600000001 /* NSWeatherActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWeatherActivity.swift; sourceTree = "<group>"; };
+		BB00001C0609202600000001 /* NSNetworkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNetworkActivity.swift; sourceTree = "<group>"; };
 		AA3000010609202600000001 /* NSuperiorBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSuperiorBootstrap.swift; sourceTree = "<group>"; };
 		AA4000010609202600000001 /* NSShelfModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfModels.swift; sourceTree = "<group>"; };
 		AA4000030609202600000001 /* NSShelfEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShelfEngine.swift; sourceTree = "<group>"; };
@@ -791,6 +803,17 @@
 			path = Shelf;
 			sourceTree = "<group>";
 		};
+		BB0000010609202600000001 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				BB0000020609202600000001 /* NSSystemStatsEngine.swift */,
+				BB0000040609202600000001 /* NSSystemStatsView.swift */,
+				BB0000060609202600000001 /* NSCameraView.swift */,
+				BB0000080609202600000001 /* NSWeatherEngine.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
 		AA10000B0609202600000001 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -826,6 +849,7 @@
 				AA10001E0609202600000001 /* LiveActivity */,
 				AA1000100609202600000001 /* Settings */,
 				AA4000090609202600000001 /* Shelf */,
+				BB0000010609202600000001 /* Stats */,
 			);
 			path = NotchSuperior;
 			sourceTree = "<group>";
@@ -851,6 +875,8 @@
 				AA2000050609202600000001 /* NSBluetoothActivity.swift */,
 				AA2000070609202600000001 /* NSScreenRecordActivity.swift */,
 				AA2000090609202600000001 /* NSThirdPartyActivity.swift */,
+				BB00001A0609202600000001 /* NSWeatherActivity.swift */,
+				BB00001C0609202600000001 /* NSNetworkActivity.swift */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -1369,6 +1395,12 @@
 				B1F0A0022E60000100000001 /* BrightnessManager.swift in Sources */,
 				5408648EFDC6B6E0A5DE44B0 /* AudioRecorder.swift in Sources */,
 				C7163DD3444816A2A5F445FE /* VoiceNotesManager.swift in Sources */,
+				BB0000030609202600000001 /* NSSystemStatsEngine.swift in Sources */,
+				BB0000050609202600000001 /* NSSystemStatsView.swift in Sources */,
+				BB0000070609202600000001 /* NSCameraView.swift in Sources */,
+				BB0000090609202600000001 /* NSWeatherEngine.swift in Sources */,
+				BB00001B0609202600000001 /* NSWeatherActivity.swift in Sources */,
+				BB00001D0609202600000001 /* NSNetworkActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
