@@ -458,8 +458,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // NOTCHSUPERIOR ADDITION — Main engine bootstrap
         NSuperiorBootstrap.shared.start()
 
+        // Auto-close is handled by Timer.publish in ContentView (checkAutoClose).
+        // AppDelegate.timer is reserved for future use.
+
         previousScreens = NSScreen.screens
     }
+
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if coordinator.firstLaunch {
