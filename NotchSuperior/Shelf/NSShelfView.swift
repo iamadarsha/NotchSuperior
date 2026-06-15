@@ -64,16 +64,9 @@ struct NSShelfView: View {
                     }
                     .frame(height: 100)
                 } else {
-                    VStack {
-                        Spacer()
-                        Text("Drag files here to add to \(currentStack?.name ?? "stack")")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                        Spacer()
-                    }
-                    .frame(height: 100)
-                    .frame(maxWidth: .infinity)
+                    ShelfDropTargetView(stackName: currentStack?.name ?? "shelf")
+                        .frame(height: 100)
+                        .frame(maxWidth: .infinity)
                 }
             }
         }
@@ -102,6 +95,40 @@ struct NSShelfView: View {
         }
     }
 }
+
+// MARK: - Drop Target Empty State
+
+@available(macOS 14.0, *)
+struct ShelfDropTargetView: View {
+    let stackName: String
+    @State private var isAnimating = false
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(systemName: "arrow.down.to.line")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundStyle(.secondary)
+                .scaleEffect(isAnimating ? 1.08 : 1.0)
+                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isAnimating)
+            Text("Drop files into \(stackName)")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.secondary)
+            Text("Images, PDFs, documents — anything")
+                .font(.system(size: 10))
+                .foregroundStyle(.tertiary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(Color.secondary.opacity(0.25), style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+        )
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+        .onAppear { isAnimating = true }
+    }
+}
+
+// MARK: - Shelf Item Tile
 
 @available(macOS 14.0, *)
 struct NSShelfItemTile: View {

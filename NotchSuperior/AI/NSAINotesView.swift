@@ -454,7 +454,6 @@ struct NSNotchNotesView: View {
                         .font(.system(size: 10))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
-                        .frame(width: 160)
                 } else {
                     Button("Manage Notes...") {
                         HapticHelper.trigger()

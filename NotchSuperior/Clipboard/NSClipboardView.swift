@@ -92,24 +92,55 @@ struct NSClipboardView: View {
                     LazyVStack(spacing: 4) {
                         switch selectedTab {
                         case .history:
-                            ForEach(groupedHistory, id: \.section.rawValue) { group in
-                                Section {
-                                    ForEach(group.items) { item in
-                                        NSClipboardItemRow(item: item)
-                                    }
-                                } header: {
-                                    Text(group.section.rawValue)
-                                        .font(.system(size: 10, weight: .semibold))
+                            if groupedHistory.isEmpty {
+                                VStack(spacing: 8) {
+                                    Image(systemName: "doc.on.clipboard")
+                                        .font(.system(size: 22))
+                                        .foregroundStyle(.tertiary)
+                                    Text(searchText.isEmpty ? "No clipboard history yet" : "No results for \"\(searchText)\"")
+                                        .font(.system(size: 12, weight: .medium))
                                         .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal, 4)
-                                        .padding(.top, 6)
-                                        .padding(.bottom, 2)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 20)
+                            } else {
+                                ForEach(groupedHistory, id: \.section.rawValue) { group in
+                                    Section {
+                                        ForEach(group.items) { item in
+                                            NSClipboardItemRow(item: item)
+                                        }
+                                    } header: {
+                                        Text(group.section.rawValue)
+                                            .font(.system(size: 10, weight: .semibold))
+                                            .foregroundStyle(.secondary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.horizontal, 4)
+                                            .padding(.top, 6)
+                                            .padding(.bottom, 2)
+                                    }
                                 }
                             }
                         case .pinned:
-                            ForEach(pinnedItems) { item in
-                                NSClipboardItemRow(item: item)
+                            if pinnedItems.isEmpty {
+                                VStack(spacing: 8) {
+                                    Image(systemName: "pin.slash")
+                                        .font(.system(size: 22))
+                                        .foregroundStyle(.tertiary)
+                                    Text("No pinned items")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundStyle(.secondary)
+                                    Text("Long-press a clipboard item to pin it")
+                                        .font(.system(size: 10))
+                                        .foregroundStyle(.tertiary)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 20)
+                            } else {
+                                ForEach(pinnedItems) { item in
+                                    NSClipboardItemRow(item: item)
+                                }
                             }
                         case .snippets:
                             ForEach(engine.snippets) { s in

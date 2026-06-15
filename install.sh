@@ -26,7 +26,7 @@ if [ "$OS_MAJOR" -lt 14 ]; then
     exit 1
 fi
 
-DMG_URL="https://github.com/iamadarsha/NotchSuperior/releases/download/v1.0.5/NotchSuperior-v1.0.5.dmg"
+DMG_URL="https://github.com/iamadarsha/NotchSuperior/releases/download/v1.0.6/NotchSuperior-v1.0.6.dmg"
 TEMP_DMG="/tmp/NotchSuperior_install.dmg"
 MOUNT_DIR="/tmp/NotchSuperiorMount"
 

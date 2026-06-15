@@ -479,7 +479,7 @@ struct ContentView: View {
                     case .home:
                         NotchHomeView(albumArtNamespace: albumArtNamespace)
                     case .shelf:
-                        if #available(macOS 14.0, *), isEnabled(.clipboardShortcut), shelfEngine.stacks.contains(where: { !$0.items.isEmpty }) {
+                        if #available(macOS 14.0, *) {
                             NSShelfView()
                         } else {
                             ShelfView()
